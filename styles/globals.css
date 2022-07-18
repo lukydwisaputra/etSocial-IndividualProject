@@ -1,16 +1,51 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+	padding: 0;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+		Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+	color: inherit;
+	text-decoration: none;
+}
+
+.mantine-a5mxpq:hover,
+.mantine-g77ufc:hover,
+.mantine-7bbi9r:hover,
+.mantine-2qa0ve:hover,
+.mantine-1f83q5f:hover,
+.mantine-1wkxtfm:hover,
+.mantine-12mvy9p:hover,
+.mantine-1juarfr:hover,
+.mantine-qls5vf:hover,
+.mantine-lfggf9:hover,
+.mantine-he7kh3:hover,
+.mantine-1a71rn0:hover {
+	color: gray;
+	text-decoration: none;
 }
 
 * {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
+
+.mantine-1juarfr {
+	color: rgb(73, 80, 87);
+	font-size: small;
+}
+
+.mantine-12mvy9p  {
+	color: rgb(166, 167, 171);
+	font-size: small;
+}
+
+.mantine-he7kh3 {
+	color: rgb(166, 167, 171);
+}
+
+.mantine-1ivg9cl {
+	color: rgb(73, 80, 87);
+}
+
