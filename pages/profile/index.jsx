@@ -1,13 +1,19 @@
-import React from 'react';
-import AlbumComponent from '../../components/post/AlbumComponent';
-import MenubarComponent from '../../components/menubar/MenubarComponent';
+import React from "react";
+import ProfileComponent from "../../components/profile/ProfileComponent";
+import AlbumComponent from "../../components/post/AlbumComponent";
+import MenubarComponent from "../../components/menubar/MenubarComponent";
 
-function SavedPage() {
-    let contentClasses = 'col-4 p-1';
+export default function ProfilePage() {
+	let contentClasses = "col-4 p-1";
 
-    return ( 
+	return (
         <>
-            <MenubarComponent title={'Savéd'} /> 
+            <MenubarComponent title={'lukydwisaputra'} /> 
+            <div className='container' style={{marginTop: '1vh', marginBottom: '1vh'}}>
+                <div className='row'>
+                    <ProfileComponent />
+                </div>
+            </div>
             <div className='container' style={{marginTop: '1vh', marginBottom: '1vh'}}>
                 <div className='row'>
                     <div className={contentClasses}>
@@ -67,7 +73,5 @@ function SavedPage() {
                 </div>
             </div>
         </>
-    );
+	);
 }
-
-export default SavedPage;

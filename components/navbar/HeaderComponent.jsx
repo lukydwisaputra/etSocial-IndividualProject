@@ -49,6 +49,9 @@ const homePage = () => {
 const otherPage = (title) => {
 	const { classes, theme } = useStyles();
 	const router = useRouter();
+	const { pathname } = useRouter();
+    const isLandingPage = pathname === '/' ? 'd-none' : "";
+
 	return (
 		<header
 			className="justify-content-between align-items-center fixed-top d-lg-none"
@@ -61,7 +64,7 @@ const otherPage = (title) => {
 			<div className="container m-auto">
 				<div className="row justify-content-between align-items-center">
 					<div className="col-3 col-sm-3 col-md-3 col-lg-1">
-						<ActionIcon component="button" onClick={() => router.back()}>
+						<ActionIcon className={isLandingPage} component="button" onClick={() => router.back()}>
 							<IoIosArrowBack size={20} />
 						</ActionIcon>
 					</div>

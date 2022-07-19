@@ -42,7 +42,7 @@ export function ArticleComponent() {
 			shadow="md"
 			p="xl"
 			radius="md"
-			sx={{ backgroundImage: `url(${content.image})`, maxHeight: '20vh' }}
+			sx={{ backgroundImage: `url(${content.image})`, maxHeight: '25vh' }}
 			className={classes.card}
 		>
 			<div>

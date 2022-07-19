@@ -15,6 +15,7 @@ import {
     useMantineTheme
 } from "@mantine/core";
 import { At } from 'tabler-icons-react';
+import Link from "next/link";
 
 export default function AuthenticationForm(props) {
 	const [type, toggle] = useToggle("login", ["login", "register"]);
@@ -48,7 +49,7 @@ export default function AuthenticationForm(props) {
     // console.log(form.values)
 
 	return (
-        <div className="container" style={{marginTop: '5vh', maxWidth: '500px'}}>
+        <div className="container" style={{marginTop: '10vh', maxWidth: '500px'}}>
 			<div className="container">
                 <div>
                     <Text weight={700} className='fs-2 mb-4 text-center'>
@@ -120,14 +121,15 @@ export default function AuthenticationForm(props) {
                                         onChange={(event) => form.setFieldValue("passwordLogin", event.currentTarget.value)}
                                         // error={form.errors.passwordLogin === "" ? "" : "Password should include at least 8 characters"}
                                     />
-                                    <Anchor
-                                        className="text-muted"
-                                        component="a"
-                                        onClick={() => {}}
-                                        size="xs"
-                                    >
-                                        Forgot password? 
-                                    </Anchor>
+                                    <Link href="/recovery" passHref>
+                                        <Anchor
+                                            className="text-muted"
+                                            component="a"
+                                            size="xs"
+                                        >
+                                            Forgot password? 
+                                        </Anchor>
+                                    </Link>
                                 </>
                                 
                             }

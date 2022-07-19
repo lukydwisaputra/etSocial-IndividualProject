@@ -4,6 +4,7 @@ import { AiFillHeart, AiOutlineHeart, AiOutlineEdit, AiOutlineDelete, AiOutlineS
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { FaCommentAlt } from "react-icons/fa";
 import { CommentComponent } from './CommentComponent';
+import Link from "next/link";
 
 export default function PostComponent(props) {
     const theme = useMantineTheme();
@@ -23,22 +24,24 @@ export default function PostComponent(props) {
     return ( 
         <> 
             <div style={{ marginBottom: "1vh", marginTop: '1vh', zIndex: "5"}}>
-                <div className='container px-lg-5'>
+                <div className='container'>
                     <div className='row my-3'>
                         <Card shadow="xs" p="md" radius={'md'}>
                             <Card.Section>
                                 <Group className='mx-3 my-3' position='apart'>
-                                    <Group>
-                                            {avatarPost}
-                                            <Text size="sm">
-                                                lukydwisaputra
-                                            </Text>
-                                    </Group>
+                                    <Link href="/profile" passHref>
+                                        <Group style={{cursor: 'pointer'}}>
+                                                {avatarPost}
+                                                <Text size="sm">
+                                                    lukydwisaputra
+                                                </Text>
+                                        </Group>
+                                    </Link>
                                     <Menu radius={'md'} shadow={'lg'} size={'sm'} placement='end' withArrow>
                                         <Menu.Item component="button">
                                             <Group>
                                                 <AiOutlineShareAlt className='text-muted' />
-                                                <p className='m-auto text-muted'>Share</p>
+                                                <p className='m-auto text-muted'>Share Post</p>
                                             </Group>
                                         </Menu.Item>
                                         <Menu.Item component="button">

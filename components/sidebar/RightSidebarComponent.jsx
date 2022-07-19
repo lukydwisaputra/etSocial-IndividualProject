@@ -17,13 +17,16 @@ const useStyles = createStyles((theme) => ({
 export default function RightSidebarComponent() {
     const { theme } = useStyles();
 	const { pathname } = useRouter();
-	const isLoginUser = pathname.includes('login') || pathname === '/';
+
+	const allowedPage = ['/home', '/explore', '/saved', 'profile']
+	const isAllowed = allowedPage.includes(pathname);
+	const isLoginUser = pathname.includes('home')
 	const border = "1px solid rgb(166,167,171, 0.2)";
 
 	return ( 
 		<>
 			{
-				!isLoginUser &&
+				isAllowed &&
 				<div className="sticky-top" style={{backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : 'white', zIndex: '5'}}>
 					{/* tinggal tambah row aja */}
 					<div className="row" style={{ height:  '5vh', borderBottom: border}}>
