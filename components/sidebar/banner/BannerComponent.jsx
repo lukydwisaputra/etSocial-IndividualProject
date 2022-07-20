@@ -23,11 +23,11 @@ const useStyles = createStyles((theme) => ({
 export function BannerComponent({ title, description }) {
 	const { classes } = useStyles();
 	return (
-		<Paper withBorder radius="md" className={classes.card} style={{ bottom: "0px" }}>
-			<Text size="md" weight={700} mt="xs">
+		<Paper withBorder radius="md" className={`ms-1 ${classes.card}`} style={{ bottom: "0px" }}>
+			<Text size="sm" weight={600}>
 				{"Howdy, lukydwisaputra!"}
 			</Text>
-			<Text size="sm" mt="xs" color="dimmed" className="mb-2">
+			<Text size="xs" mt="xs" color="dimmed">
 				Welcome to <span className="fw-bold"> étSocial </span>. Enjoy 🤞🏼
 			</Text>
 		</Paper>

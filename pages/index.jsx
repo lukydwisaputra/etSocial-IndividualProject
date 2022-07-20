@@ -18,9 +18,9 @@ export default function Home() {
 						<Text className="fs-1 fw-bold">étSocial</Text>
 						<Text className="fs-3 mt-2 lead">A place to find and share inspiration.</Text>
 					</div>
-					<div className="mt-1">
+					<div className="">
 						<Link href="/about" passHref>
-							<small className="fw-bold" style={{cursor: 'pointer'}}>Learn More</small>
+							<small className="text-muted" style={{cursor: 'pointer'}}>Learn More</small>
 						</Link>
 					</div>
 					<div style={{marginTop: '5vh'}}>
@@ -30,11 +30,6 @@ export default function Home() {
 							</Button>
 						</Link>
 					</div>
-					{/* <div className="mt-1">
-						<Link href="/home" passHref>
-							<small>or <span className="fw-bold" style={{cursor: 'pointer'}} ocClick={() => {}}>Sign In</span></small>
-						</Link>
-					</div> */}
 				</div>
 			</div>
 		</div>

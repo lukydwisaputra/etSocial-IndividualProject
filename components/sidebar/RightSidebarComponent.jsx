@@ -29,10 +29,10 @@ export default function RightSidebarComponent() {
 				isAllowed &&
 				<div className="sticky-top" style={{backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : 'white', zIndex: '5'}}>
 					{/* tinggal tambah row aja */}
-					<div className="row" style={{ height:  '5vh', borderBottom: border}}>
-						<div className="col-12  m-auto">
+					<div className="row" style={{ height: '6vh', borderBottom: border}}>
+						<div className="col-12 m-auto">
 								<div className='container'>
-									<Text className='fs-5 fw-bold'>What's new today?</Text>
+									<Text className='fs-6 fw-bold ms-1'>What's new today?</Text>
 								</div>
 							</div>
 						</div>
@@ -46,7 +46,7 @@ export default function RightSidebarComponent() {
 					<div className='row'>
 						<div className="col-12 m-auto" >
 							<div className='container'>
-								<Text className="fs-5 my-3 ms-2 fw-bold">Curated Articles</Text>
+								<Text className="fs-6 my-3 ms-1 fw-bold">Curated Articles</Text>
 							</div>
 						</div>
 					</div>
@@ -60,7 +60,7 @@ export default function RightSidebarComponent() {
 					<div className='row'>
 						<div className="col-12 m-auto" >
 							<div className='container'>
-								<Text className="fs-5 my-3 ms-2 fw-bold">Latest News</Text>
+								<Text className="fs-6 my-3 ms-1 fw-bold">Latest News</Text>
 							</div>
 						</div>
 					</div>

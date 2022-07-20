@@ -49,3 +49,7 @@ a {
 	color: rgb(73, 80, 87);
 }
 
+hr:not([size]) {
+	height: 0.5px;
+	color: rgba(46, 46, 19, 0.4);
+}

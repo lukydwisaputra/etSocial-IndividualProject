@@ -24,7 +24,7 @@ export default function LayoutComponent({children}) {
 			<MobileNavbarComponent />
 
 			{/* Mobile */}
-			<main style={{ marginTop: "7vh", marginBottom: "7vh" }} className="d-lg-none">
+			<main style={{ marginTop: "6.5vh", marginBottom: "7vh" }} className="d-lg-none">
                 {children} {/* content for mobile and tablet */}
 			</main>
 			
@@ -32,15 +32,17 @@ export default function LayoutComponent({children}) {
 			<main>
 				<div className="container d-none d-sm-none d-md-none d-lg-block">
 					<div className="row">
+						<div className="col-1"></div>
 						<div className="col-1" style={{ borderRight: border }}>
 							<LeftSidebarComponent />
 						</div>
-						<div className="col-7" style={{minHeight: '100vh', paddingTop: paddingPostDesktop, paddingRight: paddingPostDesktop, paddingLeft: paddingPostDesktop}}>
+						<div className="col-5" style={{minHeight: '100vh', paddingTop: paddingPostDesktop, paddingRight: '5vh', paddingLeft: '5vh'}}>
                             {children} {/* content for desktop */}
 						</div>
 						<div className="col-4" style={{ borderLeft: border }}>
 							<RightSidebarComponent />
 						</div>
+						<div className="col-1"></div>
 					</div>
 				</div>
 			</main>

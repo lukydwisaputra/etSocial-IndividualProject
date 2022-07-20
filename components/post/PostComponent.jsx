@@ -19,16 +19,16 @@ export default function PostComponent(props) {
         : theme.colors.gray[2]
     ;
 
-    const avatarPost =  (<Avatar radius="xl" size={25} style={{backgroundColor: avatarBgColor}} src={'https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200'} />)
+    const avatarPost =  (<Avatar className='ms-1' radius="xl" size={20} style={{backgroundColor: avatarBgColor}} src={'https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200'} />)
 
     return ( 
         <> 
-            <div style={{ marginBottom: "1vh", marginTop: '1vh', zIndex: "5"}}>
-                <div className='container'>
-                    <div className='row my-3'>
-                        <Card shadow="xs" p="md" radius={'md'}>
+            <div style={{ marginBottom: "1vh", marginTop: '1vh'}}>
+                {/* <div className='container'> */}
+                    <div className='row'>
+                        <Card shadow={'xs'}>
                             <Card.Section>
-                                <Group className='mx-3 my-3' position='apart'>
+                                <Group className='mx-3 my-2' position='apart'>
                                     <Link href="/profile" passHref>
                                         <Group style={{cursor: 'pointer'}}>
                                                 {avatarPost}
@@ -110,7 +110,7 @@ export default function PostComponent(props) {
                             </div>
                         </Card>
                     </div>
-                </div>
+                {/* </div> */}
             </div>
         </>
      );

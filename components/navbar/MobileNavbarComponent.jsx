@@ -35,7 +35,7 @@ export default function MobileNavbarComponent() {
 					style={{
 						backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
 						// height: "6vh",
-						padding: "1vh",
+						padding: "1.5vh",
 						zIndex:'2'
 					}}
 				>

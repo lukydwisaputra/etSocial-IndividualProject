@@ -14,17 +14,19 @@ const useStyles = createStyles((theme) => ({
 
 	title: {
 		fontFamily: `Greycliff CF ${theme.fontFamily}`,
-		fontWeight: 700,
+		fontWeight: 900,
 		color: theme.white,
 		lineHeight: 1.2,
-		fontSize: 20,
+		fontSize: '0.8rem',
 		marginTop: theme.spacing.xs,
+		maxWidth: '70%'
 	},
 
 	category: {
 		color: theme.white,
 		opacity: 0.7,
 		fontWeight: 700,
+		fontSize: '0.65rem',
 		textTransform: "uppercase",
 	},
 }));
@@ -40,9 +42,9 @@ export function ArticleComponent() {
 	return (
 		<Paper
 			shadow="md"
-			p="xl"
+			p="md"
 			radius="md"
-			sx={{ backgroundImage: `url(${content.image})`, maxHeight: '25vh' }}
+			sx={{ backgroundImage: `url(${content.image})`, maxHeight: '12.5vw'}}
 			className={classes.card}
 		>
 			<div>
@@ -53,7 +55,7 @@ export function ArticleComponent() {
 					{content.title}
 				</Title>
 			</div>
-			<Button variant="white" color="dark">
+			<Button variant="light" color="dark" size="xs">
 				Read article
 			</Button>
 		</Paper>

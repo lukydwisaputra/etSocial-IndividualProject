@@ -18,29 +18,30 @@ const useStyles = createStyles((theme) => ({
 function LeftSidebarComponent() {
 	const { classes, theme } = useStyles();
 	const buttonStyle = "col-2";
-	const rowStyle = "row mt-5";
+	const rowStyle = "row mt-4";
 	const borderStyle = "rgb(166,167,171, 0.2)";
-	const avatarBgColor = theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2];
+	const avatarBgColor = theme.colorScheme === "dark" ? 'white' : 'rgb(26,27,30,0.7)';
+	const border = `1px solid ${avatarBgColor}`;
 	const { pathname } = useRouter();
 	const allowedPage = ["/home", "/explore", "/saved", "/profile"];
-	// ganti jadi kalau user beneran udah login
+	const iconSize = 17;
 	const isAllowed = allowedPage.includes(pathname);
 
 	return (
-		<nav style={{ height: "100%", zIndex: "5" }}>
+		<nav style={{zIndex: "5", marginTop: '6vh' }}>
 			{isAllowed ? (
 				<div>
-					<div style={{ position: "fixed", top: "1.5%" }}>
-						<hr className={rowStyle} style={{ border: "none", borderTop: borderStyle }} />
+					<div style={{ position: "fixed" }}>
+						<hr style={{ borderBottom: 'none', borderTop: border, marginTop: 0 }} />
 						{/* Logo */}
 						<div className={rowStyle}>
 							<Link href="/home" passHref>
-								<Text component="a" className="fs-1 fw-bold">
+								<Text component="a" className="fs-3 fw-bold">
 									ét
 								</Text>
 							</Link>
 						</div>
-						<hr className={rowStyle} style={{ border: "none", borderTop: borderStyle }} />
+						<hr style={{ borderBottom: 'none', borderTop: border }} />
 
 						<div>
 							{/* Home */}
@@ -52,7 +53,7 @@ function LeftSidebarComponent() {
 											className={buttonStyle}
 											style={classes.theme}
 										>
-											<MdHomeFilled className="" size={25} />
+											<MdHomeFilled className="" size={iconSize} />
 										</ActionIcon>
 									</Link>
 								</Tooltip>
@@ -66,7 +67,7 @@ function LeftSidebarComponent() {
 											className={buttonStyle}
 											style={classes.theme}
 										>
-											<MdSearch size={25} />
+											<MdSearch size={iconSize} />
 										</ActionIcon>
 									</Link>
 								</Tooltip>
@@ -80,7 +81,7 @@ function LeftSidebarComponent() {
 											className={buttonStyle}
 											style={classes.theme}
 										>
-											<MdBookmark size={22} />
+											<MdBookmark size={iconSize} />
 										</ActionIcon>
 									</Link>
 								</Tooltip>
@@ -100,7 +101,7 @@ function LeftSidebarComponent() {
 										className={buttonStyle}
 										style={classes.theme}
 									>
-										<AiOutlinePlus size={25} />
+										<AiOutlinePlus size={iconSize} />
 									</ActionIcon>
 								</Tooltip>
 							</div>
@@ -119,13 +120,13 @@ function LeftSidebarComponent() {
 											className={buttonStyle}
 											style={classes.theme}
 										>
-											<Indicator inline size={10} offset={0} position="bottom-end" color="green">
+											<Indicator inline size={5} offset={-7.5} position="bottom-center" color="green">
 												<Avatar
 													src={
 														"https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200"
 													}
 													radius="xl"
-													size={30}
+													size={25}
 													style={{
 														border: `1px solid ${
 															theme.colorScheme === "dark" ? "white" : theme.colors.dark[7]
@@ -156,16 +157,16 @@ function LeftSidebarComponent() {
 				</div>
 			) : (
 				<div style={{ position: "fixed", top: "1.5%" }}>
-					<hr className={rowStyle} style={{ border: "none", borderTop: borderStyle }} />
+					<hr style={{ borderBottom: 'none', borderTop: border }} />
 					{/* Logo */}
 					<div className={rowStyle}>
 						<Link href="/home" passHref>
-							<Text component="a" className="fs-1 fw-bold">
+							<Text component="a" className="fs-3 fw-bold">
 								ét
 							</Text>
 						</Link>
 					</div>
-					<hr className={rowStyle} style={{ border: "none", borderTop: borderStyle }} />
+					<hr style={{ borderBottom: 'none', borderTop: border }} />
 					{/* Theme Toggle */}
 					<div className={rowStyle}>
 						<Tooltip position="right" withArrow transition="pop" label="Try me!">
