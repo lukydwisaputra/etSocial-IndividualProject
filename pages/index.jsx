@@ -9,10 +9,10 @@ export default function Home() {
 	const btnColor = theme.colorScheme === "dark" ? 'gray' : 'dark';
 
 	return (
-		<div>
+		<>
 			{/* if user already login redirect to her home page */}
 			{/* if user not login redirect to Login page */}
-			<div className="container" style={{marginTop: '30vh'}}>
+			<div className="container mx-2" style={{marginTop: '25vh'}}>
 				<div className="container">
 					<div>
 						<Text className="fs-1 fw-bold">étSocial</Text>
@@ -32,6 +32,6 @@ export default function Home() {
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 }

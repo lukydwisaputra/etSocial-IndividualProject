@@ -24,7 +24,7 @@ export default function LayoutComponent({children}) {
 			<MobileNavbarComponent />
 
 			{/* Mobile */}
-			<main style={{ marginTop: "6.5vh", marginBottom: "7vh" }} className="d-lg-none">
+			<main style={{ marginTop: "7vh", marginBottom: "7vh" }} className="d-lg-none">
                 {children} {/* content for mobile and tablet */}
 			</main>
 			
