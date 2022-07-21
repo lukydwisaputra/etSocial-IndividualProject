@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createStyles, Avatar, Indicator, ActionIcon, Menu, Group } from "@mantine/core";
 import { MdHomeFilled, MdSearch, MdBookmark } from "react-icons/md";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus, AiFillHeart } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -23,7 +23,7 @@ export default function MobileNavbarComponent() {
 		: theme.colors.gray[2]
 	;
 	const { pathname } = useRouter();
-	const allowedPage = ["/home", "/explore", "/saved", "/profile"];
+	const allowedPage = ["/home", "/explore", "/liked", "/profile"];
 	const isAllowed = allowedPage.includes(pathname);
 
 	return (
@@ -60,9 +60,9 @@ export default function MobileNavbarComponent() {
 								</ActionIcon>
 							</Link>
 							{/* Bookmarks */}
-							<Link href="/saved" passHref>
+							<Link href="/liked" passHref>
 								<ActionIcon component="button" style={classes.theme}>
-									<MdBookmark size={22} />
+									<AiFillHeart size={22} />
 								</ActionIcon>
 							</Link>
 							{/* Profile */}

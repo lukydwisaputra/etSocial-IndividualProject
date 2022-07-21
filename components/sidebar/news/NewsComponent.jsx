@@ -7,7 +7,7 @@ const useStyles = createStyles((theme) => ({
 	},
 
 	title: {
-		fontWeight: 700,
+		fontWeight: 600,
 		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 		lineHeight: 1.2,
 		fontSize: '0.8rem'
@@ -33,7 +33,7 @@ export function NewsComponent() {
 						{"Empowering a new wave of health tech startups — with data"}
 					</Text>
 					<Group noWrap spacing="xs">
-						<Text style={{fontSize: '0.7rem'}}>{"Anna Heim - published in techcrunch.com"}</Text>
+						<Text className="text-secondary" style={{fontSize: '0.7rem'}}>{"Anna Heim - published in techcrunch.com"}</Text>
 					</Group>
 				</div>
 			</Group>

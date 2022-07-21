@@ -17,14 +17,15 @@ export default function LayoutComponent({children}) {
 			<Head>
 				<title>étSocial</title>
 				<link rel="icon" href="/favicon.ico" />
-				<meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" />
+				{/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
 			</Head>
 
 			<HeaderComponent />
 			<MobileNavbarComponent />
 
 			{/* Mobile */}
-			<main style={{ marginTop: "7vh", marginBottom: "7vh" }} className="d-lg-none">
+			<main style={{ marginTop: "7.5vh", marginBottom: "7.5vh" }} className="d-lg-none">
                 {children} {/* content for mobile and tablet */}
 			</main>
 			
@@ -36,7 +37,7 @@ export default function LayoutComponent({children}) {
 						<div className="col-1" style={{ borderRight: border }}>
 							<LeftSidebarComponent />
 						</div>
-						<div className="col-5" style={{minHeight: '100vh', paddingTop: paddingPostDesktop, paddingRight: '5vh', paddingLeft: '5vh'}}>
+						<div className="col-5" style={{minHeight: '100vh', paddingTop: '7vh', paddingRight: '5vh', paddingLeft: '5vh'}}>
                             {children} {/* content for desktop */}
 						</div>
 						<div className="col-4" style={{ borderLeft: border }}>

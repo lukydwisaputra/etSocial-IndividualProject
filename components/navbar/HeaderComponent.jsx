@@ -29,7 +29,7 @@ const homePage = () => {
 			<div className="container m-auto">
 				<div className="row justify-content-between align-items-center">
 					<div className="col-3 col-sm-3 col-md-3 col-lg-1">
-						<Text href="/" className={`${classes.a} fs-3 m-auto`}>ét</Text>
+						<Text href="/" className={`${classes.a} fs-3 m-auto`} style={{fontWeight: '500'}}>étSocial</Text>
 					</div>
 					<div className={`col-6 col-sm-6 col-md-6 col-lg-7 m-auto`}>
 						{/* <SearchComponent /> */}
@@ -70,7 +70,7 @@ const otherPage = (title) => {
 					</div>
 					<div className={`col-6 col-sm-6 col-md-6 col-lg-7 m-auto`}>
 						{/* <SearchComponent /> */}
-						<Text href="/" className={`${classes.a} fs-6 m-auto text-center fw-bold`}>{title}</Text>
+						<Text href="/" className={`${classes.a} fs-6 m-auto text-center`} style={{fontWeight: '600'}}>{title}</Text>
 					</div>
 					<div className="col-3 col-sm-3 col-md-3 col-lg-4">
 						<div className="float-end">
@@ -92,11 +92,20 @@ export default function HeaderComponent() {
 		case 'explore':
 			_title = 'Exploré'
 			break;
-		case 'saved':
-			_title = 'Savéd'
+		case 'liked':
+			_title = 'Likéd'
 			break;
 		case 'about':
 			_title = 'About'
+			break;
+		case 'authentication':
+			_title = 'Authéntication'
+			break;
+		case 'recovery':
+			_title = 'Récovery'
+			break;
+		case 'profile':
+			_title = 'lukydwisaputra' // ganti sama username
 			break;
 		default:
 			break;

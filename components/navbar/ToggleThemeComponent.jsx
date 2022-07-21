@@ -4,7 +4,7 @@ import { Sun, MoonStars } from "tabler-icons-react";
 
 export function ToggleThemeComponent() {
 	const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-	const iconSize = 15;
+	const iconSize = 17;
 
 	return (
 		<Group position="flex">

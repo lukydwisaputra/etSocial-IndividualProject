@@ -16,11 +16,13 @@ import {
 } from "@mantine/core";
 import { At } from "tabler-icons-react";
 import Link from "next/link";
+import MenubarComponent from "../../components/menubar/MenubarComponent";
 
 export default function AuthenticationForm(props) {
 	const [type, toggle] = useToggle("login", ["login", "register"]);
 	const theme = useMantineTheme();
 	const btnColor = theme.colorScheme === "dark" ? "light" : "dark";
+	const border = `1px solid rgb(166,167,171, 0.2)`;
 
 	const form = useForm({
 		initialValues: {
@@ -47,116 +49,124 @@ export default function AuthenticationForm(props) {
 	// console.log(form.values)
 
 	return (
-		<div className="container" style={{ marginTop: "6.5vh", maxWidth: "500px" }}>
-			<div className="container">
-				<div>
-					<Text weight={700} className="fs-2 mb-4 text-center">
-						{type === "login" ? "Welcome back to étSocial!" : "Welcome to étSocial!"}
-					</Text>
+		<>
+			<MenubarComponent title={'Authentication'} /> 
+			<div
+				className="d-flex justify-content-center align-items-center text-center p-0"
+				style={{minHeight: "70vh", marginTop: "10vh", marginBottom: "7vh"}}
+			>
+				<div className="container" style={{ maxWidth: "500px" }}>
+					<div>
+						<Text weight={700} className="fs-4 mb-25 text-center">
+							{type === "login" ? "Welcome back to étSocial!" : "Welcome to étSocial!"}
+						</Text>
+					</div>
+					<div style={{marginBottom: '5vh'}}>
+						<Text className="mt-2 mb-4" color="dimmed" size="sm" align="center">
+							{
+								type === "login"
+								? "Keep create, discover and connect with the global community"
+								: "Start create, discover and connect with the global community"
+							}	
+						</Text>
+					</div>
+
+					<Paper radius="md" p="xl" shadow='sm' style={{border: border }} {...props}>
+						<Text size="sm" weight={700} className="mb-4">
+							{type.toUpperCase() + " FORM"}
+						</Text>
+
+						<form onSubmit={form.onSubmit(() => {})}>
+							<Group direction="column" grow>
+								{type === "register" ? (
+									<>
+										<TextInput
+											required
+											icon={<At size={14} />}
+											placeholder="username"
+											value={form.values.username}
+											onChange={(event) =>
+												form.setFieldValue("username", event.currentTarget.value)
+											}
+										/>
+
+										<Autocomplete
+											required
+											icon={<AiOutlineMail size={14} />}
+											value={value}
+											onChange={setValue}
+											placeholder="e-mail"
+											data={data}
+										/>
+
+										<PasswordComponent />
+
+										<PasswordInput
+											icon={<RiLockPasswordLine size={14} />}
+											required
+											placeholder="repeat password"
+											value={form.values.password}
+											onChange={(event) =>
+												form.setFieldValue("password", event.currentTarget.value)
+											}
+											// error={form.errors.password && "Password should include at least 8 characters"}
+										/>
+										{/* <small className="text-muted" style={{textAlign: 'left'}}>
+											Strong password should include at least 8 characters including an
+											uppercase letter, a symbol, and a number.
+										</small> */}
+									</>
+								) : (
+									<>
+										<TextInput
+											required
+											icon={<At size={14} />}
+											placeholder="username or email"
+											value={form.values.userOrEmail}
+											onChange={(event) =>
+												form.setFieldValue("userOrEmail", event.currentTarget.value)
+											}
+										/>
+
+										<PasswordInput
+											icon={<RiLockPasswordLine size={14} />}
+											required
+											placeholder="password"
+											value={form.values.passwordLogin}
+											onChange={(event) =>
+												form.setFieldValue("passwordLogin", event.currentTarget.value)
+											}
+											// error={form.errors.passwordLogin === "" ? "" : "Password should include at least 8 characters"}
+										/>
+										<Link href="/recovery" passHref >
+											<Anchor className="text-muted" component="a" size="xs" style={{textAlign: 'left'}}>
+												Forgot password?
+											</Anchor>
+										</Link>
+									</>
+								)}
+							</Group>
+
+							<Group position="apart" mt="xl">
+								<Anchor
+									className="text-muted fw-bold"
+									component="a"
+									color={btnColor}
+									onClick={() => toggle()}
+									size="xs"
+								>
+									{type === "register"
+										? "Have an account? Login"
+										: "Don't have an account? Register"}
+								</Anchor>
+								<Button variant="light" color="gray" type="submit">
+									{upperFirst(type)}
+								</Button>
+							</Group>
+						</form>
+					</Paper>
 				</div>
-				<div>
-					<p className="text-center m-auto mb-5" style={{ maxWidth: "300px" }}>
-						{type === "login"
-							? "Keep create, discover and connect with the global community"
-							: "Start create, discover and connect with the global community"}
-					</p>
-				</div>
-
-				<Paper radius="md" p="xl" withBorder {...props}>
-					<Text size="lg" weight={700} className="mb-4">
-						{type.toUpperCase() + " FORM"}
-					</Text>
-
-					<form onSubmit={form.onSubmit(() => {})}>
-						<Group direction="column" grow>
-							{type === "register" ? (
-								<>
-									<TextInput
-										required
-										icon={<At size={14} />}
-										placeholder="username"
-										value={form.values.username}
-										onChange={(event) =>
-											form.setFieldValue("username", event.currentTarget.value)
-										}
-									/>
-
-									<Autocomplete
-										required
-										icon={<AiOutlineMail size={14} />}
-										value={value}
-										onChange={setValue}
-										placeholder="e-mail"
-										data={data}
-									/>
-
-									<PasswordComponent />
-
-									<PasswordInput
-										icon={<RiLockPasswordLine size={14} />}
-										required
-										placeholder="repeat password"
-										value={form.values.password}
-										onChange={(event) =>
-											form.setFieldValue("password", event.currentTarget.value)
-										}
-										// error={form.errors.password && "Password should include at least 8 characters"}
-									/>
-									<small className="text-muted">
-										Strong password should include at least 8 characters including an
-										uppercase letter, a symbol, and a number.
-									</small>
-								</>
-							) : (
-								<>
-									<TextInput
-										required
-										icon={<At size={14} />}
-										placeholder="username or email"
-										value={form.values.userOrEmail}
-										onChange={(event) =>
-											form.setFieldValue("userOrEmail", event.currentTarget.value)
-										}
-									/>
-
-									<PasswordInput
-										icon={<RiLockPasswordLine size={14} />}
-										required
-										placeholder="password"
-										value={form.values.passwordLogin}
-										onChange={(event) =>
-											form.setFieldValue("passwordLogin", event.currentTarget.value)
-										}
-										// error={form.errors.passwordLogin === "" ? "" : "Password should include at least 8 characters"}
-									/>
-									<Link href="/recovery" passHref>
-										<Anchor className="text-muted" component="a" size="xs">
-											Forgot password?
-										</Anchor>
-									</Link>
-								</>
-							)}
-						</Group>
-
-						<Group position="apart" mt="xl">
-							<Anchor
-								className="text-muted fw-bold"
-								component="a"
-								color={btnColor}
-								onClick={() => toggle()}
-								size="xs"
-							>
-								{type === "register"
-									? "Already have an account? Login"
-									: "Don't have an account? Register"}
-							</Anchor>
-							<Button variant="light" color="gray" type="submit">
-								{upperFirst(type)}
-							</Button>
-						</Group>
-					</form>
-				</Paper>
 			</div>
-		</div>
+		</>
 	);
 }

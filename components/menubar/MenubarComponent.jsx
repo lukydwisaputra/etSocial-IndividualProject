@@ -12,6 +12,7 @@ function MenubarComponent(props) {
     return ( 
         <div
             className="fixed-top d-none d-sm-none d-md-none d-lg-block"
+            style={{zIndex: '1'}}
         >
             <div className='container'>
                 <div className="row">
@@ -34,7 +35,7 @@ function MenubarComponent(props) {
                                 </ActionIcon>
                             </div>
                             <div className="col-11 m-auto">
-                                <Text className="fs-6 fw-bold">{props.title}</Text>
+                                <Text className="fs-6 fw-bold" >{props.title}</Text>
                             </div>
                         </div>
                     </div>

@@ -14,12 +14,12 @@ const useStyles = createStyles((theme) => ({
 
 	title: {
 		fontFamily: `Greycliff CF ${theme.fontFamily}`,
-		fontWeight: 900,
+		fontWeight: 700,
 		color: theme.white,
 		lineHeight: 1.2,
-		fontSize: '0.8rem',
+		fontSize: '0.9rem',
 		marginTop: theme.spacing.xs,
-		maxWidth: '70%'
+		maxWidth: '80%'
 	},
 
 	category: {
@@ -44,7 +44,7 @@ export function ArticleComponent() {
 			shadow="md"
 			p="md"
 			radius="md"
-			sx={{ backgroundImage: `url(${content.image})`, maxHeight: '12.5vw'}}
+			sx={{ backgroundImage: `url(${content.image})`, maxHeight: '200px'}}
 			className={classes.card}
 		>
 			<div>

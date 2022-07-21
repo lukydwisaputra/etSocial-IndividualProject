@@ -40,9 +40,9 @@ export default function AlbumComponent(props) {
         <div>
             <Paper
                 shadow="md"
-                p="xl"
+                p="md"
                 radius="xs"
-                sx={{ backgroundImage: `url(${bgImage})`, maxHeight: '20vh', maxWidth: '20vh'}}
+                sx={{ backgroundImage: `url(${bgImage})`, maxHeight: '12.5vh', maxWidth: '35vw'}}
                 className={classes.card}
             >
                 {/* <div>

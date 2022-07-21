@@ -57,16 +57,16 @@ export function PasswordComponent() {
                 result = ''
                 break;
             case 25:
-                result = 'weak 🥱'
+                result = 'Weak 🥱'
                 break;
             case 50:
-                result = 'medium 👀'
+                result = 'Medium 👀'
                 break;
             case 75:
-                result = 'strong 💪🏽'
+                result = 'Strong 💪🏽'
                 break;
             case 100:
-                result = 'very strong ⚡️'
+                result = 'Very Strong ⚡️'
                 break;
             default:
                 break;

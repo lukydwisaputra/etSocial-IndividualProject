@@ -1,7 +1,7 @@
 import React from "react";
 import { createStyles, Avatar, Indicator, ActionIcon, Tooltip, Text, Menu } from "@mantine/core";
 import { MdHomeFilled, MdBookmark, MdSearch } from "react-icons/md";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus, AiFillHeart } from "react-icons/ai";
 import Link from "next/link";
 import { ToggleThemeComponent } from "../navbar/ToggleThemeComponent";
 import { useRouter } from "next/router";
@@ -23,7 +23,7 @@ function LeftSidebarComponent() {
 	const avatarBgColor = theme.colorScheme === "dark" ? 'white' : 'rgb(26,27,30,0.7)';
 	const border = `1px solid ${avatarBgColor}`;
 	const { pathname } = useRouter();
-	const allowedPage = ["/home", "/explore", "/saved", "/profile"];
+	const allowedPage = ["/home", "/explore", "/liked", "/profile"];
 	const iconSize = 17;
 	const isAllowed = allowedPage.includes(pathname);
 
@@ -32,21 +32,21 @@ function LeftSidebarComponent() {
 			{isAllowed ? (
 				<div>
 					<div style={{ position: "fixed" }}>
-						<hr style={{ borderBottom: 'none', borderTop: border, marginTop: 0 }} />
+						<hr className="mb-4" style={{ borderBottom: 'none', borderTop: border, marginTop: 0 }} />
 						{/* Logo */}
 						<div className={rowStyle}>
 							<Link href="/home" passHref>
-								<Text component="a" className="fs-3 fw-bold">
+								<Text component="a" className="fs-3" style={{fontWeight: '500'}}>
 									ét
 								</Text>
 							</Link>
 						</div>
-						<hr style={{ borderBottom: 'none', borderTop: border }} />
+						<hr className="mt-4" style={{ borderBottom: 'none', borderTop: border }} />
 
 						<div>
 							{/* Home */}
 							<div className={rowStyle}>
-								<Tooltip size="sm" position="right" withArrow transition="pop" label="Home">
+								<Tooltip size="sm" position="right" withArrow transition="pop" label="Homé">
 									<Link href="/home" passHref>
 										<ActionIcon
 											component="button"
@@ -60,7 +60,7 @@ function LeftSidebarComponent() {
 							</div>
 							{/* Explore */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Explore">
+								<Tooltip position="right" withArrow transition="pop" label="Exploré">
 									<Link href="/explore" passHref>
 										<ActionIcon
 											component="button"
@@ -74,28 +74,28 @@ function LeftSidebarComponent() {
 							</div>
 							{/* Bookmarks */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Saved">
-									<Link href="/saved" passHref>
+								<Tooltip position="right" withArrow transition="pop" label="Likéd">
+									<Link href="/liked" passHref>
 										<ActionIcon
 											component="button"
 											className={buttonStyle}
 											style={classes.theme}
 										>
-											<MdBookmark size={iconSize} />
+											<AiFillHeart size={iconSize - 2} />
 										</ActionIcon>
 									</Link>
 								</Tooltip>
 							</div>
 							{/* Theme Toggle */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Try me!">
+								<Tooltip position="right" withArrow transition="pop" label="Try mé!">
 									<ToggleThemeComponent />
 								</Tooltip>
 							</div>
 							<hr className={rowStyle} style={{ borderTop: borderStyle }} />
 							{/* Create a Post */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Create a Post">
+								<Tooltip position="right" withArrow transition="pop" label="Creaté a Post">
 									<ActionIcon
 										component="button"
 										className={buttonStyle}
@@ -114,7 +114,7 @@ function LeftSidebarComponent() {
 								withArrow
 								size={'xs'}
 								control={
-									<Tooltip position="right" withArrow transition="pop" label="Profile">
+									<Tooltip position="right" withArrow transition="pop" label="Profilé">
 										<ActionIcon
 											component="button"
 											className={buttonStyle}
@@ -141,7 +141,7 @@ function LeftSidebarComponent() {
 							>
 								<Menu.Item>
 									<Link href="/profile" passHref>
-										<p className='m-auto text-muted'>Profile</p>
+										<p className='m-auto text-muted'>Profilé</p>
 									</Link>
 								</Menu.Item>
 
@@ -156,17 +156,17 @@ function LeftSidebarComponent() {
 					</div>
 				</div>
 			) : (
-				<div style={{ position: "fixed", top: "1.5%" }}>
-					<hr style={{ borderBottom: 'none', borderTop: border }} />
+				<div style={{ position: "fixed"}}>
+					<hr className="mb-4" style={{ borderBottom: 'none', borderTop: border, marginTop: 0 }} />
 					{/* Logo */}
 					<div className={rowStyle}>
 						<Link href="/home" passHref>
-							<Text component="a" className="fs-3 fw-bold">
+							<Text component="a" className="fs-3" style={{fontWeight: '500'}}>
 								ét
 							</Text>
 						</Link>
 					</div>
-					<hr style={{ borderBottom: 'none', borderTop: border }} />
+					<hr className="mt-4" style={{ borderBottom: 'none', borderTop: border }} />
 					{/* Theme Toggle */}
 					<div className={rowStyle}>
 						<Tooltip position="right" withArrow transition="pop" label="Try me!">
