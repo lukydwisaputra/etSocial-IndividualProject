@@ -36,7 +36,7 @@ function getStrength(password) {
 	return (Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10));
 }
 
-export function PasswordComponent() {
+export function PasswordComponent(props) {
     const [popoverOpened, setPopoverOpened] = useState(false);
 	const [value, setValue] = useState("");
 	const checks = requirements.map((requirement, index) => (
@@ -93,7 +93,8 @@ export function PasswordComponent() {
                         placeholder="password"
                         onChange={(event) => { 
                             getStrength(value)
-                            setValue(event.currentTarget.value)
+                            setValue(event.currentTarget.value);
+                            props.getValue(event.currentTarget.value)
                         }}
                     />
                 }

@@ -19,7 +19,6 @@ import {
 	AiOutlineDelete,
 	AiOutlineShareAlt,
 } from "react-icons/ai";
-import EditProfileComponent from "./EditProfileComponent";
 
 export default function UserInfoAction() {
 	const theme = useMantineTheme();
@@ -73,7 +72,6 @@ export default function UserInfoAction() {
                                     label="Name"
                                     value={'Luky Dwi Saputra'}
                                     variant='default'
-									// value={value}
 									onChange={(event) => setValue(event.currentTarget.value)}
 								/>
 								<TextInput
@@ -81,7 +79,6 @@ export default function UserInfoAction() {
                                     label="Username"
                                     value={'lukydwisaputra'}
                                     variant='default'
-									// value={value}
 									onChange={(event) => setValue(event.currentTarget.value)}
 								/>
                                 <Textarea
@@ -89,6 +86,7 @@ export default function UserInfoAction() {
                                     variant='default'
                                     value="Make It Anyway 🐙"
                                     label="Bio"
+									onChange={(event) => setValue(event.currentTarget.value)}
                                 />
                                 <div 
                                     className="mt-3 text-center"

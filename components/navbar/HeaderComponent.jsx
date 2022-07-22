@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createStyles, Group, Text, ActionIcon } from "@mantine/core";
-import { SearchComponent } from "./SearchComponent";
-import { UserButtonComponent } from "./UserButtonComponent";
+import { createStyles, Text, ActionIcon } from "@mantine/core";
 import { ToggleThemeComponent } from "./ToggleThemeComponent";
 import { useRouter } from 'next/router';
 import { IoIosArrowBack } from "react-icons/io";

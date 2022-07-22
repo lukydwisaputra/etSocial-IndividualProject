@@ -35,38 +35,61 @@ export default function ForgotPassword() {
 	const data =
 		value.trim().length > 0 && !value.includes("@")
 			? ["gmail.com", "outlook.com", "yahoo.com"].map((provider) => `${value}@${provider}`)
-			: []
-    ;
-    
+			: [];
+	// console.log(value);
 	return (
 		<>
-			<MenubarComponent title={'Recovery'} /> 
+			<MenubarComponent title={"Récovery"} />
 			<div
 				className="d-flex justify-content-center align-items-center p-0"
-				style={{minHeight: "70vh", marginTop: "5vh"}}
+				style={{ minHeight: "70vh", marginTop: "5vh" }}
 			>
-				<Container size={"sm"} my={30} style={{maxWidth: "500px"}}>
+				<Container size={"sm"} my={30} style={{ maxWidth: "500px" }}>
 					<Title className="fs-4" align="center">
 						Oops..
 					</Title>
 					<Title className="fs-4" align="center">
-						Forgot your password? 
+						Forgot your password?
 					</Title>
-					<Text className="mt-2" color="dimmed" size="sm" align="center" style={{marginBottom: '5vh'}}>
+					<Text
+						className="mt-2"
+						color="dimmed"
+						size="sm"
+						align="center"
+						style={{ marginBottom: "5vh" }}
+					>
 						Don't worry, just type your email and get a recovery link
 					</Text>
 
-					<Paper shadow="xs" p={30} radius="md" mt="xl" style={{border: border}}>
+					<Paper shadow="xs" p={30} radius="md" mt="xl" style={{ border: border }}>
 						<Autocomplete
 							required
 							icon={<AiOutlineMail size={14} />}
 							label="Email"
 							onChange={setValue}
-							placeholder="e-mail"
+							placeholder="email"
 							data={data}
+							error={
+								value === "" ? (
+									""
+								) : value.includes("@" && ".") ? (
+									""
+								) : (
+									<small style={{ textAlign: "center" }}>
+										please check your email format
+									</small>
+								)
+							}
 						/>
 						<Group mt="lg" className={classes.controls}>
-							<Button size="sm" variant="light" color="gray" type="submit" className="d-flex">
+							<Button
+								size="sm"
+								variant="light"
+								color="gray"
+								type="submit"
+								className="d-flex"
+								onClick={() => {}}
+							>
 								Send recovery link
 							</Button>
 						</Group>
