@@ -19,11 +19,26 @@ import {
 	AiOutlineDelete,
 	AiOutlineShareAlt,
 } from "react-icons/ai";
+import { useForm } from "@mantine/hooks";
+import { At } from "tabler-icons-react";
 
 export default function UserInfoAction() {
 	const theme = useMantineTheme();
 	const [opened, setOpened] = useState(false);
 	const [value, setValue] = useState("");
+
+	const form = useForm({
+		initialValues: {
+			name: "",
+			username: "",
+			bio: ""
+		}
+	});
+
+	let name = "Luky Dwi Saputra";
+	let username = 'lukydwisaputra';
+	let email = 'lukydwisaputra@mail.com';
+	let bio = 'Make It Anyway 🐙';
 
 	return (
 		<>
@@ -44,6 +59,9 @@ export default function UserInfoAction() {
 								size={15}
 								onClick={() => {
 									setOpened(true);
+									form.setFieldValue("name", name);
+									form.setFieldValue("username", username);
+									form.setFieldValue("bio", bio);
 								}}
 							/>
 							<Modal
@@ -70,28 +88,41 @@ export default function UserInfoAction() {
 								<TextInput
                                     className="mt-2"
                                     label="Name"
-                                    value={'Luky Dwi Saputra'}
+                                    value={form.values.name}
                                     variant='default'
-									onChange={(event) => setValue(event.currentTarget.value)}
+									onChange={(event) =>
+										form.setFieldValue("name", event.currentTarget.value)
+									}
 								/>
 								<TextInput
+									icon={<At size={14} />}
                                     className="mt-2"
                                     label="Username"
-                                    value={'lukydwisaputra'}
+                                    value={form.values.username}
                                     variant='default'
-									onChange={(event) => setValue(event.currentTarget.value)}
+									onChange={(event) =>
+										form.setFieldValue("username", event.currentTarget.value)
+									}
 								/>
                                 <Textarea
                                     className="mt-2"
                                     variant='default'
-                                    value="Make It Anyway 🐙"
+                                    value={form.values.bio}
                                     label="Bio"
-									onChange={(event) => setValue(event.currentTarget.value)}
+									onChange={(event) =>
+										form.setFieldValue("bio", event.currentTarget.value)
+									}
                                 />
                                 <div 
                                     className="mt-3 text-center"
                                 >
-                                    <Button variant="default" size="sm">
+                                    <Button 
+										variant="default" 
+										size="sm"
+										onClick={() => {
+											console.log(form.values)
+										}}
+									>
                                         Done
                                     </Button>
                                 </div>
@@ -109,16 +140,16 @@ export default function UserInfoAction() {
 					mx="auto"
 				/>
 				<Text align="center" size="sm" weight={500} className="mt-4">
-					Luky Dwi Saputra • <span className="fw-light">@lukydwisaputra</span>
+					{name} • <span className="fw-light">@{username}</span>
 				</Text>
 				<Text align="center" color="dimmed" size="xs">
-					lukydwisaputra@mail.com
+					{email}
 				</Text>
 				<Text align="center" size="xs" weight={500} className="mt-2">
 					Bio:
 				</Text>
 				<Text align="center" color="dimmed" size="xs">
-					Make It Anyway 🐙
+					{bio}
 				</Text>
 			</Paper>
 			<div></div>

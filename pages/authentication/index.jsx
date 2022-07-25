@@ -17,10 +17,12 @@ import {
 	Anchor,
 	useMantineTheme,
 } from "@mantine/core";
+import Head from "next/head";
 
 export default function AuthenticationForm(props) {
 	const [type, toggle] = useToggle("login", ["login", "register"]);
 	const [value, setValue] = useState("");
+	const [isError, setIsError] = useState(false);
 	const theme = useMantineTheme();
 	const btnColor = theme.colorScheme === "dark" ? "light" : "dark";
 	const border = `1px solid rgb(166,167,171, 0.2)`;
@@ -42,7 +44,7 @@ export default function AuthenticationForm(props) {
 			email: (val) => /^\S+@\S+$/.test(val),
 			password: (val) => val.length >= 8,
 			userOrEmailLogin: (val) => /^\S+@\S+$/.test(val),
-			secondPassword: (val) => val === password,
+			secondPassword: (val) => val === form.values.password,
 		},
 	});
 
@@ -56,6 +58,15 @@ export default function AuthenticationForm(props) {
 
 	return (
 		<>
+			<Head>
+				<title>étSocial | {type === "register" ? "Régister" : "Login"}</title>
+				<link rel="icon" href="/favicon.ico" />
+				{/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1, maximum-scale=1"
+				></meta>
+			</Head>
 			<MenubarComponent title={"Authéntication"} />
 			<div
 				className="d-flex justify-content-center align-items-center p-0"
@@ -108,7 +119,8 @@ export default function AuthenticationForm(props) {
 											error={
 												form.values.email === "" ? (
 													""
-												) : form.values.email.includes("@" && ".") ? (
+												) : form.values.email.includes("@") &&
+												  form.values.email.includes(".") ? (
 													""
 												) : (
 													<small style={{ textAlign: "left" }}>
@@ -125,9 +137,11 @@ export default function AuthenticationForm(props) {
 											icon={<RiLockPasswordLine size={14} />}
 											required
 											placeholder="repeat password"
-											onChange={(event) =>
-												form.setFieldValue("secondPassword", event.currentTarget.value)
-											}
+											onChange={(event) => {
+												form.setFieldValue("secondPassword", event.currentTarget.value);
+												console.log(event.currentTarget.value === form.values.password);
+												// form.setErrors("secondPassword", true)
+											}}
 											error={
 												form.values.secondPassword === "" ? (
 													""
@@ -195,10 +209,7 @@ export default function AuthenticationForm(props) {
 											"username",
 										];
 
-										formFields.forEach((val) => {
-											form.setFieldValue(val, "");
-										});
-
+										form.reset();
 										toggle();
 									}}
 									size="xs"
@@ -207,7 +218,14 @@ export default function AuthenticationForm(props) {
 										? "Have an account? Login"
 										: "Don't have an account? Register"}
 								</Anchor>
-								<Button variant="light" color="gray" type="submit">
+								<Button
+									variant="light"
+									color="gray"
+									type="submit"
+									onClick={() => {
+										console.log(form);
+									}}
+								>
 									{upperFirst(type)}
 								</Button>
 							</Group>

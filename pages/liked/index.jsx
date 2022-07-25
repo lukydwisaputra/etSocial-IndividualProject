@@ -1,12 +1,18 @@
 import React from 'react';
 import AlbumComponent from '../../components/post/AlbumComponent';
 import MenubarComponent from '../../components/menubar/MenubarComponent';
+import Head from "next/head";
 
 function SavedPage() {
     let contentClasses = 'col-4 p-1';
 
     return ( 
         <>
+			<Head>
+				<title>étSocial | Likéd</title>
+				<link rel="icon" href="/favicon.ico" />
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+			</Head>
             <MenubarComponent title={'Likéd'} /> 
             <div className='container'>
                 <div className='row'>

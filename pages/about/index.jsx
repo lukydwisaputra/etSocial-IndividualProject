@@ -6,11 +6,19 @@ import Image from 'next/image';
 import about_us_1 from '../../assets/images/about_us_1.png';
 import about_us_2 from '../../assets/images/about_us_2.png';
 import about_us_3 from '../../assets/images/about_us_3.png';
+import Head from "next/head";
 
 function AboutPage() {
 
     return ( 
         <>
+			<Head>
+				<title>étSocial | About</title>
+				<link rel="icon" href="/favicon.ico" />
+				{/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+			</Head>
+			
             <div>
                 <MenubarComponent title={'About'} /> 
                 <div className="container">

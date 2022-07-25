@@ -12,6 +12,7 @@ import {
 } from "@mantine/core";
 import { AiOutlineMail } from "react-icons/ai";
 import MenubarComponent from "../../components/menubar/MenubarComponent";
+import Head from "next/head";
 
 const useStyles = createStyles((theme) => ({
 	controls: {
@@ -39,6 +40,12 @@ export default function ForgotPassword() {
 	// console.log(value);
 	return (
 		<>
+			<Head>
+				<title>étSocial | Récovery</title>
+				<link rel="icon" href="/favicon.ico" />
+				{/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+			</Head>
 			<MenubarComponent title={"Récovery"} />
 			<div
 				className="d-flex justify-content-center align-items-center p-0"
