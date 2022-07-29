@@ -75,34 +75,32 @@ export function PasswordComponent(props) {
     }
 
 	return (
-        <>
-            <Popover
-                opened={popoverOpened}
-                position="bottom"
-                placement="start"
-                withArrow
-                styles={{ popover: { width: "100%" } }}
-                trapFocus={false}
-                transition="pop-top-left"
-                onFocusCapture={() => setPopoverOpened(true)}
-                onBlurCapture={() => setPopoverOpened(false)}
-                target={
-                    <PasswordInput
-                        required
-                        icon={<RiLockPasswordLine size={14}/>}
-                        placeholder="password"
-                        onChange={(event) => { 
-                            getStrength(value)
-                            setValue(event.currentTarget.value);
-                            props.getValue(event.currentTarget.value)
-                        }}
-                    />
-                }
-            >
-                <small className='text-muted fw-bold text-secondary'>{'Strength: ' + indicator(strength)} </small>
-                <PasswordRequirement label="Includes at least 8 characters" meets={value.length >= 8} />
-                {checks}
-            </Popover>
-        </>
+        <Popover
+            opened={popoverOpened}
+            position="bottom"
+            placement="start"
+            withArrow
+            styles={{ popover: { width: "100%" } }}
+            trapFocus={false}
+            transition="pop-top-left"
+            onFocusCapture={() => setPopoverOpened(true)}
+            onBlurCapture={() => setPopoverOpened(false)}
+            target={
+                <PasswordInput
+                    required
+                    icon={<RiLockPasswordLine size={14}/>}
+                    placeholder="password"
+                    onChange={(event) => { 
+                        getStrength(value)
+                        setValue(event.currentTarget.value);
+                        props.getValue(event.currentTarget.value)
+                    }}
+                />
+            }
+        >
+            <small className='text-muted fw-bold text-secondary'>{'Strength: ' + indicator(strength)} </small>
+            <PasswordRequirement label="Includes at least 8 characters" meets={value.length >= 8} />
+            {checks}
+        </Popover>
 	);
 }

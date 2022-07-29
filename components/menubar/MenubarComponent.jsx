@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from "next/link";
 import { useMantineTheme, Text, ActionIcon } from "@mantine/core";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from 'next/router';

@@ -17,7 +17,6 @@ export default function LayoutComponent({children}) {
 			<Head>
 				<title>étSocial</title>
 				<link rel="icon" href="/favicon.ico" />
-				{/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
 				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
 			</Head>
 
@@ -47,8 +46,6 @@ export default function LayoutComponent({children}) {
 					</div>
 				</div>
 			</main>
-
-			<footer></footer>
 		</div>
 	);
 }
