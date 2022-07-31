@@ -6,11 +6,15 @@ import LeftSidebarComponent from "../../components/sidebar/LeftSidebarComponent"
 import RightSidebarComponent from "../../components/sidebar/RightSidebarComponent";
 import MenubarComponent from "../menubar/MenubarComponent";
 import { useMantineTheme } from "@mantine/core";
+import { useRouter } from 'next/router';
 
 export default function LayoutComponent({children}) {
 	const theme = useMantineTheme();
 	const border = "1px solid rgb(166,167,171, 0.2)";
 	const paddingPostDesktop = '5vh';
+	const router = useRouter();
+	const { pathname } = useRouter();
+	const isRegistrationPage = pathname.includes('/authentication') || pathname.includes('/recovery');
 
 	return (
 		<div className={styles.container}>
@@ -36,13 +40,30 @@ export default function LayoutComponent({children}) {
 						<div className="col-1" style={{ borderRight: border }}>
 							<LeftSidebarComponent />
 						</div>
-						<div className="col-5" style={{minHeight: '100vh', paddingTop: '7vh', paddingRight: '5vh', paddingLeft: '5vh'}}>
-                            {children} {/* content for desktop */}
-						</div>
-						<div className="col-4" style={{ borderLeft: border }}>
-							<RightSidebarComponent />
-						</div>
-						<div className="col-1"></div>
+						{
+							isRegistrationPage && 
+							<>
+								<div className="col-6" style={{minHeight: '100vh', paddingTop: '7vh', paddingRight: '5vh', paddingLeft: '5vh'}}>
+									{children} {/* content for desktop */}
+								</div>
+								<div className="col-4" style={{ borderLeft: border }}>
+									<RightSidebarComponent />
+								</div>
+								<div className="col-1"></div>
+							</>
+						}
+						{
+							!isRegistrationPage && 
+							<>
+								<div className="col-5" style={{minHeight: '100vh', paddingTop: '7vh', paddingRight: '5vh', paddingLeft: '5vh'}}>
+									{children} {/* content for desktop */}
+								</div>
+								<div className="col-4" style={{ borderLeft: border }}>
+									<RightSidebarComponent />
+								</div>
+								<div className="col-1"></div>
+							</>
+						}
 					</div>
 				</div>
 			</main>

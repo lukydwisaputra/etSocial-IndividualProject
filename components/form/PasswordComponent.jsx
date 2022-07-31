@@ -36,7 +36,7 @@ function getStrength(password) {
 	return (Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10));
 }
 
-export function PasswordComponent(props) {
+export function PasswordComponent({getValue, inputValue}) {
     const [popoverOpened, setPopoverOpened] = useState(false);
 	const [value, setValue] = useState("");
 	const checks = requirements.map((requirement, index) => (
@@ -90,10 +90,14 @@ export function PasswordComponent(props) {
                     required
                     icon={<RiLockPasswordLine size={14}/>}
                     placeholder="password"
+                    value={inputValue}
                     onChange={(event) => { 
-                        getStrength(value)
-                        setValue(event.currentTarget.value);
-                        props.getValue(event.currentTarget.value)
+                        let password = event.currentTarget.value;
+                        if (password === "") {
+                            getStrength(password);
+                        }
+                        setValue(password);
+                        getValue(password);
                     }}
                 />
             }

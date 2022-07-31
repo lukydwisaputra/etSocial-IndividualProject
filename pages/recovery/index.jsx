@@ -90,7 +90,7 @@ export default function ForgotPassword() {
 						/>
 						<Group mt="lg" className={classes.controls}>
 							<Button
-								size="sm"
+								size="xs"
 								variant="light"
 								color="gray"
 								type="submit"
