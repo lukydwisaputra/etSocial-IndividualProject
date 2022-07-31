@@ -16,8 +16,7 @@ function MenubarComponent(props) {
             <div className='container'>
                 <div className="row">
                     <div className='col-1'></div>
-                    <div className='col-1'></div>
-                    <div className='col-5 py-1' style={{
+                    <div className='col-6 py-1' style={{
                             height: "6vh",
                             backgroundColor:
                                 theme.colorScheme === "dark" ? theme.colors.dark[7] : "white"

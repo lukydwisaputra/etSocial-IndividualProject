@@ -18,14 +18,13 @@ import {
 	AiOutlineDelete,
 	AiOutlineShareAlt,
 } from "react-icons/ai";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
-import { FaRegComment, FaCommentAlt } from "react-icons/fa";
+import { BiComment } from "react-icons/bi";
 import { CommentComponent } from "./CommentComponent";
 import Link from "next/link";
 
 export default function PostComponent(props) {
 	const theme = useMantineTheme();
-    const iconSize = 22;
+	const iconSize = 22;
 
 	const secondaryColor =
 		theme.colorScheme === "dark" ? theme.colors.dark[1] : theme.colors.gray[7];
@@ -94,7 +93,8 @@ export default function PostComponent(props) {
 						>
 							<Group>
 								<ActionIcon radius="sm" size={30}>
-									<AiFillHeart size={iconSize} color="rgb(235,72,72,0.8)" />
+									{/* <AiFillHeart size={iconSize} color="rgb(235,72,72,0.8)" /> */}
+									<AiOutlineHeart size={iconSize} color={secondaryColor} />
 								</ActionIcon>
 								<ActionIcon
 									className="float-end"
@@ -102,7 +102,7 @@ export default function PostComponent(props) {
 									size={30}
 									style={{ marginLeft: "-10px" }}
 								>
-									<FaCommentAlt size={iconSize - 3} color={secondaryColor} />
+									<BiComment size={iconSize - 1} color={secondaryColor} />
 								</ActionIcon>
 							</Group>
 
@@ -167,6 +167,14 @@ export default function PostComponent(props) {
 										with tours and activities on and around the fjords of Norway.
 									</span>
 								</Spoiler>
+								{/* If caption > 85 characters spoiler active */}
+								{/* <Text size="sm" className="fw-bold" component="a">
+									@lukydwisaputra{" "}
+								</Text>
+								<span size="sm">
+									With Fjord Tours you can explore more of the magical fjord landscapes
+									with tours and activities on and around the fjords of Norway.
+								</span> */}
 							</div>
 						</Text>
 						{/* <Anchor href="/" target="_blank" style={{fontColor: theme.colors.gray[1]}}> */}

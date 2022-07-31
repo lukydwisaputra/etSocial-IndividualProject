@@ -1,21 +1,69 @@
-import React from 'react';
-import { Text } from "@mantine/core";
+import React from "react";
+import { createStyles, Image, Container, Title, Text, Button, SimpleGrid } from "@mantine/core";
+import image from '../assets/images/404.svg';
 import Link from "next/link";
 
+const useStyles = createStyles((theme) => ({
+	root: {
+		paddingTop: 50,
+		paddingBottom: 80,
+	},
+
+	title: {
+		fontWeight: 600,
+		marginBottom: theme.spacing.md,
+		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
+
+		[theme.fn.smallerThan("sm")]: {
+			fontSize: 32,
+		},
+	},
+
+	control: {
+		[theme.fn.smallerThan("sm")]: {
+			width: "100%",
+		},
+	},
+
+	mobileImage: {
+		[theme.fn.largerThan("sm")]: {
+			display: "none",
+		},
+	},
+
+	desktopImage: {
+		[theme.fn.smallerThan("sm")]: {
+			display: "none",
+		},
+	},
+}));
+
 function Custom404() {
-    return ( 
-        <div
-            className="d-flex justify-content-center align-items-center p-0"
-            style={{ minHeight: "70vh", marginTop: "7vh", marginBottom: "7vh" }}
-		>
-            <div className=''>
-                    <Text className='fw-bold fs-5'>404 - PAGE NOT FOUND</Text>
-                <Link href="/" passHref>
-                    <Text className='mt-5 text-center' style={{textDecoration: 'underline'}}>back to the right path</Text>
-                </Link>
-            </div>
+	const { classes } = useStyles();
+
+	return (
+        <div className="d-flex justify-content-center align-items-center p-0" style={{height: '90vh'}}>
+            <Container className={classes.root}>
+                <div className="mb-5">
+                    <Image src={image.src} className={classes.mobileImage} />
+                    <Image src={image.src} className={classes.desktopImage} />
+                </div>
+                <div>
+                    <Title className={`${classes.title} fs-3`}>Something is not right...</Title>
+                    <Text color="dimmed" size="sm" style={{textAlign: 'justify'}}>
+                        Page you are trying to open does not exist. You may have mistyped the address, or
+                        the page has been moved to another URL. If you think this is an error contact
+                        support.
+                    </Text>
+                    <Link href="/home" passHref>
+                        <Button variant="outline" size="sm" mt="xl" className={classes.control}>
+                            Get back to home page
+                        </Button>
+                    </Link>
+                </div>
+            </Container>
         </div>
-     );
+	);
 }
 
 export default Custom404;

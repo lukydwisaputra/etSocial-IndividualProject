@@ -56,7 +56,8 @@ const otherPage = (title) => {
 			style={{
 				backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
 				padding: "1.5vh",
-				borderBottom: '1 px solid gray'
+				borderBottom: '1 px solid gray',
+				zIndex: '1'
 			}}
 		>
 			<div className="container m-auto">

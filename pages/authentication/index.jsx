@@ -1,5 +1,4 @@
-import React, { useState, useId, useEffect } from "react";
-import { Autocomplete, InputWrapper } from "@mantine/core";
+import React, { useState, useId } from "react";
 import { useForm, useToggle, upperFirst } from "@mantine/hooks";
 import { AiOutlineMail, AiOutlineClose, AiOutlineCheck } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -23,6 +22,7 @@ import Head from "next/head";
 import axios from "axios";
 import { API_URL } from "../../helper/helper";
 import { IconCheck, IconX } from "@tabler/icons";
+import { useRouter } from 'next/router';
 
 export default function AuthenticationForm(props) {
 	const [type, toggle] = useToggle("login", ["login", "register"]);
@@ -34,6 +34,7 @@ export default function AuthenticationForm(props) {
 		isStrengthPassword: false,
 		isUploading: false,
 		isSuccess: null,
+		isCredentialsOk: null,
 	});
 
 	let {
@@ -44,6 +45,7 @@ export default function AuthenticationForm(props) {
 		isStrengthPassword,
 		isUploading,
 		isSuccess,
+		isCredentialsOk,
 	} = state;
 
 	let isNotError =
@@ -53,6 +55,7 @@ export default function AuthenticationForm(props) {
 	const btnColor = theme.colorScheme === "dark" ? "light" : "dark";
 	const border = `1px solid rgb(166,167,171, 0.2)`;
 	let id = useId();
+	const router = useRouter()
 
 	const form = useForm({
 		initialValues: {
@@ -80,15 +83,29 @@ export default function AuthenticationForm(props) {
 		{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
 	];
 
-	const onLogin = (formValues) => {
-		let credentials = formValues.userOrEmailLogin;
-		let isEmail = credentials.includes("@") && credentials.includes(".");
-		let password = formValues.passwordLogin;
+	const onLogin = async (formValues) => {
+		try {
+			let credentials = formValues.userOrEmailLogin;
+			let password = formValues.passwordLogin;
+			if (credentials && password) {
+				setState((prev) => ({ ...prev, isUploading: true }));
+				let results = await axios.post(`${API_URL}/users/login`, { credentials, password });
 
-		if (isEmail) {
-			console.log({ credentials, password });
-		} else {
-			console.log({ credentials, password });
+				if (await results.data.success) {
+					setTimeout(() => {
+						setState((prev) => ({ ...prev, isUploading: false }));
+						setState((prev) => ({ ...prev, isCredentialsOk: true }));
+						router.push('/home');
+					}, 500);
+				} else {
+					setTimeout(() => {
+						setState((prev) => ({ ...prev, isUploading: false }));
+						setState((prev) => ({ ...prev, isCredentialsOk: false }));
+					}, 500);
+				}
+			}
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -105,20 +122,20 @@ export default function AuthenticationForm(props) {
 					email,
 					password,
 				});
-				
+
 				if (await result.data.success) {
 					setTimeout(() => {
 						setState((prev) => ({ ...prev, isUploading: false }));
-					}, 250);
-					setState((prev) => ({ ...prev, isSuccess: true }));
-					toggle();
+						setState((prev) => ({ ...prev, isSuccess: true }));
+						form.reset();
+					}, 500);
+					// toggle();
 				} else {
 					setTimeout(() => {
 						setState((prev) => ({ ...prev, isUploading: false }));
-					}, 250);
-					setState((prev) => ({ ...prev, isSuccess: false }));
+						setState((prev) => ({ ...prev, isSuccess: false }));
+					}, 500);
 				}
-
 			} catch (error) {
 				console.log(error);
 				setState((prev) => ({ ...prev, isUploading: false }));
@@ -153,6 +170,11 @@ export default function AuthenticationForm(props) {
 		}
 	};
 
+	const resetNotification = () => {
+		setState((prev) => ({ ...prev, isSuccess: null }));
+		setState((prev) => ({ ...prev, isCredentialsOk: null }));
+	}
+
 	return (
 		<>
 			<Head>
@@ -165,29 +187,43 @@ export default function AuthenticationForm(props) {
 			</Head>
 			<MenubarComponent title={"Authéntication"} />
 
-			{isSuccess === true && isUploading === false && (
+			{isSuccess === true && isUploading === false && type === "register" && (
 				<Notification
 					size={15}
 					icon={<IconCheck size={15} />}
 					color="teal"
-					title="Registration success!"
+					title="REGISTRATION SUCCESS"
 					onClose={() => setState((prev) => ({ ...prev, isSuccess: null }))}
 					className="mt-3"
-				>	
+				>
 					<small>Please check email to verify your account.</small>
 				</Notification>
 			)}
-			{isSuccess === false && isUploading === false && (
+			{isSuccess === false && isUploading === false && type === "register" && (
 				<Notification
 					icon={<IconX size={15} />}
 					color="red"
-					title="Registration failed!"
+					title="REGISTRATION FAILED"
 					className="mt-3"
 					onClose={() => setState((prev) => ({ ...prev, isSuccess: null }))}
 				>
 					<small>oops, something wrong happened!</small>
 				</Notification>
 			)}
+			{isCredentialsOk === false &&
+				form.values.userOrEmailLogin !== "" &&
+				form.values.passwordLogin !== "" &&
+				type === "login" && (
+					<Notification
+						icon={<IconX size={15} />}
+						color="red"
+						title="LOGIN FAILED"
+						className="mt-3"
+						onClose={() => setState((prev) => ({ ...prev, isCredentialsOk: null }))}
+					>
+						<small>Your credentials did not match or not registered</small>
+					</Notification>
+				)}
 			<div
 				className={`d-flex justify-content-center align-items-center p-0`}
 				style={{ minHeight: "75vh" }}
@@ -229,8 +265,9 @@ export default function AuthenticationForm(props) {
 												)
 											}
 											placeholder="username"
-											value={form.values.username}
+											value={form.values.username.toLowerCase()}
 											onChange={async (event) => {
+												resetNotification()
 												let username = event.currentTarget.value;
 												form.setFieldValue("username", username);
 												let result = await axios.get(
@@ -251,7 +288,7 @@ export default function AuthenticationForm(props) {
 																	username has been taken
 																</small>
 															</div>
-													)
+													  )
 											}
 										/>
 
@@ -263,9 +300,9 @@ export default function AuthenticationForm(props) {
 												form.values.email === "" ? (
 													""
 												) : !isTakenEmail &&
-												form.values.email !== "" &&
-												form.values.email.includes("@") &&
-												form.values.email.includes(".") ? (
+												  form.values.email !== "" &&
+												  form.values.email.includes("@") &&
+												  form.values.email.includes(".") ? (
 													<AiOutlineCheck size={14} color={"teal"} />
 												) : (
 													<AiOutlineClose size={14} color={"red"} />
@@ -274,6 +311,7 @@ export default function AuthenticationForm(props) {
 											placeholder="email"
 											value={form.values.email}
 											onChange={async (event) => {
+												resetNotification()
 												let email = event.currentTarget.value;
 												form.setFieldValue("email", email);
 												let result = await axios.get(
@@ -317,7 +355,9 @@ export default function AuthenticationForm(props) {
 										<PasswordComponent
 											getValue={passwordComponentValue}
 											inputValue={form.values.password}
+											resetNotification={resetNotification}
 										/>
+
 										{!isStrengthPassword && form.values.password !== "" && (
 											<div className="row">
 												<small>
@@ -334,6 +374,7 @@ export default function AuthenticationForm(props) {
 											placeholder="repeat password"
 											value={form.values.secondPassword}
 											onChange={(event) => {
+												resetNotification()
 												let secondPassword = event.currentTarget.value;
 												form.setFieldValue("secondPassword", secondPassword);
 												if (secondPassword === form.values.password) {
@@ -358,13 +399,13 @@ export default function AuthenticationForm(props) {
 											required
 											icon={<At size={14} />}
 											placeholder="username or email"
-											onChange={(event) =>
+											onChange={(event) => {
+												resetNotification()
 												form.setFieldValue(
 													"userOrEmailLogin",
 													event.currentTarget.value
 												)
-											}
-											error={""}
+											}}
 										/>
 
 										<PasswordInput
@@ -372,17 +413,17 @@ export default function AuthenticationForm(props) {
 											icon={<RiLockPasswordLine size={14} />}
 											required
 											placeholder="password"
-											onChange={(event) =>
+											onChange={(event) => {
 												form.setFieldValue("passwordLogin", event.currentTarget.value)
-											}
-											// error={form.values.passwordLogin === "" ? "" : <small>password should include at least 8 characters</small>}
+												resetNotification()
+											}}
 										/>
 										<Link href="/recovery" passHref>
 											<Anchor
 												className="text-muted"
 												component="a"
 												size="xs"
-												style={{ textAlign: "left" }}
+												style={{ textAlign: "left", width: "40%" }}
 											>
 												Forgot password?
 											</Anchor>
@@ -397,6 +438,8 @@ export default function AuthenticationForm(props) {
 									component="a"
 									color={btnColor}
 									onClick={() => {
+										setState((prev) => ({ ...prev, isUploading: null }));
+										setState((prev) => ({ ...prev, isCredentialsOk: null }));
 										form.reset();
 										toggle();
 									}}
@@ -406,6 +449,7 @@ export default function AuthenticationForm(props) {
 										? "Have an account? Login"
 										: "Don't have an account? Register"}
 								</Anchor>
+
 								<Button
 									size={"xs"}
 									variant="light"
@@ -413,8 +457,7 @@ export default function AuthenticationForm(props) {
 									type="submit"
 									onClick={async () => {
 										if (type === "login") {
-											console.log(form.values);
-											// onLogin(form.values);
+											onLogin(form.values);
 										} else if (type === "register") {
 											if (isNotError) {
 												onRegister(form.values);

@@ -5,6 +5,7 @@ import { AiOutlinePlus, AiFillHeart } from "react-icons/ai";
 import Link from "next/link";
 import { ToggleThemeComponent } from "../navbar/ToggleThemeComponent";
 import { useRouter } from "next/router";
+import CreatePostComponent from "../post/CreatePostComponent";
 
 const useStyles = createStyles((theme) => ({
 	a: {
@@ -46,7 +47,7 @@ function LeftSidebarComponent() {
 						<div>
 							{/* Home */}
 							<div className={rowStyle}>
-								<Tooltip size="sm" position="right" withArrow transition="pop" label="Homé">
+								<Tooltip position="right" withArrow transition="pop" label="Homé" size="xs">
 									<Link href="/home" passHref>
 										<ActionIcon
 											component="button"
@@ -60,7 +61,7 @@ function LeftSidebarComponent() {
 							</div>
 							{/* Explore */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Exploré">
+								<Tooltip position="right" withArrow transition="pop" label="Exploré" size='xs'>
 									<Link href="/explore" passHref>
 										<ActionIcon
 											component="button"
@@ -74,7 +75,7 @@ function LeftSidebarComponent() {
 							</div>
 							{/* Bookmarks */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Likéd">
+								<Tooltip position="right" withArrow transition="pop" label="Likéd" size='xs'>
 									<Link href="/liked" passHref>
 										<ActionIcon
 											component="button"
@@ -88,22 +89,14 @@ function LeftSidebarComponent() {
 							</div>
 							{/* Theme Toggle */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Try mé!">
+								<Tooltip position="right" withArrow transition="pop" label="Try mé!" size='xs'>
 									<ToggleThemeComponent />
 								</Tooltip>
 							</div>
 							<hr className={rowStyle} style={{ borderTop: borderStyle }} />
 							{/* Create a Post */}
 							<div className={rowStyle}>
-								<Tooltip position="right" withArrow transition="pop" label="Creaté a Post">
-									<ActionIcon
-										component="button"
-										className={buttonStyle}
-										style={classes.theme}
-									>
-										<AiOutlinePlus size={iconSize} />
-									</ActionIcon>
-								</Tooltip>
+								<CreatePostComponent />
 							</div>
 						</div>
 					</div>
@@ -114,19 +107,19 @@ function LeftSidebarComponent() {
 								withArrow
 								size={'xs'}
 								control={
-									<Tooltip position="right" withArrow transition="pop" label="Profilé">
+									<Tooltip position="right" withArrow transition="pop" label="Profilé" size='xs'>
 										<ActionIcon
 											component="button"
 											className={buttonStyle}
 											style={classes.theme}
 										>
-											<Indicator inline size={5} offset={-7.5} position="bottom-center" color="green">
+											<Indicator inline size={5} offset={-7.5} position="bottom-center" color="red">
 												<Avatar
 													src={
 														"https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200"
 													}
 													radius="xl"
-													size={25}
+													size={22}
 													style={{
 														border: `1px solid ${
 															theme.colorScheme === "dark" ? "white" : theme.colors.dark[7]
@@ -169,7 +162,7 @@ function LeftSidebarComponent() {
 					<hr className="mt-4" style={{ borderBottom: 'none', borderTop: border }} />
 					{/* Theme Toggle */}
 					<div className={rowStyle}>
-						<Tooltip position="right" withArrow transition="pop" label="Try me!">
+						<Tooltip position="right" withArrow transition="pop" label="Try me!" size='xs'>
 							<ToggleThemeComponent />
 						</Tooltip>
 					</div>

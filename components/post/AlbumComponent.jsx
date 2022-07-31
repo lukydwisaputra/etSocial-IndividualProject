@@ -31,10 +31,10 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-export default function AlbumComponent(props) {
-    const desktop = "d-none d-sm-none d-md-none d-lg-block";
+export default function AlbumComponent({ image }) {
+    const desktop = "d-none d-sm-none d-md-block d-lg-block";
+    const mobile = "d-md-none d-lg-none";
 	const { classes } = useStyles();
-    const bgImage = props.image;
 
 	return (
         <div>
@@ -42,16 +42,17 @@ export default function AlbumComponent(props) {
                 shadow="md"
                 p="md"
                 radius="xs"
-                sx={{ backgroundImage: `url(${bgImage})`, maxHeight: '12.5vh', maxWidth: '35vw'}}
-                className={classes.card}
+                sx={{ backgroundImage: `url(${image})`, maxHeight: '17.5vh', maxWidth: '35vw'}}
+                className={`${classes.card} ${desktop}`}
             >
-                {/* <div>
-                    <Text className={classes.category} size="xs">
-                        @lukydwisaputra
-                    </Text>
-                    <Title order={3} className={classes.title}>
-                    </Title>
-                </div> */}
+            </Paper>
+            <Paper
+                shadow="md"
+                p="md"
+                radius="xs"
+                sx={{ backgroundImage: `url(${image})`, maxHeight: '12.5vh', maxWidth: '35vw'}}
+                className={`${classes.card} ${mobile}`}
+            >
             </Paper>
         </div>
 	);

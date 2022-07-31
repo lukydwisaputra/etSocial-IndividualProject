@@ -4,6 +4,7 @@ import { MdHomeFilled, MdSearch, MdBookmark } from "react-icons/md";
 import { AiOutlinePlus, AiFillHeart } from "react-icons/ai";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import CreatePostComponent from "../post/CreatePostComponent";
 
 const useStyles = createStyles((theme) => ({
 	a: {
@@ -17,11 +18,7 @@ const useStyles = createStyles((theme) => ({
 export default function MobileNavbarComponent() {
 	const { classes, theme } = useStyles();
 	const mobile = "d-lg-none";
-	const buttonStyle = "col-2 m-auto";
-	const avatarBgColor = theme.colorScheme === 'dark'
-		? theme.colors.dark[7]
-		: theme.colors.gray[2]
-	;
+	const avatarBgColor = theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2];
 	const { pathname } = useRouter();
 	const allowedPage = ["/home", "/explore", "/liked", "/profile"];
 	const isAllowed = allowedPage.includes(pathname);
@@ -54,11 +51,7 @@ export default function MobileNavbarComponent() {
 								</ActionIcon>
 							</Link>
 							{/* Create a Post */}
-							<Link href="/" passHref>
-								<ActionIcon component="button" style={classes.theme}>
-									<AiOutlinePlus size={25} />
-								</ActionIcon>
-							</Link>
+							<CreatePostComponent />
 							{/* Bookmarks */}
 							<Link href="/liked" passHref>
 								<ActionIcon component="button" style={classes.theme}>
@@ -72,7 +65,7 @@ export default function MobileNavbarComponent() {
 								size={'xs'}
 								control={
 									<ActionIcon component="button" style={classes.theme}>
-										<Indicator inline size={7} offset={0} position="bottom-end" color="red">
+										<Indicator inline size={9} offset={0} position="bottom-end" color="red">
 											<Avatar
 												src={
 													"https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200"
