@@ -1,6 +1,6 @@
 import React from "react";
 import { createStyles, Image, Container, Title, Text, Button, SimpleGrid } from "@mantine/core";
-import image from '../assets/images/404.svg';
+import image from '../public/404/404.svg';
 import Link from "next/link";
 
 const useStyles = createStyles((theme) => ({

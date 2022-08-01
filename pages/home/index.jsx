@@ -4,6 +4,8 @@ import MenubarComponent from "../../components/menubar/MenubarComponent";
 import Head from "next/head";
 
 export default function HomePage() {
+	const userId = localStorage.getItem('etSocial_user');
+	console.log(userId)
 
 	return (
 		<>

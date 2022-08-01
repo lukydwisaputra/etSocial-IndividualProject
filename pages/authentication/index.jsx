@@ -25,6 +25,7 @@ import { IconCheck, IconX } from "@tabler/icons";
 import { useRouter } from 'next/router';
 
 export default function AuthenticationForm(props) {
+	const router = useRouter();
 	const [type, toggle] = useToggle("login", ["login", "register"]);
 	const [state, setState] = useState({
 		isTakenEmail: null,
@@ -55,7 +56,6 @@ export default function AuthenticationForm(props) {
 	const btnColor = theme.colorScheme === "dark" ? "light" : "dark";
 	const border = `1px solid rgb(166,167,171, 0.2)`;
 	let id = useId();
-	const router = useRouter()
 
 	const form = useForm({
 		initialValues: {
@@ -89,12 +89,14 @@ export default function AuthenticationForm(props) {
 			let password = formValues.passwordLogin;
 			if (credentials && password) {
 				setState((prev) => ({ ...prev, isUploading: true }));
-				let results = await axios.post(`${API_URL}/users/login`, { credentials, password });
+				let results = await axios.post(`${API_URL}/api/users/login`, { credentials, password });
+				console.log(results.data)
 
-				if (await results.data.success) {
+				if (results.data.success) {
 					setTimeout(() => {
 						setState((prev) => ({ ...prev, isUploading: false }));
 						setState((prev) => ({ ...prev, isCredentialsOk: true }));
+						// localStorage.setItem('etSocial_user', `${results.data.id}`);
 						router.push('/home');
 					}, 500);
 				} else {
@@ -117,7 +119,7 @@ export default function AuthenticationForm(props) {
 		if (username && email && password && isNotError && password === secondPassword) {
 			try {
 				setState((prev) => ({ ...prev, isUploading: true }));
-				let result = await axios.post(`${API_URL}/users/register`, {
+				let result = await axios.post(`${API_URL}/api/users/register`, {
 					username,
 					email,
 					password,
@@ -178,13 +180,14 @@ export default function AuthenticationForm(props) {
 	return (
 		<>
 			<Head>
-				<title>étSocial | {type === "register" ? "Régister" : "Login"}</title>
+				<title>étSocial | Authéntication</title>
 				<link rel="icon" href="/favicon.ico" />
 				<meta
 					name="viewport"
 					content="width=device-width, initial-scale=1, maximum-scale=1"
 				></meta>
 			</Head>
+			
 			<MenubarComponent title={"Authéntication"} />
 
 			{isSuccess === true && isUploading === false && type === "register" && (
@@ -271,7 +274,7 @@ export default function AuthenticationForm(props) {
 												let username = event.currentTarget.value;
 												form.setFieldValue("username", username);
 												let result = await axios.get(
-													`${API_URL}/users?username=${username.toLowerCase()}`
+													`${API_URL}/api/users?username=${username.toLowerCase()}`
 												);
 												if (result.data.success && username !== "") {
 													setState((prev) => ({ ...prev, isTakenUsername: true }));
@@ -315,7 +318,7 @@ export default function AuthenticationForm(props) {
 												let email = event.currentTarget.value;
 												form.setFieldValue("email", email);
 												let result = await axios.get(
-													`${API_URL}/users?email=${email.toLowerCase()}`
+													`${API_URL}/api/users?email=${email.toLowerCase()}`
 												);
 												if (result.data.success) {
 													setState((prev) => ({ ...prev, isTakenEmail: true }));
