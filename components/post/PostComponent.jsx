@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
 	Card,
 	Image,
@@ -19,27 +19,22 @@ import {
 	AiOutlineShareAlt,
 } from "react-icons/ai";
 import { BiComment } from "react-icons/bi";
-import { CommentComponent } from "./CommentComponent";
 import Link from "next/link";
 
-export default function PostComponent(props) {
+export default function PostComponent({props}) {
+	// let { avatar, username, images, caption, comments, postingTime} = props;
+	let { id, id_user, post_image, caption, comments, created_at} = props;
+
+	useEffect(() => {
+		console.log(id)
+	}, [props])
+
 	const theme = useMantineTheme();
 	const iconSize = 22;
 
 	const secondaryColor =
 		theme.colorScheme === "dark" ? theme.colors.dark[1] : theme.colors.gray[7];
 	const avatarBgColor = theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2];
-	const avatarPost = (
-		<Avatar
-			className="ms-1"
-			radius="xl"
-			size={20}
-			style={{ backgroundColor: avatarBgColor }}
-			src={
-				"https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200"
-			}
-		/>
-	);
 
 	return (
 		<>
@@ -51,8 +46,14 @@ export default function PostComponent(props) {
 							<Group className="mx-3 my-2" position="apart">
 								<Link href="/profile" passHref>
 									<Group style={{ cursor: "pointer" }}>
-										{avatarPost}
-										<Text size="sm">lukydwisaputra</Text>
+										<Avatar
+											className="ms-1"
+											radius="xl"
+											size={20}
+											style={{ backgroundColor: avatarBgColor }}
+											// src={avatar}
+										/>
+										{/* <Text size="sm">{username}</Text> */}
 									</Group>
 								</Link>
 								<Menu radius={"md"} shadow={"lg"} size={"sm"} placement="end" withArrow>
@@ -76,7 +77,7 @@ export default function PostComponent(props) {
 									</Menu.Item>
 								</Menu>
 							</Group>
-							<Image src={props.image} alt="Norway"></Image>
+							<Image className="text-center" src={post_image} alt="etSocial-post"></Image>
 						</Card.Section>
 
 						<Group
@@ -93,7 +94,6 @@ export default function PostComponent(props) {
 						>
 							<Group>
 								<ActionIcon radius="sm" size={30}>
-									{/* <AiFillHeart size={iconSize} color="rgb(235,72,72,0.8)" /> */}
 									<AiOutlineHeart size={iconSize} color={secondaryColor} />
 								</ActionIcon>
 								<ActionIcon
@@ -105,10 +105,6 @@ export default function PostComponent(props) {
 									<BiComment size={iconSize - 1} color={secondaryColor} />
 								</ActionIcon>
 							</Group>
-
-							{/* <ActionIcon className='float-end' radius="sm" size={25}>
-                                    <BsBookmark size={17} />
-                                </ActionIcon> */}
 						</Group>
 
 						<Group
@@ -141,7 +137,10 @@ export default function PostComponent(props) {
 								src={""}
 							/>
 							<small>
-								liked by <span className="fw-bold">you</span> and 232.256 others
+								liked by 
+								{/* You and kalau user like */}
+								<span className="fw-bold"> you</span> and 
+								232.256 others
 							</small>
 						</Group>
 
@@ -157,16 +156,30 @@ export default function PostComponent(props) {
 						>
 							<div>
 								{/* 20 for every line of caption */}
-								{/* Using hide or not ? */}
-								<Spoiler maxHeight={20} showLabel="... more" size={"xs"}>
-									<Text size="sm" className="fw-bold" component="a">
-										@lukydwisaputra{" "}
-									</Text>
-									<span size="sm">
-										With Fjord Tours you can explore more of the magical fjord landscapes
-										with tours and activities on and around the fjords of Norway.
-									</span>
-								</Spoiler>
+								{
+									caption && caption.length > 85 &&
+									<Spoiler maxHeight={20} showLabel="... more" hideLabel='... hide' size={"xs"}>
+										<Text size="sm" className="fw-bold" component="a">
+											@lukydwisaputra{" "}
+										</Text>
+										<span size="sm">
+											Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam ipsum vitae tempora quia mollitia eveniet voluptate amet libero maiores quaerat.
+											{/* {caption} */}
+										</span>
+									</Spoiler>
+								}
+								{
+									caption && caption.length <= 85 &&
+									<>
+										<Text size="sm" className="fw-bold" component="a">
+											@lukydwisaputra{" "}
+										</Text>
+										<span size="sm">
+											{/* {caption} */}
+											Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi veniam quidem ducimus voluptates ipsum officiis excepturi provident totam fugiat ex!
+										</span>
+									</>
+								}
 								{/* If caption > 85 characters spoiler active */}
 								{/* <Text size="sm" className="fw-bold" component="a">
 									@lukydwisaputra{" "}
@@ -178,19 +191,22 @@ export default function PostComponent(props) {
 							</div>
 						</Text>
 						{/* <Anchor href="/" target="_blank" style={{fontColor: theme.colors.gray[1]}}> */}
-						<div className="mx-1 text-secondary">
+						{/* <div className="mx-1 text-secondary">
 							<Text size="xs" component="a">
-								View all 1.233 comments
-							</Text>
+								View all {comments} comments
+							</Text> */}
 							{/* <small>View all 1.233 comments</small> */}
-							<CommentComponent />
+							{/* comment */}
+							{/* <Group className="ms-2">
+								<Text size="xs" component="a" className="fw-bold">another_people</Text>
+								<Text style={{marginLeft: '-12px'}} size="xs">nice view 👀</Text>
+							</Group>
 						</div>
 						<div className="mt-2">
-							<small className="text-muted mx-1 mt-2">a few seconds ago</small>
-						</div>
+							<small className="text-muted mx-1 mt-2">{postingTime}</small>
+						</div> */}
 					</Card>
 				</div>
-				{/* </div> */}
 			</div>
 		</>
 	);

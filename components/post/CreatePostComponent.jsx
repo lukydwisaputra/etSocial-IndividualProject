@@ -61,6 +61,7 @@ function CreatePostComponent() {
 					</Text>
 					<div className="container">
 						<Image
+							alt='upload image'
 							radius={"sm"}
 							src={require("../../public/assets/thumbnail-placeholder.png")}
 							objectFit="cover"

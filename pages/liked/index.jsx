@@ -2,8 +2,10 @@ import React from 'react';
 import AlbumComponent from '../../components/post/AlbumComponent';
 import MenubarComponent from '../../components/menubar/MenubarComponent';
 import Head from "next/head";
+import axios from 'axios';
+import { API_URL } from "../../helper/helper";
 
-function SavedPage() {
+export default function SavedPage(props) {
     let contentClasses = 'col-4 p-1';
 
     return ( 
@@ -148,4 +150,19 @@ function SavedPage() {
     );
 }
 
-export default SavedPage;
+export const getServerSideProps = async (context) => {
+    try {
+        // console.log('Data Context Request', context);
+		// let { avatar, username, images, caption, comments, postingTime} = props;
+        let results = await axios.get(`${API_URL}/api/posts?id=1`)
+        return {
+            props: {
+                posts: results.data.posts
+            }
+        }
+
+    } catch(error) {
+		console.log(error)
+		return error;
+	}
+}

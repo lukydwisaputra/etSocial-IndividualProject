@@ -32,7 +32,7 @@ export default function RightSidebarComponent() {
 					<div className="row" style={{ height: '6vh', borderBottom: border}}>
 						<div className="col-12 m-auto">
 								<div className='container'>
-									<Text className='fs-6 fw-bold ms-1'>What's new today?</Text>
+									<Text className='fs-6 fw-bold ms-1'>What&apos;s new today?</Text>
 								</div>
 							</div>
 						</div>

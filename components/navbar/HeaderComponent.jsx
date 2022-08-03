@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { createStyles, Text, ActionIcon } from "@mantine/core";
 import { ToggleThemeComponent } from "./ToggleThemeComponent";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { IoIosArrowBack } from "react-icons/io";
 
-const useStyles = createStyles((theme) => ({
+const UseStyles = createStyles((theme) => ({
 	a: {
 		color: theme.colorScheme === "dark" ? theme.white : theme.colors.dark[6],
 		":hover": {
@@ -13,21 +13,27 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-const homePage = () => {
-	const { classes, theme } = useStyles();
+const HomePage = () => {
+	const { classes, theme } = UseStyles();
 	return (
 		<header
 			className="justify-content-between align-items-center fixed-top d-lg-none"
 			style={{
 				backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
 				padding: "1.25vh",
-				borderBottom: '1 px solid gray'
+				borderBottom: "1 px solid gray",
 			}}
 		>
 			<div className="container m-auto">
 				<div className="row justify-content-between align-items-center">
 					<div className="col-3 col-sm-3 col-md-3 col-lg-1">
-						<Text href="/" className={`${classes.a} fs-3 m-auto`} style={{fontWeight: '500'}}>étSocial</Text>
+						<Text
+							href="/"
+							className={`${classes.a} fs-3 m-auto`}
+							style={{ fontWeight: "500" }}
+						>
+							étSocial
+						</Text>
 					</div>
 					<div className={`col-6 col-sm-6 col-md-6 col-lg-7 m-auto`}>
 						{/* <SearchComponent /> */}
@@ -35,20 +41,20 @@ const homePage = () => {
 					</div>
 					<div className="col-3 col-sm-3 col-md-3 col-lg-4">
 						<div className="float-end">
-							<ToggleThemeComponent />	
+							<ToggleThemeComponent />
 						</div>
 					</div>
 				</div>
 			</div>
 		</header>
 	);
-}
+};
 
-const otherPage = (title) => {
-	const { classes, theme } = useStyles();
+const OtherPage = (title) => {
+	const { classes, theme } = UseStyles();
 	const router = useRouter();
 	const { pathname } = useRouter();
-    const isLandingPage = pathname === '/' ? 'd-none' : "";
+	const isLandingPage = pathname === "/" ? "d-none" : "";
 
 	return (
 		<header
@@ -56,65 +62,66 @@ const otherPage = (title) => {
 			style={{
 				backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
 				padding: "1.5vh",
-				borderBottom: '1 px solid gray',
-				zIndex: '1'
+				borderBottom: "1 px solid gray",
+				zIndex: "1",
 			}}
 		>
 			<div className="container m-auto">
 				<div className="row justify-content-between align-items-center">
 					<div className="col-3 col-sm-3 col-md-3 col-lg-1">
-						<ActionIcon className={isLandingPage} component="button" onClick={() => router.back()}>
+						<ActionIcon
+							className={isLandingPage}
+							component="button"
+							onClick={() => router.back()}
+						>
 							<IoIosArrowBack size={20} />
 						</ActionIcon>
 					</div>
 					<div className={`col-6 col-sm-6 col-md-6 col-lg-7 m-auto`}>
 						{/* <SearchComponent /> */}
-						<Text href="/" className={`${classes.a} fs-6 m-auto text-center`} style={{fontWeight: '600'}}>{title}</Text>
+						<Text
+							href="/"
+							className={`${classes.a} fs-6 m-auto text-center`}
+							style={{ fontWeight: "600" }}
+						>
+							{title}
+						</Text>
 					</div>
 					<div className="col-3 col-sm-3 col-md-3 col-lg-4">
 						<div className="float-end">
-							<ToggleThemeComponent />	
+							<ToggleThemeComponent />
 						</div>
 					</div>
 				</div>
 			</div>
 		</header>
 	);
-}
+};
 
 export default function HeaderComponent() {
 	const { pathname } = useRouter();
-	const isHome = pathname.includes('home');
-	let _title = pathname.split('/').join('');
+	const isHome = pathname.includes("home");
+	let _title = pathname.split("/").join("");
 
 	switch (_title) {
-		case 'explore':
-			_title = 'Exploré'
+		case "explore":
+			_title = "Exploré";
 			break;
-		case 'liked':
-			_title = 'Likéd'
+		case "liked":
+			_title = "Likéd";
 			break;
-		case 'about':
-			_title = 'About'
+		case "about":
+			_title = "About";
 			break;
-		case 'authentication':
-			_title = 'Authéntication'
+		case "authentication":
+			_title = "Authéntication";
 			break;
-		case 'recovery':
-			_title = 'Récovery'
-			break;
-		case 'profile':
-			_title = 'lukydwisaputra' // ganti sama username
+		case "recovery":
+			_title = "Récovery";
 			break;
 		default:
 			break;
 	}
 
-	return (
-		<>
-			{
-				isHome ? homePage() : otherPage(_title)
-			}
-		</>
-	);
+	return <>{isHome ? HomePage() : OtherPage(_title)}</>;
 }

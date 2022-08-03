@@ -3,7 +3,7 @@ import { createStyles, Image, Container, Title, Text, Button, SimpleGrid } from 
 import image from '../public/404/404.svg';
 import Link from "next/link";
 
-const useStyles = createStyles((theme) => ({
+const UseStyles = createStyles((theme) => ({
 	root: {
 		paddingTop: 50,
 		paddingBottom: 80,
@@ -38,15 +38,15 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-function Custom404() {
-	const { classes } = useStyles();
+export default function Custom404() {
+	const { classes } = UseStyles();
 
 	return (
         <div className="d-flex justify-content-center align-items-center p-0" style={{height: '90vh'}}>
             <Container className={classes.root}>
                 <div className="mb-5">
-                    <Image src={image.src} className={classes.mobileImage} />
-                    <Image src={image.src} className={classes.desktopImage} />
+                    <Image src={image.src} className={classes.mobileImage} alt='404.svg'/>
+                    <Image src={image.src} className={classes.desktopImage} alt='404.svg'/>
                 </div>
                 <div>
                     <Title className={`${classes.title} fs-3`}>Something is not right...</Title>
@@ -66,4 +66,3 @@ function Custom404() {
 	);
 }
 
-export default Custom404;

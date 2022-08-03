@@ -7,8 +7,10 @@ import about_us_1 from '../../public/about/about_us_1.png';
 import about_us_2 from '../../public/about/about_us_2.png';
 import about_us_3 from '../../public/about/about_us_3.png';
 import Head from "next/head";
+import axios from 'axios';
+import { API_URL } from "../../helper/helper";
 
-function AboutPage() {
+export default function AboutPage(props) {
 
     return ( 
         <>
@@ -28,7 +30,9 @@ function AboutPage() {
 					<hr />
 					<article style={{marginTop: '5vh'}}>
 						<Text className="fs-4 fw-bold mb-3">For creators, by creators</Text>
-						<Image radius={'sm'} 
+						<Image 
+							alt='about_us_1'
+							radius={'sm'} 
 							src={about_us_1}
 							objectFit='cover'
 							layout='responsive'
@@ -42,14 +46,18 @@ function AboutPage() {
 					<hr />
 					<article style={{marginTop: '5vh', marginBottom: '2.5vh'}}>
 						<Text className="fs-4 fw-bold mb-3" style={{marginTop: '1vh'}}>Our inspiration today</Text>
-						<Image radius={'sm'} 
+						<Image 
+							alt='about_us_2'
+							radius={'sm'} 
 							src={about_us_2}
 							objectFit='cover'
 							layout='responsive'
 						/>
 						<p className="mt-2 fw-light" style={{ textAlign: 'justify'}}>The way we express ourselves creatively is always changing. Whether we’re on a shoot, experimenting for the next one, or simply capturing life, we’re here to hone our craft, expand our perspective, and tell better stories. We’re here to grow.</p>
 						{/* <Image radius={'sm'}  src={'https://assets-global.website-files.com/625d2a5ca1316da92392fd13/62af4edd501088c08b2cad24_cover.png'} height={350} width={'100%'} style={{marginTop: '5vh'}}/> */}
-						<Image radius={'sm'} 
+						<Image 
+							alt='about_us_3'
+							radius={'sm'} 
 							src={about_us_3}
 							objectFit='cover'
 							layout='responsive'
@@ -64,4 +72,19 @@ function AboutPage() {
      );
 }
 
-export default AboutPage;
+export const getServerSideProps = async (context) => {
+    try {
+        // console.log('Data Context Request', context);
+		// let { avatar, username, images, caption, comments, postingTime} = props;
+        let results = await axios.get(`${API_URL}/api/posts?id=1`)
+        return {
+            props: {
+                posts: results.data.posts
+            }
+        }
+
+    } catch(error) {
+		console.log(error)
+		return error;
+	}
+}

@@ -6,12 +6,8 @@ const nextConfig = {
 		domains: [
 			"assets-global.website-files.com"
 		],
-	},
-	experimental: {
-		images: {
-			unoptimized: false,
-			formats: ['image/webp'],
-		},
+		unoptimized: false,
+		formats: ['image/webp'],
 	},
 };
 

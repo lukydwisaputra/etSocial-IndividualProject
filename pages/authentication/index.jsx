@@ -96,7 +96,7 @@ export default function AuthenticationForm(props) {
 					setTimeout(() => {
 						setState((prev) => ({ ...prev, isUploading: false }));
 						setState((prev) => ({ ...prev, isCredentialsOk: true }));
-						// localStorage.setItem('etSocial_user', `${results.data.id}`);
+						localStorage.setItem('etSocial_user', `${results.data.id}`);
 						router.push('/home');
 					}, 500);
 				} else {
@@ -479,4 +479,21 @@ export default function AuthenticationForm(props) {
 			</div>
 		</>
 	);
+}
+
+export const getServerSideProps = async (context) => {
+    try {
+        // console.log('Data Context Request', context);
+		// let { avatar, username, images, caption, comments, postingTime} = props;
+        let results = await axios.get(`${API_URL}/api/posts?id=1`)
+        return {
+            props: {
+                posts: results.data.posts
+            }
+        }
+
+    } catch(error) {
+		console.log(error)
+		return error;
+	}
 }

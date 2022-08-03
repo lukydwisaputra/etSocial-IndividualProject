@@ -13,6 +13,8 @@ import {
 import { AiOutlineMail } from "react-icons/ai";
 import MenubarComponent from "../../components/menubar/MenubarComponent";
 import Head from "next/head";
+import axios from 'axios';
+import { API_URL } from "../../helper/helper";
 
 const useStyles = createStyles((theme) => ({
 	controls: {
@@ -29,7 +31,7 @@ const useStyles = createStyles((theme) => ({
 	},
 }));
 
-export default function ForgotPassword() {
+export default function ForgotPassword(props) {
 	const border = `1px solid rgb(166,167,171, 0.2)`;
 	const { classes } = useStyles();
 	const [value, setValue] = useState("");
@@ -65,7 +67,7 @@ export default function ForgotPassword() {
 						align="center"
 						style={{ marginBottom: "5vh" }}
 					>
-						Don't worry, just type your email and get a recovery link
+						Don&apos;t worry, just type your email and get a recovery link
 					</Text>
 
 					<Paper shadow="xs" p={30} radius="md" mt="xl" style={{ border: border }}>
@@ -105,4 +107,21 @@ export default function ForgotPassword() {
 			</div>
 		</>
 	);
+}
+
+export const getServerSideProps = async (context) => {
+    try {
+        // console.log('Data Context Request', context);
+		// let { avatar, username, images, caption, comments, postingTime} = props;
+        let results = await axios.get(`${API_URL}/api/posts?id=1`)
+        return {
+            props: {
+                posts: results.data.posts
+            }
+        }
+
+    } catch(error) {
+		console.log(error)
+		return error;
+	}
 }
