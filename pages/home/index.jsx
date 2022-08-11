@@ -1,26 +1,31 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useId } from 'react'
 import PostComponent from '../../components/post/PostComponent'
 import MenubarComponent from '../../components/menubar/MenubarComponent'
 import Head from 'next/head'
 import { API_URL } from '../../helper/helper'
+import { useSelector, useDispatch } from 'react-redux'
+import { setPost, getAllPost } from '../../slices/postSlice'
 
 export default function HomePage(props) {
-	// use selector untuk ambil reducer
-	const printPost = () => {
-		// conditional: jika reducer masih kosong maka pakainya props.post untuk mapnya
-		// jika reducer sudah ada isinya, maka reducer yg di map
-		return props.posts.map((val, idx) => {
+	// HOOKS
+	let post = useSelector(getAllPost)
+	const dispatch = useDispatch()
+	let id = useId()
+
+	const renderedPost = () => {
+		if (JSON.stringify(post) === '[]') {
+			post = props.posts
+		} 
+		dispatch(setPost(post))
+
+		return post.map((val, idx) => {
 			return (
-				<div key={idx}>
-					<PostComponent postDetails={props.posts[idx]} user={props.user} />
+				<div key={`${id}post-${idx}`}>
+					<PostComponent postIndex={idx} />
 				</div>
 			)
 		})
 	}
-
-	useEffect(() => {
-		printPost()
-	}, [])
 
 	return (
 		<>
@@ -30,16 +35,16 @@ export default function HomePage(props) {
 				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
 			</Head>
 
-			<MenubarComponent title={'Homé'} />
+			<MenubarComponent title={'Homé'} id={'top'} />
 			<div className="container" style={{ marginBottom: '2.5vh' }}>
-				{printPost()}
+				{renderedPost()}
 			</div>
 		</>
 	)
 }
 
 export async function getServerSideProps(context) {
-	let token = context.req.cookies?.token
+	let token = context.req?.cookies?.token
 	if (!token) {
 		return {
 			redirect: {
@@ -56,7 +61,7 @@ export async function getServerSideProps(context) {
 	})
 	let dataUser = await users.json()
 	
-	if (dataUser.users.status === 'unverified') {
+	if (dataUser?.users?.status === 'unverified') {
 		return {
 			redirect: {
 				destination: '/home/unverified',
@@ -69,8 +74,7 @@ export async function getServerSideProps(context) {
 	let dataFeed = await feeds.json()
 	return {
 		props: {
-			posts: dataFeed.posts,
-			user: dataUser.users,
-		},
+			posts: dataFeed?.posts?.length > 0 ? dataFeed?.posts : []
+		}
 	}
 }

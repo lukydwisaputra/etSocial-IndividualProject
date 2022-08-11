@@ -29,7 +29,7 @@ export default function LayoutComponent({ children }) {
 		})
 
 		if (token && result.data?.success && result.data?.users?.status === 'verified') {
-			dispatch(userLogin(result.data.users))
+			dispatch(userLogin(result.data?.users))
 			Cookies.set('token', result.data?.token, { expires: COOKIES_EXP })
 		}
 	}

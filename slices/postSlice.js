@@ -6,17 +6,28 @@ export const postSlice = createSlice({
 	name: 'post',
 	initialState,
 	reducers: {
-		postAction: (state, action) => {
-			// let { id, username, email, status, name, bio, profile_picture} = action.payload
+		setPost: (state, action) => {
 			return action.payload
 		},
-		userLogout: (state) => {
+		addPost: (state, action) => {
+			state.unshift(action.payload)
+		},
+		resetPost: (state) => {
 			state = initialState
+		},
+		likePost: (state, action) => {
+			let {postIndex, data} = action.payload
+			state[postIndex].likes.push(data)
+		},
+		unlikePost: (state, action) => {
+			let {postIndex, likesIndex} = action.payload
+			state[postIndex].likes.splice(likesIndex, 1)
 		}
 	}
 })
 
-// Action creators are generated for each case reducer function
-export const { userLogin, userLogout } = userSlice.actions
+export const getAllPost = (state) => state.post
 
-export default userSlice.reducer
+export const { setPost, addPost, resetPost, likePost, unlikePost } = postSlice.actions
+
+export default postSlice.reducer

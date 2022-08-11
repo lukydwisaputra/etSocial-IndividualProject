@@ -8,62 +8,19 @@ import moment from 'moment'
 import axios from 'axios'
 import { useSelector } from 'react-redux'
 
-export default function PostComponent({ postDetails }) {
+export default function PostComponent({ postIndex }) {
 	// HOOKS
-	const [likeToggle, setLikeToggle] = useState(false)
-	const [countLikes, setCountLikes] = useState(postDetails.likes.length)
-	const [like, setLike] = useState({})
+	let { id_user, username, id_post, caption, post_image, created_at, likes, comments, profile_picture } = useSelector((state) => state.post[postIndex])
 	const theme = useMantineTheme()
-	const {id, username, email, status, name, bio} = useSelector((state) => state.user)
+	const [likeToggle, setLikeToggle] = useState(false)
+	const [like, setLike] = useState({})
+	const { id } = useSelector((state) => state.user)
+	const [countLikes, setCountLikes] = useState(likes?.length ? likes?.length : 0)
 
 	// VAR
-	let { id_user, id_post, caption, post_image, created_at, likes, comments, profile_picture } = postDetails
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
 	const secondaryColor = theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7]
 	const iconSize = 22
-
-	const isLiked = async () => {
-		try {
-			let res = await fetch(`${API_URL}/api/likes?id_user=${id}&id_post=${id_post}`)
-			let dataLikes = await res.json()
-			if (dataLikes.likes?.length > 0) {
-				setLike(dataLikes.likes[0])
-				setLikeToggle(true)
-			} else {
-				setLikeToggle(false)
-			}
-		} catch (error) {
-			console.log(error)
-			return false
-		}
-	}
-
-	const getLikes = async () => {
-		let res = await fetch(`${API_URL}/api/likes?id_post=${id_post}`)
-		let dataLikes = await res.json()
-		if (dataLikes.likes?.length > 0) {
-			setCountLikes(dataLikes.likes?.length)
-		}
-	}
-
-	useEffect(() => {
-		isLiked()
-		getLikes()
-	}, [])
-
-	const handleToggle = async () => {
-		setLikeToggle(!likeToggle)
-
-		if (likeToggle === true) {
-			await handleUnlike()
-			await isLiked()
-			setCountLikes(countLikes - 1)
-		} else if (likeToggle === false) {
-			await handleLike()
-			await isLiked()
-			setCountLikes(countLikes + 1)
-		}
-	}
 
 	const handleLike = async () => {
 		// console.log('like')
@@ -103,7 +60,7 @@ export default function PostComponent({ postDetails }) {
 										radius="xl"
 										size={20}
 										style={{ backgroundColor: avatarBgColor }}
-										src={profile_picture.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`}
+										src={profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`}
 									/>
 									<Link href="/profile" passHref>
 										<Text size="sm">{username}</Text>
@@ -138,15 +95,13 @@ export default function PostComponent({ postDetails }) {
 									)}
 								</Menu>
 								{/* --- END POST MENU --- */}
-
 							</Group>
 							{/* ----- END POST HEADER ----- */}
 
 							{/* POST IMAGE */}
 							<Image className="text-center" src={post_image.includes('http') ? post_image : `${API_URL}/${post_image}`} alt="etSocial-post"></Image>
-						
 						</Card.Section>
-						
+
 						{/* ----- START LIKES & COMMENTS BUTTON ----- */}
 						<Group
 							position="apart"
@@ -186,7 +141,7 @@ export default function PostComponent({ postDetails }) {
 							</Group>
 						</Group>
 						{/* ----- END LIKES & COMMENTS BUTTON ----- */}
-						
+
 						{/* ----- START LIKES COUNTER ----- */}
 						<Group
 							className="mb-1 mx-1 mb-3 ms-1"
@@ -229,17 +184,12 @@ export default function PostComponent({ postDetails }) {
 								</small>
 							)}
 
-							{!likeToggle && countLikes > 0 && (
-								<small>
-									Liked by {countLikes} others
-								</small>
-							)}
+							{!likeToggle && countLikes > 0 && <small>Liked by {countLikes} others</small>}
 
 							{likeToggle && countLikes - 1 > 0 && (
 								<small>
 									Liked by
-									{likeToggle && <span className="fw-bold"> you</span>}
-									{" "}and {countLikes - 1} others
+									{likeToggle && <span className="fw-bold"> you</span>} and {countLikes - 1} others
 								</small>
 							)}
 
@@ -250,7 +200,7 @@ export default function PostComponent({ postDetails }) {
 							)}
 						</Group>
 						{/* ----- END LIKES COUNTER ----- */}
-						
+
 						{/* ----- START CAPTION ----- */}
 						<Text
 							className="mx-1"
@@ -272,13 +222,11 @@ export default function PostComponent({ postDetails }) {
 										<span size="sm">{caption}</span>
 									</Spoiler>
 								)}
-								{caption && caption.length <= 85 && (
-									<span size="sm">{caption}</span>
-								)}
+								{caption && caption.length <= 85 && <span size="sm">{caption}</span>}
 							</div>
 						</Text>
 						{/* ----- END CAPTION ----- */}
-						
+
 						{/* ----- START COMMENTS ----- */}
 						<div className="mx-1 text-secondary">
 							{comments.length >= 5 && <small>View all comments</small>}
