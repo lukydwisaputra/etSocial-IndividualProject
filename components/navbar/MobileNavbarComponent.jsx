@@ -1,104 +1,115 @@
-import React, { useState, useEffect } from "react";
-import { createStyles, Avatar, Indicator, ActionIcon, Menu, Group } from "@mantine/core";
-import { MdHomeFilled, MdSearch, MdBookmark } from "react-icons/md";
-import { AiOutlinePlus, AiFillHeart } from "react-icons/ai";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import CreatePostComponent from "../post/CreatePostComponent";
+import React, { useState, useEffect } from 'react'
+import { createStyles, Avatar, Indicator, ActionIcon, Menu, Group } from '@mantine/core'
+import { MdHomeFilled, MdSearch } from 'react-icons/md'
+import { AiFillHeart } from 'react-icons/ai'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import CreatePostComponent from '../post/CreatePostComponent'
+import { useSelector } from 'react-redux'
+import Cookies from 'js-cookie'
+import axios from 'axios'
+import { API_URL, COOKIES_EXP } from '../../helper/helper'
 
 const useStyles = createStyles((theme) => ({
 	a: {
-		color: theme.colorScheme === "dark" ? theme.white : theme.colors.dark[6],
-		":hover": {
-			color: theme.colorScheme === "dark" ? theme.white : theme.colors.dark[6],
+		color: theme.colorScheme === 'dark' ? theme.white : theme.colors.dark[6],
+		':hover': {
+			color: theme.colorScheme === 'dark' ? theme.white : theme.colors.dark[6],
 		},
 	},
-}));
+}))
 
 export default function MobileNavbarComponent() {
-	const { classes, theme } = useStyles();
-	const mobile = "d-lg-none";
-	const avatarBgColor = theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2];
-	const { pathname } = useRouter();
-	const allowedPage = ["/home", "/explore", "/liked", "/profile"];
-	const isAllowed = allowedPage.includes(pathname);
+	// HOOKS
+	const { classes, theme } = useStyles()
+	const { pathname } = useRouter()
+	const { status, profile_picture } = useSelector((state) => state.user)
+
+	// VAR
+	const mobile = 'd-lg-none'
+	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
+	const allowedPage = ['/home', '/explore', '/liked', '/profile']
+	const isAllowed = allowedPage.includes(pathname)
 
 	return (
 		<>
-			{
-				isAllowed &&
+			{isAllowed && (
 				<nav
 					className={`justify-content-between align-items-center fixed-bottom ${mobile}`}
 					style={{
-						backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : "white",
+						backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : 'white',
 						// height: "6vh",
-						padding: "1.5vh",
-						zIndex:'2'
+						padding: '1.5vh',
+						zIndex: '2',
 					}}
 				>
 					<div className="container">
 						<Group position="apart">
-							{/* Home */}
+							{/* HOME ICON */}
 							<Link href="/home" passHref>
 								<ActionIcon component="button" style={classes.theme}>
 									<MdHomeFilled size={25} />
 								</ActionIcon>
 							</Link>
-							{/* Explore */}
+
+							{/* EXPLORE ICON */}
 							<Link href="/explore" passHref>
 								<ActionIcon component="button" style={classes.theme}>
 									<MdSearch size={25} />
 								</ActionIcon>
 							</Link>
-							{/* Create a Post */}
+
+							{/* CREATE A POST ICON */}
 							<CreatePostComponent />
-							{/* Bookmarks */}
+
+							{/* LIKED ICON */}
 							<Link href="/liked" passHref>
 								<ActionIcon component="button" style={classes.theme}>
 									<AiFillHeart size={22} />
 								</ActionIcon>
 							</Link>
-							{/* Profile */}
+
+							{/* PROFILE */}
+							{/* ------- START MENU -------- */}
 							<Menu
-								style={{zIndex: '3'}}
+								style={{ zIndex: '3' }}
 								withArrow
 								size={'xs'}
 								control={
 									<ActionIcon component="button" style={classes.theme}>
-										<Indicator inline size={9} offset={0} position="bottom-end" color="red">
+										<Indicator inline size={8} offset={2} position="bottom-end" color={status === 'verified' ? 'teal' : 'red'}>
 											<Avatar
-												src={
-													"https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200"
-												}
+												src={profile_picture}
 												radius="xl"
 												size={20}
 												style={{
-													border: `1px solid ${
-														theme.colorScheme === "dark" ? "white" : theme.colors.dark[7]
-													}}`,
-													backgroundColor: avatarBgColor
+													border: '1px solid rgb(166,167,171, 0.3)',
+													backgroundColor: avatarBgColor,
 												}}
 											/>
 										</Indicator>
 									</ActionIcon>
 								}
 							>
+								{/* PROFILE */}
 								<Menu.Item>
 									<Link href="/profile" passHref>
-										<p className='m-auto text-muted'>Profile</p>
+										<p className="m-auto text-muted">Profile</p>
 									</Link>
 								</Menu.Item>
 
+								{/* SIGN OUT */}
 								<Menu.Item>
 									<Link href="/" passHref>
-										<p className='m-auto text-muted'>Sign Out</p>
+										<p className="m-auto text-muted">Sign Out</p>
 									</Link>
 								</Menu.Item>
 							</Menu>
+							{/* ------- END MENU -------- */}
 						</Group>
 					</div>
 				</nav>
-			}
+			)}
 		</>
-	);
+	)
 }

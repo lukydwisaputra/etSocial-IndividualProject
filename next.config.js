@@ -9,6 +9,7 @@ const nextConfig = {
 		unoptimized: false,
 		formats: ['image/webp'],
 	},
+	reactStrictMode: false,
 };
 
 module.exports = nextConfig;

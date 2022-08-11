@@ -1,35 +1,41 @@
-import React from "react";
-import { createStyles, Paper, Text } from "@mantine/core";
+import React from 'react'
+import { createStyles, Paper, Text } from '@mantine/core'
+import { useSelector } from 'react-redux'
 
 const useStyles = createStyles((theme) => ({
 	card: {
-		position: "relative",
-		overflow: "hidden",
+		position: 'relative',
+		overflow: 'hidden',
 		padding: theme.spacing.xs,
 		paddingLeft: theme.spacing.md * 2,
 
-		"&::before": {
+		'&::before': {
 			content: '""',
-			position: "absolute",
+			position: 'absolute',
 			top: 0,
 			bottom: 0,
 			left: 0,
 			width: 6,
-			backgroundImage: theme.fn.linearGradient(0, theme.colors.pink[6], theme.colors.orange[6]),
+			backgroundImage: theme.fn.linearGradient(50, 'aqua', 'teal'),
 		},
 	},
-}));
+}))
 
-export function BannerComponent({ title, description }) {
-	const { classes } = useStyles();
+export function BannerComponent() {
+	// HOOKS
+	const { classes } = useStyles()
+	
+	// VAR
+	const username = useSelector((state) => state.user.username)
+
 	return (
-		<Paper withBorder radius="md" className={`ms-1 ${classes.card}`} style={{ bottom: "0px" }}>
+		<Paper withBorder radius="md" className={`ms-1 ${classes.card}`} shadow={'sm'}>
 			<Text size="sm" weight={600}>
-				{"Howdy, lukydwisaputra!"}
+				Howdy, {username}!
 			</Text>
 			<Text size="xs" mt="xs" color="dimmed">
-				Welcome to <span className="fw-bold"> étSocial </span>. Enjoy 🤞🏼
+				Welcome to <span className="fw-bold"> étSocial </span> | Have a good time 🤞🏼
 			</Text>
 		</Paper>
-	);
+	)
 }

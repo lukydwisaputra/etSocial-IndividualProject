@@ -20,9 +20,11 @@ a {
 .mantine-12mvy9p:hover,
 .mantine-1juarfr:hover,
 .mantine-qls5vf:hover,
-.mantine-lfggf9:hover,
 .mantine-he7kh3:hover,
-.mantine-1a71rn0:hover {
+.mantine-1a71rn0:hover,
+.mantine-lfggf9:hover,
+.mantine-qo1k2:hover,
+.mantine-1f5xhiw:hover {
 	color: gray;
 	text-decoration: none;
 }
@@ -57,4 +59,28 @@ hr:not([size]) {
 .mantine-1vhreye:focus,
 .mantine-n2xu5g:focus {
 	outline:0;
+}
+
+.wrapper{
+	text-align:center;
+}
+
+.wrapper #file-input{
+display:none;
+}
+
+.wrapper label[for='file-input'] *{
+vertical-align:middle;
+cursor:pointer;
+}
+
+.wrapper label[for='file-input'] span{
+margin-left: 10px
+}
+
+.wrapper i.remove{
+vertical-align:middle;
+margin-left: 5px;
+cursor:pointer;
+display:none;
 }

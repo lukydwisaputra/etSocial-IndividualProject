@@ -149,20 +149,3 @@ export default function SavedPage(props) {
         </>
     );
 }
-
-export const getServerSideProps = async (context) => {
-    try {
-        // console.log('Data Context Request', context);
-		// let { avatar, username, images, caption, comments, postingTime} = props;
-        let results = await axios.get(`${API_URL}/api/posts?id=1`)
-        return {
-            props: {
-                posts: results.data.posts
-            }
-        }
-
-    } catch(error) {
-		console.log(error)
-		return error;
-	}
-}

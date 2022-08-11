@@ -1,42 +1,57 @@
-import React from "react";
-import { createStyles, Card, Image, Avatar, Text, Group } from "@mantine/core";
+import React from 'react'
+import { createStyles, Card, Text, Group } from '@mantine/core'
+import Link from 'next/link'
 
 const useStyles = createStyles((theme) => ({
 	card: {
-		backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.white,
+		backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
 	},
 
 	title: {
 		fontWeight: 600,
 		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 		lineHeight: 1.2,
-		fontSize: '0.8rem'
+		fontSize: '0.8rem',
 	},
 
 	body: {
 		padding: theme.spacing.sm,
 	},
-}));
+}))
 
-export function NewsComponent() {
-	const { classes } = useStyles();
+export function NewsComponent({ props }) {
+	// HOOKS
+	const { classes } = useStyles()
+	
+	// VAR
+	let { author, category, media, title, url } = props
 
 	return (
-		<Card withBorder radius="sm" p={0} className={classes.card}>
+		<Card withBorder radius="sm" p={0} className={classes.card} shadow={'sm'}>
 			<Group noWrap spacing={0}>
-				{/* <Image src={'https://techcrunch.com/wp-content/uploads/2020/06/NSussman_Techcrunch_Exchange-multicolor.jpg?w=1390&crop=1'} height={25} width={25} /> */}
+
 				<div className={classes.body}>
-					<Text transform="uppercase" color="dimmed" weight={600} style={{fontSize: '0.65rem'}}>
-						Market Analysis
+					<Text
+						transform="uppercase"
+						color="dimmed"
+						weight={600}
+						style={{ fontSize: '0.65rem' }}
+					>
+						{category}
 					</Text>
-					<Text className={` my-2 ${classes.title}`}>
-						{"Empowering a new wave of health tech startups — with data"}
-					</Text>
+
+					<Link href={url ? url : ""} passHref>
+						<Text style={{cursor: 'pointer'}} className={` my-2 ${classes.title}`}>{title}</Text>
+					</Link>
+
 					<Group noWrap spacing="xs">
-						<Text className="text-secondary" style={{fontSize: '0.7rem'}}>{"Anna Heim - published in techcrunch.com"}</Text>
+						<Text className="text-secondary" style={{ fontSize: '0.7rem' }}>
+							{author} - published in {media}
+						</Text>
 					</Group>
 				</div>
+
 			</Group>
 		</Card>
-	);
+	)
 }

@@ -1,48 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react'
 import {
 	Avatar,
 	Text,
-	Button,
 	Paper,
-	Group,
-	Menu,
 	ActionIcon,
-	Modal,
 	useMantineTheme,
-	TextInput,
-	Textarea,
-} from "@mantine/core";
-import {
-	AiFillHeart,
-	AiOutlineHeart,
-	AiOutlineEdit,
-	AiOutlineDelete,
-	AiOutlineShareAlt,
-} from "react-icons/ai";
-import { useForm } from "@mantine/hooks";
-import { At } from "tabler-icons-react";
-import EditProfileComponent from "./EditProfileComponent";
+} from '@mantine/core'
+import { useForm } from '@mantine/hooks'
+import EditProfileComponent from './EditProfileComponent'
+import Cookies from 'js-cookie'
+import axios from 'axios'
+import { API_URL } from '../../helper/helper'
 
 export default function UserInfoAction() {
-	const theme = useMantineTheme();
-	const [value, setValue] = useState("");
-	const avatarBgColor = theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2];
+	// HOOKS
+	const theme = useMantineTheme()
+	const [value, setValue] = useState('')
+	const [user, setUser] = useState({})
+
+	// VAR
+	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
+
+	const getUsers = async () => {
+		let token = Cookies.get('token')
+		let result = await axios.get(`${API_URL}/api/users/keep`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+		setUser(result.data.users)
+	}
+
+	useEffect(() => {
+		getUsers()
+	}, [])
 
 	const form = useForm({
 		initialValues: {
-			name: "",
-			username: "",
-			bio: "",
+			name: user.name,
+			username: user.username,
+			bio: user.bio,
 		},
-	});
-
-	let users = {
-		name: "Luky Dwi Saputra",
-		username: "lukydwisaputra",
-		email: "lukydwisaputra@mail.com",
-		bio: "Make It Anyway 🐙"
-	}
-	let { name, username, email, bio } = users;
+	})
 
 	return (
 		<Paper
@@ -50,45 +49,52 @@ export default function UserInfoAction() {
 			withBorder
 			p="lg"
 			sx={(theme) => ({
-				backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.white,
+				backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.white,
 			})}
 		>
-			{/* Criteria: Fullname, Bio, Username, Email, Profile Picture */}
+			{/* CRITERIA: Fullname, Bio, Username, Email, Profile Picture */}
+
 			<div className="container">
 				<div align="right">
 					<ActionIcon variant="transparent">
-						<EditProfileComponent form={form} users={users}/>
+						<EditProfileComponent form={form} users={user} />
 					</ActionIcon>
 				</div>
 			</div>
+
+			{/* PROFILE PICTURE */}
 			<Avatar
-				style={{ 
-					border: "1px solid rgb(166,167,171, 0.3)", 
-					marginTop: "-2vh",
-					border: `1px solid ${
-						theme.colorScheme === "dark" ? "white" : theme.colors.dark[7]
-					}}`,
-					backgroundColor: avatarBgColor
+				style={{
+					border: '1px solid rgb(166,167,171, 0.3)',
+					marginTop: '-2vh',
+					border: '1px solid rgb(166,167,171, 0.3)',
+					backgroundColor: avatarBgColor,
 				}}
-				src={
-					"https://avatars.dicebear.com/api/identicon/your-custom-seed.svg?r=50&scale=84&flip=1&colors[]=amber&colors[]=blue&colors[]=blueGrey&colors[]=green&colors[]=grey&colors[]=lightGreen&colors[]=lime&colors[]=lightBlue&colors[]=indigo&colors[]=deepOrange&colorLevel=200"
-				}
+				src={user?.profile_picture}
 				size={60}
 				radius={100}
 				mx="auto"
 			/>
+
+			{/* NAME & USERNAME */}
 			<Text align="center" size="sm" weight={500} className="mt-4">
-				{name} • <span className="fw-light">@{username}</span>
+				{user?.name} • <span className="fw-light">@{user.username}</span>
 			</Text>
+			
+			{/* EMAIL */}
 			<Text align="center" color="dimmed" size="xs">
-				{email}
+				{user?.email}
 			</Text>
-			<Text align="center" size="xs" weight={500} className="mt-2">
-				Bio:
-			</Text>
-			<Text align="center" color="dimmed" size="xs">
-				{bio}
-			</Text>
+			
+			{/* BIO */}
+			<>
+				<Text align="center" size="xs" weight={500} className="mt-2">
+					Bio:
+				</Text>
+				<Text align="center" color="dimmed" size="xs">
+					{user?.bio}
+				</Text>
+			</>
 		</Paper>
-	);
+	)
 }

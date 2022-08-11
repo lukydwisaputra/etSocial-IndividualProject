@@ -13,7 +13,7 @@ import {
 import { AiOutlineMail } from "react-icons/ai";
 import MenubarComponent from "../../components/menubar/MenubarComponent";
 import Head from "next/head";
-import axios from 'axios';
+import axios from "axios";
 import { API_URL } from "../../helper/helper";
 
 const useStyles = createStyles((theme) => ({
@@ -46,7 +46,10 @@ export default function ForgotPassword(props) {
 				<title>étSocial | Récovery</title>
 				<link rel="icon" href="/favicon.ico" />
 				{/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
-				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+				<meta
+					name="viewport"
+					content="width=device-width, initial-scale=1, maximum-scale=1"
+				></meta>
 			</Head>
 			<MenubarComponent title={"Récovery"} />
 			<div
@@ -109,19 +112,19 @@ export default function ForgotPassword(props) {
 	);
 }
 
-export const getServerSideProps = async (context) => {
-    try {
-        // console.log('Data Context Request', context);
-		// let { avatar, username, images, caption, comments, postingTime} = props;
-        let results = await axios.get(`${API_URL}/api/posts?id=1`)
-        return {
-            props: {
-                posts: results.data.posts
-            }
-        }
+// export const getServerSideProps = async (context) => {
+//     try {
+//         // console.log('Data Context Request', context);
+// 		// let { avatar, username, images, caption, comments, postingTime} = props;
+//         let results = await axios.get(`${API_URL}/api/posts?id=1`)
+//         return {
+//             props: {
+//                 posts: results.data.posts
+//             }
+//         }
 
-    } catch(error) {
-		console.log(error)
-		return error;
-	}
-}
+//     } catch(error) {
+// 		console.log(error)
+// 		return error;
+// 	}
+// }

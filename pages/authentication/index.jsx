@@ -1,11 +1,11 @@
-import React, { useState, useId } from "react";
-import { useForm, useToggle, upperFirst } from "@mantine/hooks";
-import { AiOutlineMail, AiOutlineClose, AiOutlineCheck } from "react-icons/ai";
-import { RiLockPasswordLine } from "react-icons/ri";
-import { PasswordComponent } from "../../components/form/PasswordComponent";
-import { At } from "tabler-icons-react";
-import Link from "next/link";
-import MenubarComponent from "../../components/menubar/MenubarComponent";
+import React, { useState, useId } from 'react'
+import { useForm, useToggle, upperFirst } from '@mantine/hooks'
+import { AiOutlineMail, AiOutlineClose, AiOutlineCheck } from 'react-icons/ai'
+import { RiLockPasswordLine } from 'react-icons/ri'
+import { PasswordComponent } from '../../components/form/PasswordComponent'
+import { At } from 'tabler-icons-react'
+import Link from 'next/link'
+import MenubarComponent from '../../components/menubar/MenubarComponent'
 import {
 	TextInput,
 	PasswordInput,
@@ -17,16 +17,23 @@ import {
 	useMantineTheme,
 	Loader,
 	Notification,
-} from "@mantine/core";
-import Head from "next/head";
-import axios from "axios";
-import { API_URL } from "../../helper/helper";
-import { IconCheck, IconX } from "@tabler/icons";
-import { useRouter } from 'next/router';
+} from '@mantine/core'
+import Head from 'next/head'
+import axios from 'axios'
+import { API_URL, COOKIES_EXP } from '../../helper/helper'
+import { IconCheck, IconX } from '@tabler/icons'
+import { useRouter } from 'next/router'
+import Cookies from 'js-cookie'
+import { useDispatch } from 'react-redux'
+import { userLogin } from '../../slices/userSlice'
 
-export default function AuthenticationForm(props) {
-	const router = useRouter();
-	const [type, toggle] = useToggle("login", ["login", "register"]);
+export default function AuthenticationForm({ data }) {
+	// HOOKS
+	const dispatch = useDispatch()
+	const router = useRouter()
+	const [type, toggle] = useToggle('login', ['login', 'register'])
+	const theme = useMantineTheme()
+	let id = useId()
 	const [state, setState] = useState({
 		isTakenEmail: null,
 		isValidEmail: null,
@@ -36,8 +43,9 @@ export default function AuthenticationForm(props) {
 		isUploading: false,
 		isSuccess: null,
 		isCredentialsOk: null,
-	});
-
+	})
+	
+	// VAR
 	let {
 		isTakenEmail,
 		isValidEmail,
@@ -47,26 +55,20 @@ export default function AuthenticationForm(props) {
 		isUploading,
 		isSuccess,
 		isCredentialsOk,
-	} = state;
-
-	let isNotError =
-		!isTakenEmail && isValidEmail && !isTakenUsername && isMatchPassword && isStrengthPassword;
-
-	const theme = useMantineTheme();
-	const btnColor = theme.colorScheme === "dark" ? "light" : "dark";
-	const border = `1px solid rgb(166,167,171, 0.2)`;
-	let id = useId();
-
+	} = state
+	let isNotError = !isTakenEmail && isValidEmail && !isTakenUsername && isMatchPassword && isStrengthPassword
+	const btnColor = theme.colorScheme === 'dark' ? 'light' : 'dark'
+	const border = `1px solid rgb(166,167,171, 0.2)`
 	const form = useForm({
 		initialValues: {
 			// register
-			username: "",
-			email: "",
-			password: "",
-			secondPassword: "",
+			username: '',
+			email: '',
+			password: '',
+			secondPassword: '',
 			// login
-			userOrEmailLogin: "",
-			passwordLogin: "",
+			userOrEmailLogin: '',
+			passwordLogin: '',
 		},
 
 		validationRules: {
@@ -75,106 +77,141 @@ export default function AuthenticationForm(props) {
 			userOrEmailLogin: (val) => /^\S+@\S+$/.test(val),
 			secondPassword: (val) => val === form.values.password,
 		},
-	});
-
+	})
 	const requirements = [
-		{ re: /[0-9]/, label: "Includes number" },
-		{ re: /[A-Z]/, label: "Includes uppercase letter" },
-		{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: "Includes special symbol" },
-	];
+		{ re: /[0-9]/, label: 'Includes number' },
+		{ re: /[A-Z]/, label: 'Includes uppercase letter' },
+		{ re: /[$&+,:;=?@#|'<>.^*()%!-]/, label: 'Includes special symbol' },
+	]
 
-	const onLogin = async (formValues) => {
+	const onLogin = (formValues) => {
 		try {
-			let credentials = formValues.userOrEmailLogin;
-			let password = formValues.passwordLogin;
+			let credentials = formValues.userOrEmailLogin
+			let password = formValues.passwordLogin
 			if (credentials && password) {
-				setState((prev) => ({ ...prev, isUploading: true }));
-				let results = await axios.post(`${API_URL}/api/users/login`, { credentials, password });
-				console.log(results.data)
+				setState((prev) => ({ ...prev, isUploading: true }))
+				setTimeout(async() => {
+					let result = await axios.post(`${API_URL}/api/users/login`, {
+						credentials,
+						password,
+					})
+	
+					if (result.data?.success) {
+						dispatch(userLogin(result.data.users))
+						Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
 
-				if (results.data.success) {
+						setTimeout(() => {
+							setState((prev) => ({ ...prev, isUploading: false }))
+							setState((prev) => ({ ...prev, isCredentialsOk: true }))
+							router.push('/home')
+						}, 750)
+						return
+					} 
+
 					setTimeout(() => {
-						setState((prev) => ({ ...prev, isUploading: false }));
-						setState((prev) => ({ ...prev, isCredentialsOk: true }));
-						localStorage.setItem('etSocial_user', `${results.data.id}`);
-						router.push('/home');
-					}, 500);
-				} else {
+						setState((prev) => ({ ...prev, isUploading: false }))
+						setState((prev) => ({ ...prev, isCredentialsOk: false }))
+					}, 1000)
 					setTimeout(() => {
-						setState((prev) => ({ ...prev, isUploading: false }));
-						setState((prev) => ({ ...prev, isCredentialsOk: false }));
-					}, 500);
-				}
+						setState((prev) => ({ ...prev, isUploading: false }))
+						setState((prev) => ({ ...prev, isCredentialsOk: null }))
+					}, 5000)
+
+				}, 1000);
 			}
 		} catch (error) {
-			console.log(error);
+			console.log(error)
+			setTimeout(() => {
+				setState((prev) => ({ ...prev, isUploading: false }))
+				setState((prev) => ({ ...prev, isCredentialsOk: false }))
+			}, 1000)
+			setTimeout(() => {
+				setState((prev) => ({ ...prev, isUploading: false }))
+				setState((prev) => ({ ...prev, isCredentialsOk: null }))
+			}, 5000)
 		}
-	};
+	}
 
 	const onRegister = async (formValues) => {
-		let username = formValues.username;
-		let email = formValues.email;
-		let password = formValues.password;
-		let secondPassword = formValues.secondPassword;
+		let username = formValues.username
+		let email = formValues.email
+		let password = formValues.password
+		let secondPassword = formValues.secondPassword
+
 		if (username && email && password && isNotError && password === secondPassword) {
 			try {
-				setState((prev) => ({ ...prev, isUploading: true }));
-				let result = await axios.post(`${API_URL}/api/users/register`, {
-					username,
-					email,
-					password,
-				});
+				setState((prev) => ({ ...prev, isUploading: true }))
+				setTimeout(async () => {
+					let result = await axios.post(`${API_URL}/api/users/register`, {
+						username,
+						email,
+						password,
+					})
 
-				if (await result.data.success) {
-					setTimeout(() => {
-						setState((prev) => ({ ...prev, isUploading: false }));
-						setState((prev) => ({ ...prev, isSuccess: true }));
-						form.reset();
-					}, 500);
-					// toggle();
-				} else {
-					setTimeout(() => {
-						setState((prev) => ({ ...prev, isUploading: false }));
-						setState((prev) => ({ ...prev, isSuccess: false }));
-					}, 500);
-				}
+					if (await result.data.success) {
+						// activate notification
+						setTimeout(() => {
+							setState((prev) => ({ ...prev, isUploading: false }))
+							setState((prev) => ({ ...prev, isSuccess: true }))
+							form.reset()
+
+							Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
+						}, 500)
+
+						// hide notification
+						setTimeout(() => {
+							setState((prev) => ({ ...prev, isSuccess: null }))
+						}, 5000)
+					} else {
+						// activate notification
+						setTimeout(() => {
+							setState((prev) => ({ ...prev, isUploading: false }))
+							setState((prev) => ({ ...prev, isSuccess: false }))
+						}, 500)
+
+						// hide notification
+						setTimeout(() => {
+							setState((prev) => ({ ...prev, isSuccess: null }))
+						}, 5000)
+					}
+				}, 1000)
 			} catch (error) {
-				console.log(error);
-				setState((prev) => ({ ...prev, isUploading: false }));
-				setState((prev) => ({ ...prev, isSuccess: false }));
+				console.log(error)
+				setState((prev) => ({ ...prev, isUploading: false }))
+				setState((prev) => ({ ...prev, isSuccess: false }))
 			}
 		}
-	};
+	}
 
 	const passwordComponentValue = (password) => {
-		form.setFieldValue("password", password);
+		form.setFieldValue('password', password)
 
 		if (password === form.values.secondPassword) {
-			setState((prev) => ({ ...prev, isMatchPassword: true }));
+			setState((prev) => ({ ...prev, isMatchPassword: true }))
 		} else {
-			setState((prev) => ({ ...prev, isMatchPassword: false }));
+			setState((prev) => ({ ...prev, isMatchPassword: false }))
 		}
 
-		let multiplier = password.length >= 8 ? 0 : 1;
+		let multiplier = password.length >= 8 ? 0 : 1
 
 		requirements.forEach((requirement) => {
 			if (!requirement.re.test(password)) {
-				multiplier += 1;
+				multiplier += 1
 			}
-		});
+		})
 
-		let strength = Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
+		let strength = Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10)
 
 		if (strength === 100) {
-			setState((prev) => ({ ...prev, isStrengthPassword: true }));
+			setState((prev) => ({ ...prev, isStrengthPassword: true }))
 		} else {
-			setState((prev) => ({ ...prev, isStrengthPassword: false }));
+			setState((prev) => ({ ...prev, isStrengthPassword: false }))
 		}
-	};
+	}
 
 	const resetNotification = () => {
-		setState((prev) => ({ ...prev, isSuccess: null }));
-		setState((prev) => ({ ...prev, isCredentialsOk: null }));
+		setState((prev) => ({ ...prev, isSuccess: null }))
+		setState((prev) => ({ ...prev, isCredentialsOk: null }))
 	}
 
 	return (
@@ -187,10 +224,10 @@ export default function AuthenticationForm(props) {
 					content="width=device-width, initial-scale=1, maximum-scale=1"
 				></meta>
 			</Head>
-			
-			<MenubarComponent title={"Authéntication"} />
 
-			{isSuccess === true && isUploading === false && type === "register" && (
+			<MenubarComponent title={'Authéntication'} />
+
+			{isSuccess === true && isUploading === false && type === 'register' && (
 				<Notification
 					size={15}
 					icon={<IconCheck size={15} />}
@@ -202,7 +239,7 @@ export default function AuthenticationForm(props) {
 					<small>Please check email to verify your account.</small>
 				</Notification>
 			)}
-			{isSuccess === false && isUploading === false && type === "register" && (
+			{isSuccess === false && isUploading === false && type === 'register' && (
 				<Notification
 					icon={<IconX size={15} />}
 					color="red"
@@ -213,78 +250,97 @@ export default function AuthenticationForm(props) {
 					<small>oops, something wrong happened!</small>
 				</Notification>
 			)}
-			{isCredentialsOk === false &&
-				form.values.userOrEmailLogin !== "" &&
-				form.values.passwordLogin !== "" &&
-				type === "login" && (
-					<Notification
-						icon={<IconX size={15} />}
-						color="red"
-						title="LOGIN FAILED"
-						className="mt-3"
-						onClose={() => setState((prev) => ({ ...prev, isCredentialsOk: null }))}
-					>
-						<small>Your credentials did not match or not registered</small>
-					</Notification>
-				)}
+			{isCredentialsOk === false && isUploading === false &&
+				form.values.userOrEmailLogin !== '' &&
+				form.values.passwordLogin !== '' &&
+				type === 'login' && (
+				<Notification
+					icon={<IconX size={15} />}
+					color="red"
+					title="LOGIN FAILED"
+					className="mt-3"
+					onClose={() => setState((prev) => ({ ...prev, isCredentialsOk: null }))}
+				>
+					<small>Your credentials did not match or not registered</small>
+				</Notification>
+			)}
 			<div
 				className={`d-flex justify-content-center align-items-center p-0`}
-				style={{ minHeight: "75vh" }}
+				style={{ minHeight: '75vh' }}
 			>
-				<div className="container" style={{ maxWidth: "600px" }}>
+				<div className="container" style={{ maxWidth: '600px' }}>
 					<div>
 						<Text weight={700} className="fs-4 mb-25 text-center">
-							{type === "login" ? "Welcome back to étSocial!" : "Welcome to étSocial!"}
+							{type === 'login'
+								? 'Welcome back to étSocial!'
+								: 'Welcome to étSocial!'}
 						</Text>
 					</div>
-					<div style={{ marginBottom: "2.5vh" }}>
+					<div style={{ marginBottom: '2.5vh' }}>
 						<Text className="mt-2 mb-4" color="dimmed" size="sm" align="center">
-							{type === "login"
-								? "Keep create, discover and connect with the global community"
-								: "Start create, discover and connect with the global community"}
+							{type === 'login'
+								? 'Keep create, discover and connect with the global community'
+								: 'Start create, discover and connect with the global community'}
 						</Text>
 					</div>
 
-					<Paper radius="md" p="xl" shadow="sm" style={{ border: border }} {...props}>
+					<Paper radius="md" p="xl" shadow="sm" style={{ border: border }}>
 						<Text size="sm" weight={700} className="mb-4 text-center">
-							{type.toUpperCase() + " FORM"}
+							{type.toUpperCase() + ' FORM'}
 						</Text>
 
 						<form onSubmit={form.onSubmit(() => {})}>
 							<Group direction="column" grow>
-								{type === "register" ? (
+								{type === 'register' ? (
 									<>
 										<TextInput
 											id={`username-${id}`}
 											required
 											icon={<At size={14} />}
 											rightSection={
-												form.values.username === "" ? (
-													""
-												) : !isTakenUsername && form.values.username !== "" ? (
-													<AiOutlineCheck size={14} color={"teal"} />
+												form.values.username === '' ? (
+													''
+												) : !isTakenUsername &&
+												  form.values.username !== '' ? (
+													<AiOutlineCheck size={14} color={'teal'} />
 												) : (
-													<AiOutlineClose size={14} color={"red"} />
+													<AiOutlineClose size={14} color={'red'} />
 												)
 											}
 											placeholder="username"
 											value={form.values.username.toLowerCase()}
 											onChange={async (event) => {
 												resetNotification()
-												let username = event.currentTarget.value;
-												form.setFieldValue("username", username);
-												let result = await axios.get(
-													`${API_URL}/api/users?username=${username.toLowerCase()}`
-												);
-												if (result.data.success && username !== "") {
-													setState((prev) => ({ ...prev, isTakenUsername: true }));
-												} else {
-													setState((prev) => ({ ...prev, isTakenUsername: false }));
-												}
+												let username = event.currentTarget.value
+												form.setFieldValue('username', username)
+
+												setTimeout(async () => {
+													try {
+														let res = await axios.get(
+															`${API_URL}/api/users?username=${username.toLowerCase()}`
+														)
+														if (res.data.success && username !== '') {
+															setState((prev) => ({
+																...prev,
+																isTakenUsername: true,
+															}))
+														} else {
+															setState((prev) => ({
+																...prev,
+																isTakenUsername: false,
+															}))
+														}
+													} catch (error) {
+														setState((prev) => ({
+															...prev,
+															isTakenUsername: false,
+														}))
+													}
+												}, 500)
 											}}
 											error={
-												form.values.username === ""
-													? ""
+												form.values.username === ''
+													? ''
 													: isTakenUsername && (
 															<div className="row">
 																<small className="text-danger">
@@ -300,43 +356,66 @@ export default function AuthenticationForm(props) {
 											required
 											icon={<AiOutlineMail size={14} />}
 											rightSection={
-												form.values.email === "" ? (
-													""
+												form.values.email === '' ? (
+													''
 												) : !isTakenEmail &&
-												  form.values.email !== "" &&
-												  form.values.email.includes("@") &&
-												  form.values.email.includes(".") ? (
-													<AiOutlineCheck size={14} color={"teal"} />
+												  form.values.email !== '' &&
+												  form.values.email.includes('@') &&
+												  form.values.email.includes('.') ? (
+													<AiOutlineCheck size={14} color={'teal'} />
 												) : (
-													<AiOutlineClose size={14} color={"red"} />
+													<AiOutlineClose size={14} color={'red'} />
 												)
 											}
 											placeholder="email"
 											value={form.values.email}
 											onChange={async (event) => {
 												resetNotification()
-												let email = event.currentTarget.value;
-												form.setFieldValue("email", email);
-												let result = await axios.get(
-													`${API_URL}/api/users?email=${email.toLowerCase()}`
-												);
-												if (result.data.success) {
-													setState((prev) => ({ ...prev, isTakenEmail: true }));
-												} else {
-													setState((prev) => ({ ...prev, isTakenEmail: false }));
-												}
+												let email = event.currentTarget.value
+												form.setFieldValue('email', email)
+												setTimeout(async () => {
+													try {
+														let res = await axios.get(
+															`${API_URL}/api/users?email=${email.toLowerCase()}`
+														)
+
+														if (res.data.success && email !== '') {
+															setState((prev) => ({
+																...prev,
+																isTakenEmail: true,
+															}))
+														} else {
+															setState((prev) => ({
+																...prev,
+																isTakenEmail: false,
+															}))
+														}
+													} catch (error) {
+														setState((prev) => ({
+															...prev,
+															isTakenEmail: false,
+														}))
+													}
+												}, 500)
+
 												if (
-													email !== "" &&
-													email.includes("@") &&
-													email.includes(".")
+													email !== '' &&
+													email.includes('@') &&
+													email.includes('.')
 												) {
-													setState((prev) => ({ ...prev, isValidEmail: true }));
+													setState((prev) => ({
+														...prev,
+														isValidEmail: true,
+													}))
 												} else {
-													setState((prev) => ({ ...prev, isValidEmail: false }));
+													setState((prev) => ({
+														...prev,
+														isValidEmail: false,
+													}))
 												}
 											}}
 											error={
-												form.values.email !== "" &&
+												form.values.email !== '' &&
 												isTakenEmail && (
 													<div className="row">
 														<small className="text-danger">
@@ -346,11 +425,11 @@ export default function AuthenticationForm(props) {
 												)
 											}
 										/>
-										{!isValidEmail && form.values.email !== "" && (
+										{!isValidEmail && form.values.email !== '' && (
 											<div className="row">
 												<small>
-													<span className="text-danger">*</span> email must contains @
-													(at) and . (dot)
+													<span className="text-danger">*</span> email
+													must contains @ (at) and . (dot)
 												</small>
 											</div>
 										)}
@@ -361,11 +440,11 @@ export default function AuthenticationForm(props) {
 											resetNotification={resetNotification}
 										/>
 
-										{!isStrengthPassword && form.values.password !== "" && (
+										{!isStrengthPassword && form.values.password !== '' && (
 											<div className="row">
 												<small>
-													<span className="text-danger">*</span> please make your
-													password stronger
+													<span className="text-danger">*</span> please
+													make your password stronger
 												</small>
 											</div>
 										)}
@@ -378,17 +457,23 @@ export default function AuthenticationForm(props) {
 											value={form.values.secondPassword}
 											onChange={(event) => {
 												resetNotification()
-												let secondPassword = event.currentTarget.value;
-												form.setFieldValue("secondPassword", secondPassword);
+												let secondPassword = event.currentTarget.value
+												form.setFieldValue('secondPassword', secondPassword)
 												if (secondPassword === form.values.password) {
-													setState((prev) => ({ ...prev, isMatchPassword: true }));
+													setState((prev) => ({
+														...prev,
+														isMatchPassword: true,
+													}))
 												} else {
-													setState((prev) => ({ ...prev, isMatchPassword: false }));
+													setState((prev) => ({
+														...prev,
+														isMatchPassword: false,
+													}))
 												}
 											}}
 											error={
 												!isMatchPassword &&
-												form.values.secondPassword !== "" && (
+												form.values.secondPassword !== '' && (
 													<small>password did not match</small>
 												)
 											}
@@ -405,7 +490,7 @@ export default function AuthenticationForm(props) {
 											onChange={(event) => {
 												resetNotification()
 												form.setFieldValue(
-													"userOrEmailLogin",
+													'userOrEmailLogin',
 													event.currentTarget.value
 												)
 											}}
@@ -417,7 +502,10 @@ export default function AuthenticationForm(props) {
 											required
 											placeholder="password"
 											onChange={(event) => {
-												form.setFieldValue("passwordLogin", event.currentTarget.value)
+												form.setFieldValue(
+													'passwordLogin',
+													event.currentTarget.value
+												)
 												resetNotification()
 											}}
 										/>
@@ -426,7 +514,7 @@ export default function AuthenticationForm(props) {
 												className="text-muted"
 												component="a"
 												size="xs"
-												style={{ textAlign: "left", width: "40%" }}
+												style={{ textAlign: 'left', width: '40%' }}
 											>
 												Forgot password?
 											</Anchor>
@@ -441,36 +529,41 @@ export default function AuthenticationForm(props) {
 									component="a"
 									color={btnColor}
 									onClick={() => {
-										setState((prev) => ({ ...prev, isUploading: null }));
-										setState((prev) => ({ ...prev, isCredentialsOk: null }));
-										form.reset();
-										toggle();
+										setState((prev) => ({ ...prev, isUploading: null }))
+										setState((prev) => ({ ...prev, isCredentialsOk: null }))
+										form.reset()
+										toggle()
 									}}
 									size="xs"
 								>
-									{type === "register"
-										? "Have an account? Login"
+									{type === 'register'
+										? 'Have an account? Login'
 										: "Don't have an account? Register"}
 								</Anchor>
 
 								<Button
-									size={"xs"}
+									size={'xs'}
 									variant="light"
 									color="gray"
 									type="submit"
+									disabled={isUploading}
 									onClick={async () => {
-										if (type === "login") {
-											onLogin(form.values);
-										} else if (type === "register") {
+										if (type === 'login') {
+											onLogin(form.values)
+										} else if (type === 'register') {
 											if (isNotError) {
-												onRegister(form.values);
+												onRegister(form.values)
 											} else {
-												setState((prev) => ({ ...prev, isSuccess: false }));
+												setState((prev) => ({ ...prev, isSuccess: false }))
 											}
 										}
 									}}
 								>
-									{isUploading ? <Loader size={14} color="gray" /> : upperFirst(type)}
+									{isUploading ? (
+										<Loader size={14} color="gray" />
+									) : (
+										upperFirst(type)
+									)}
 								</Button>
 							</Group>
 						</form>
@@ -478,22 +571,29 @@ export default function AuthenticationForm(props) {
 				</div>
 			</div>
 		</>
-	);
+	)
 }
 
-export const getServerSideProps = async (context) => {
-    try {
-        // console.log('Data Context Request', context);
-		// let { avatar, username, images, caption, comments, postingTime} = props;
-        let results = await axios.get(`${API_URL}/api/posts?id=1`)
-        return {
-            props: {
-                posts: results.data.posts
-            }
-        }
+export async function getServerSideProps(context) {
+	let token = context.req.cookies?.token
 
-    } catch(error) {
-		console.log(error)
-		return error;
+	let result = await axios.get(`${API_URL}/api/users/keep`, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	})
+
+	if (result.data.success) {
+		Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
+		return {
+			redirect: {
+				destination: '/home',
+				permanent: false,
+			},
+		}
+	}
+
+	return {
+		props: {},
 	}
 }

@@ -14,19 +14,27 @@ export default function ExplorePage(props) {
     );
 }
 
-export const getServerSideProps = async (context) => {
-    try {
-        // console.log('Data Context Request', context);
-		// let { avatar, username, images, caption, comments, postingTime} = props;
-        let results = await axios.get(`${API_URL}/api/posts?id=1`)
-        return {
-            props: {
-                posts: results.data.posts
-            }
-        }
+export async function getServerSideProps(context) {
+	let token = context.req.cookies?.token
+	if (!token) {
+		return {
+			redirect: {
+				destination: '/',
+				permanent: false,
+			},
+		}
+	} 
 
-    } catch(error) {
-		console.log(error)
-		return error;
+	if (dataUser.users.status === 'unverified') {
+		return {
+			redirect: {
+				destination: '/home/unverified',
+				permanent: false,
+			},
+		}
+	}
+
+	return {
+		props: {}
 	}
 }

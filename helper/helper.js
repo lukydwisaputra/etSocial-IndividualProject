@@ -1,4 +1,5 @@
 // --- API ---
-const API_URL = 'http://localhost:3100';
-
-module.exports = { API_URL };
+module.exports = {
+	API_URL: 'http://localhost:3100',
+	COOKIES_EXP: 1 / 48,
+}

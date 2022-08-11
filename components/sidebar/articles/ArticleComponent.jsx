@@ -1,15 +1,17 @@
-import React from "react";
-import { createStyles, Paper, Text, Title, Button } from "@mantine/core";
+import React from 'react'
+import { createStyles, Paper, Text, Title, Button } from '@mantine/core'
 
 const useStyles = createStyles((theme) => ({
 	card: {
-		height: 440,
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "space-between",
-		alignItems: "flex-start",
-		backgroundSize: "cover",
-		backgroundPosition: "center",
+		height: 400,
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
+		backgroundColor: 'rgb(26,27,30, 0.6)',
+		backgroundBlendMode: 'multiply',
+		backgroundSize: 'cover',
+		backgroundPosition: 'center',
 	},
 
 	title: {
@@ -17,9 +19,8 @@ const useStyles = createStyles((theme) => ({
 		fontWeight: 700,
 		color: theme.white,
 		lineHeight: 1.2,
-		fontSize: '0.9rem',
+		fontSize: '0.8rem',
 		marginTop: theme.spacing.xs,
-		maxWidth: '80%'
 	},
 
 	category: {
@@ -27,37 +28,30 @@ const useStyles = createStyles((theme) => ({
 		opacity: 0.7,
 		fontWeight: 700,
 		fontSize: '0.65rem',
-		textTransform: "uppercase",
+		textTransform: 'uppercase',
 	},
-}));
+}))
 
-export function ArticleComponent() {
-	const { classes } = useStyles();
-    const content = {
-		image: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1640&q=80",
-		title: "The best laptop for Frontend engineers in 2022",
-		category: "Technology"
-	}
+export function ArticleComponent({ props }) {
+	// HOOKS
+	const { classes } = useStyles()
+
+	// VAR
+	let { category, image, title, url } = props
 
 	return (
-		<Paper
-			shadow="md"
-			p="md"
-			radius="md"
-			sx={{ backgroundImage: `url(${content.image})`, maxHeight: '200px'}}
-			className={classes.card}
-		>
-			<div>
-				<Text className={classes.category} size="xs">
-					{content.category}
-				</Text>
-				<Title order={3} className={classes.title}>
-					{content.title}
-				</Title>
-			</div>
-			<Button variant="light" color="dark" size="xs">
+		<Paper shadow="sm" p="md" radius="md" sx={{ backgroundImage: `url(${image})`, maxHeight: '150px' }} className={classes.card}>
+			<Text className={classes.category} size="xs">
+				{category}
+			</Text>
+
+			<Title order={3} className={classes.title}>
+				{title}
+			</Title>
+			
+			<Button component="a" target="_blank" variant="light" color="dark" size="xs" href={url}>
 				Read article
 			</Button>
 		</Paper>
-	);
+	)
 }

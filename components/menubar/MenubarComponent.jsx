@@ -4,8 +4,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from 'next/router';
 
 function MenubarComponent(props) {
+    // HOOKS
     const theme = useMantineTheme();
-    const border = "1px solid rgb(166,167,171, 0.2)";
     const router = useRouter();
     
     return ( 
@@ -22,11 +22,14 @@ function MenubarComponent(props) {
                                 theme.colorScheme === "dark" ? theme.colors.dark[7] : "white"
                         }}>
                         <div className="row border-sm-0" style={{ height: "5vh"}}>
+                            {/* DISPLAY BACK ARROW ICON FOR DESKTOP */}
                             <div className="col-1 m-auto d-none d-sm-none d-md-block d-lg-block">
                                 <ActionIcon component="button" onClick={() => router.back()}>
                                     <IoIosArrowBack size={17}/>
                                 </ActionIcon>
                             </div>
+
+                            {/* DISPLAY BACK ARROW ICON FOR MOBILE */}
                             <div className="col-11 border-0 d-md-none d-lg-none">
                                 <ActionIcon component="button" onClick={() => router.back()}>
                                     <IoIosArrowBack size={17} />
