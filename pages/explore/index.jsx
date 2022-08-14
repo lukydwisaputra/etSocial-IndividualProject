@@ -1,40 +1,52 @@
-import React from 'react';
-import MenubarComponent from '../../components/menubar/MenubarComponent';
-import axios from 'axios';
-import { API_URL } from "../../helper/helper";
+import React from 'react'
+import MenubarComponent from '../../components/menubar/MenubarComponent'
+import axios from 'axios'
+import { API_URL } from '../../helper/helper'
 
 export default function ExplorePage(props) {
-    const desktop = 'd-none d-sm-none d-md-none d-lg-block'
-    return ( 
-        <>
-            <div className={desktop}>
-                <MenubarComponent title={'Exploré'} /> 
-            </div>
-        </>
-    );
+	const desktop = 'd-none d-sm-none d-md-none d-lg-block'
+	return (
+		<>
+			<div className={desktop}>
+				<MenubarComponent title={'Exploré'} />
+			</div>
+		</>
+	)
 }
 
 export async function getServerSideProps(context) {
-	let token = context.req.cookies?.token
-	if (!token) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
+	try {
+		let token = context.req?.cookies?.token
+		if (!token) {
+			return {
+				redirect: {
+					destination: '/authentication',
+					permanent: false,
+				},
+			}
 		}
-	} 
 
-	if (dataUser.users.status === 'unverified') {
-		return {
-			redirect: {
-				destination: '/home/unverified',
-				permanent: false,
+		let users = await axios.get(`${API_URL}/api/users/keep`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
 			},
-		}
-	}
+		})
+		let dataUser = users?.data
 
-	return {
-		props: {}
+		if (dataUser.users.status !== 'verified') {
+			return {
+				redirect: {
+					destination: '/home',
+					permanent: false,
+				},
+			}
+		}
+		return {
+			props: {},
+		}
+	} catch (error) {
+		return {
+			props: {},
+		}
 	}
 }

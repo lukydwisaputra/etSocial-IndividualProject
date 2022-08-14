@@ -24,7 +24,7 @@ const useStyles = createStyles((theme) => ({
 export function BannerComponent() {
 	// HOOKS
 	const { classes } = useStyles()
-	
+
 	// VAR
 	const username = useSelector((state) => state.user.username)
 

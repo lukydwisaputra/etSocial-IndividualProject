@@ -1,4 +1,4 @@
-import React, { useState, useId } from 'react'
+import React, { useState, useId, useEffect } from 'react'
 import { useForm, useToggle, upperFirst } from '@mantine/hooks'
 import { AiOutlineMail, AiOutlineClose, AiOutlineCheck } from 'react-icons/ai'
 import { RiLockPasswordLine } from 'react-icons/ri'
@@ -56,6 +56,7 @@ export default function AuthenticationForm({ data }) {
 		isSuccess,
 		isCredentialsOk,
 	} = state
+
 	let isNotError = !isTakenEmail && isValidEmail && !isTakenUsername && isMatchPassword && isStrengthPassword
 	const btnColor = theme.colorScheme === 'dark' ? 'light' : 'dark'
 	const border = `1px solid rgb(166,167,171, 0.2)`
@@ -96,7 +97,7 @@ export default function AuthenticationForm({ data }) {
 						password,
 					})
 	
-					if (result.data?.success) {
+					if (result?.data?.success) {
 						dispatch(userLogin(result.data.users))
 						Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
 
@@ -132,6 +133,15 @@ export default function AuthenticationForm({ data }) {
 		}
 	}
 
+	useEffect(() => {
+		if (isSuccess !== null) {
+			setTimeout(() => {
+				setState((prev) => ({ ...prev, isSuccess: null }))
+			}, 5000)
+		}
+	})
+	
+
 	const onRegister = async (formValues) => {
 		let username = formValues.username
 		let email = formValues.email
@@ -153,7 +163,9 @@ export default function AuthenticationForm({ data }) {
 						setTimeout(() => {
 							setState((prev) => ({ ...prev, isUploading: false }))
 							setState((prev) => ({ ...prev, isSuccess: true }))
+
 							form.reset()
+							form.setFieldValue('password', '')
 
 							Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
 						}, 500)
@@ -239,7 +251,7 @@ export default function AuthenticationForm({ data }) {
 					<small>Please check email to verify your account.</small>
 				</Notification>
 			)}
-			{isSuccess === false && isUploading === false && type === 'register' && (
+			{isSuccess === false && !isNotError && type === 'register' && (
 				<Notification
 					icon={<IconX size={15} />}
 					color="red"
@@ -247,7 +259,7 @@ export default function AuthenticationForm({ data }) {
 					className="mt-3"
 					onClose={() => setState((prev) => ({ ...prev, isSuccess: null }))}
 				>
-					<small>oops, something wrong happened!</small>
+					<small>Oops, something wrong happened!</small>
 				</Notification>
 			)}
 			{isCredentialsOk === false && isUploading === false &&
@@ -427,10 +439,10 @@ export default function AuthenticationForm({ data }) {
 										/>
 										{!isValidEmail && form.values.email !== '' && (
 											<div className="row">
-												<small>
+												<Text style={{fontSize: '10px', marginTop: '-1.5vh'}}>
 													<span className="text-danger">*</span> email
-													must contains @ (at) and . (dot)
-												</small>
+													must contains @ (at) and . (dot) as a domain
+												</Text>
 											</div>
 										)}
 
@@ -583,7 +595,7 @@ export async function getServerSideProps(context) {
 		},
 	})
 
-	if (result.data.success) {
+	if (result.data?.success) {
 		Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
 		return {
 			redirect: {

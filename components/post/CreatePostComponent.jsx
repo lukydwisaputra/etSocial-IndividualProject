@@ -85,13 +85,14 @@ export default function CreatePostComponent({ props }) {
 						setTimeout(() => {
 							setSuccess((prev) => (prev = null))
 						}, 3000)
+						return
 					}
 
 					let post = await axios.get(`${API_URL}/api/posts/details?id_post=${newPost?.data?.id}`)
 
 					if (post?.data?.success) {
 						setTimeout(() => {
-							pathname === '/home' ? router.push('#top') : router.push('/home/#top')
+							pathname === '/home' ? router.replace('#top') : router.push('/home')
 							dispatch(addPost(post?.data?.posts[0]))
 							setLoading((prev) => (prev = false))
 							setSuccess((prev) => (prev = true))
@@ -102,8 +103,8 @@ export default function CreatePostComponent({ props }) {
 							setFileName((prev) => (prev = ''))
 							form.reset()
 						}, 3000)
+						return
 					}
-
 				}, 1000)
 			} else {
 				return

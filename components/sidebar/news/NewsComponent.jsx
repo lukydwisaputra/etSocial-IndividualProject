@@ -22,26 +22,22 @@ const useStyles = createStyles((theme) => ({
 export function NewsComponent({ props }) {
 	// HOOKS
 	const { classes } = useStyles()
-	
+
 	// VAR
 	let { author, category, media, title, url } = props
 
 	return (
 		<Card withBorder radius="sm" p={0} className={classes.card} shadow={'sm'}>
 			<Group noWrap spacing={0}>
-
 				<div className={classes.body}>
-					<Text
-						transform="uppercase"
-						color="dimmed"
-						weight={600}
-						style={{ fontSize: '0.65rem' }}
-					>
+					<Text transform="uppercase" color="dimmed" weight={600} style={{ fontSize: '0.65rem' }}>
 						{category}
 					</Text>
 
-					<Link href={url ? url : ""} passHref>
-						<Text style={{cursor: 'pointer'}} className={` my-2 ${classes.title}`}>{title}</Text>
+					<Link href={url ? url : ''} passHref>
+						<Text style={{ cursor: 'pointer' }} className={` my-2 ${classes.title}`}>
+							{title}
+						</Text>
 					</Link>
 
 					<Group noWrap spacing="xs">
@@ -50,7 +46,6 @@ export function NewsComponent({ props }) {
 						</Text>
 					</Group>
 				</div>
-
 			</Group>
 		</Card>
 	)

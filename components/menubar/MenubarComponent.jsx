@@ -3,7 +3,7 @@ import { useMantineTheme, Text, ActionIcon } from "@mantine/core";
 import { IoIosArrowBack } from "react-icons/io";
 import { useRouter } from 'next/router';
 
-function MenubarComponent(props) {
+export default function MenubarComponent(props) {
     // HOOKS
     const theme = useMantineTheme();
     const router = useRouter();
@@ -47,5 +47,3 @@ function MenubarComponent(props) {
         </div>
     );
 }
-
-export default MenubarComponent;

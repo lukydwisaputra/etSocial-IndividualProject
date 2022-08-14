@@ -22,7 +22,7 @@ const useStyles = createStyles((theme) => ({
 	},
 }))
 
-export default function VerificationPage(props) {
+export default function UnverifiedComponent() {
 	// HOOKS
 	const [uploading, setUploading] = useState(null)
 	const [value, setValue] = useState('')
@@ -91,7 +91,7 @@ export default function VerificationPage(props) {
                         You&apos;re not verified yet 😟
                     </Title>
                     <Text className="mt-2" color="dimmed" size="sm" align="center" style={{ marginBottom: '5vh' }}>
-                        Please verify your account, first!
+                        Didn&apos;t receive a verification mail? or got a problem with previous verification link? fill this form below!
                     </Text>
 
                     <Paper shadow="xs" p={30} radius="md" mt="xl" style={{ border: border, minWidth: '350px' }}>
@@ -125,32 +125,13 @@ export default function VerificationPage(props) {
                             </Button>
                         </Group>
                     </Paper>
+					<div className="mt-2">
+						<Text className="mt- text-muted" size="sm" align="center" style={{ fontSize: '10px' }}>
+							<span className="text-danger">*</span> Please use the latest verification link sent through your email.
+						</Text>
+					</div>
                 </Container>
             </div>
 		</div>
 	)
-}
-
-export async function getServerSideProps(context) {
-	let token = context.req.cookies?.token
-	let result = await axios.get(`${API_URL}/api/users/keep`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	})
-
-	if (result.data.users?.status === 'verified') {
-		const in60Minutes = 1 / 24
-		Cookies.set('token', result.data?.token, { expires: in60Minutes })
-		return {
-			redirect: {
-				destination: '/home',
-				permanent: false,
-			},
-		}
-	}
-
-	return {
-		props: {},
-	}
 }

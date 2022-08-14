@@ -5,19 +5,16 @@ import Head from 'next/head'
 import { API_URL } from '../../helper/helper'
 import { useSelector, useDispatch } from 'react-redux'
 import { setPost, getAllPost } from '../../slices/postSlice'
+import UnverifiedComponent from '../../components/profile/UnverifiedComponent'
+import axios from 'axios'
 
 export default function HomePage(props) {
 	// HOOKS
-	let post = useSelector(getAllPost)
 	const dispatch = useDispatch()
 	let id = useId()
+	let post = useSelector(getAllPost)
 
 	const renderedPost = () => {
-		if (JSON.stringify(post) === '[]') {
-			post = props.posts
-		} 
-		dispatch(setPost(post))
-
 		return post.map((val, idx) => {
 			return (
 				<div key={`${id}post-${idx}`}>
@@ -27,18 +24,31 @@ export default function HomePage(props) {
 		})
 	}
 
+	useEffect(() => {
+		if (JSON.stringify(post) === '[]') {
+			post = props?.posts
+		}
+		dispatch(setPost(post))
+	}, [])
+
 	return (
 		<>
-			<Head>
-				<title>étSocial | Homé</title>
-				<link rel="icon" />
-				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
-			</Head>
+			{props.users?.status !== 'verified' ? (
+				<UnverifiedComponent />
+			) : (
+				<>
+					<Head>
+						<title>étSocial | Homé</title>
+						<link rel="icon" />
+						<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
+					</Head>
 
-			<MenubarComponent title={'Homé'} id={'top'} />
-			<div className="container" style={{ marginBottom: '2.5vh' }}>
-				{renderedPost()}
-			</div>
+					<MenubarComponent title={'Homé'} id={'top'} />
+					<div className="container" style={{ marginBottom: '2.5vh' }}>
+						{renderedPost()}
+					</div>
+				</>
+			)}
 		</>
 	)
 }
@@ -48,33 +58,30 @@ export async function getServerSideProps(context) {
 	if (!token) {
 		return {
 			redirect: {
-				destination: '/',
+				destination: '/authentication',
 				permanent: false,
 			},
 		}
 	}
 
-	let users = await fetch(`${API_URL}/api/users/keep`, {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	})
-	let dataUser = await users.json()
-	
-	if (dataUser?.users?.status === 'unverified') {
-		return {
-			redirect: {
-				destination: '/home/unverified',
-				permanent: false,
+	let [users, feeds] = await Promise.all([
+		axios.get(`${API_URL}/api/users/keep`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
 			},
-		}
-	}
-	
-	let feeds = await fetch(`${API_URL}/api/posts/feeds`)
-	let dataFeed = await feeds.json()
+		}),
+		axios.get(`${API_URL}/api/posts/details`),
+	])
+
+	let dataUser = users?.data
+	let dataFeed = feeds?.data
+
+	console.log(dataUser?.users)
+
 	return {
 		props: {
-			posts: dataFeed?.posts?.length > 0 ? dataFeed?.posts : []
-		}
+			posts: dataFeed?.posts?.length > 0 ? dataFeed?.posts : [],
+			users: dataUser?.users,
+		},
 	}
 }

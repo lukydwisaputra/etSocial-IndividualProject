@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { PasswordInput, Text, Popover, Box } from '@mantine/core'
 import { BsCheck } from 'react-icons/bs'
 import { AiOutlineClose } from 'react-icons/ai'
@@ -39,7 +39,14 @@ export function PasswordComponent({ getValue, inputValue }) {
 	// VAR
 	const checks = requirements.map((requirement, index) => <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(value)} />)
 
-	const strength = getStrength(value)
+	let strength = getStrength(value)
+
+	useEffect(() => {
+		if (inputValue === '') {
+			strength = 10
+			setValue((prev) => (prev = ''))
+		}
+	})
 
 	const indicator = (strength) => {
 		let result = ''
@@ -94,9 +101,19 @@ export function PasswordComponent({ getValue, inputValue }) {
 				/>
 			}
 		>
-			<small className="text-muted fw-bold text-secondary">{'Strength: ' + indicator(strength)} </small>
-			<PasswordRequirement label="Includes at least 8 characters" meets={value.length >= 8} />
-			{checks}
+			{!inputValue ? (
+				<>
+					<small className="text-muted fw-bold text-secondary">{'Strength: ' + indicator(0)} </small>
+					<PasswordRequirement label="Includes at least 8 characters" meets={value.length >= 8} />
+					{checks}
+				</>
+			) : (
+				<>
+					<small className="text-muted fw-bold text-secondary">{'Strength: ' + indicator(strength)} </small>
+					<PasswordRequirement label="Includes at least 8 characters" meets={value.length >= 8} />
+					{checks}
+				</>
+			)}
 		</Popover>
 	)
 }

@@ -101,28 +101,3 @@ export default function LayoutComponent({ children }) {
 		</div>
 	)
 }
-
-export async function getServerSideProps(context) {
-	let token = context.req.cookies?.token
-	if (!token) {
-		return {
-			redirect: {
-				destination: '/',
-				permanent: false,
-			},
-		}
-	} 
-
-	if (dataUser.users.status === 'unverified') {
-		return {
-			redirect: {
-				destination: '/home/unverified',
-				permanent: false,
-			},
-		}
-	}
-
-	return {
-		props: {}
-	}
-}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Text, Loader, Container, Title, Paper, Group, Autocomplete, Button, createStyles, Notification } from '@mantine/core'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { API_URL } from '../../helper/helper'
+import { API_URL, COOKIES_EXP } from '../../helper/helper'
 import { AiOutlineMail } from 'react-icons/ai'
 import { IconCheck, IconX } from '@tabler/icons'
 import Cookies from 'js-cookie'
@@ -49,21 +49,21 @@ export default function VerificationPage(props) {
 					},
 				})
 
-				if (res.data?.users?.status === 'unverified' && token === Cookies.get('token')) {
-					dispatch(userLogin(res.data.users))
+				if (res.data?.success && res.data?.users?.status !== 'verified' && token === Cookies.get('token')) {
+					dispatch(userLogin(res.data?.users))
 					setLoading((prev) => (prev = true))
-					let res = await axios.get(`${API_URL}/api/users/verification`, {
+					let result = await axios.get(`${API_URL}/api/users/verification`, {
 						headers: {
 							Authorization: `Bearer ${token}`,
 						},
 					})
 
-					if (res.data?.success === true && res.data?.users[0]?.status === 'verified') {
+					if (result?.data?.success === true && result?.data?.users[0]?.status === 'verified') {
 						setTimeout(() => {
 							router.push('/home')
 						}, 750)
 						const in60Minutes = 1 / 24
-						Cookies.set('token', res.data.token, { expires: in60Minutes })
+						Cookies.set('token', result?.data?.token, { expires: in60Minutes })
 					} else {
 						setTimeout(() => {
 							setLoading((prev) => (prev = false))
@@ -71,7 +71,7 @@ export default function VerificationPage(props) {
 						}, 3000)
 					}
 				} else {
-					dispatch(userLogin(res.data.users))
+					dispatch(userLogin(res.data?.users))
 					setLoading((prev) => (prev = true))
 					setTimeout(() => {
 						setLoading((prev) => (prev = false))
@@ -92,18 +92,23 @@ export default function VerificationPage(props) {
 		if (!failed) {
 			handleVerification(token)
 		}
+		if (resend !== null) {
+			setTimeout(() => {
+				setResend((prev) => (prev = null))
+			}, 3000)
+		}
 	})
 
-	const resendVerification = (email, token) => {
+	const resendVerification = (email) => {
 		setTimeout(async () => {
 			try {
 				setUploading((prev) => (prev = true))
-				let res = await axios.post(`${API_URL}/api/users/resend`, { email, token })
+				let res = await axios.post(`${API_URL}/api/users/resend`, { email })
 
 				if (await res.data?.success) {
 					setResend((prev) => (prev = true))
 					const in60Minutes = 1 / 24
-					Cookies.set('token', res.data.token, { expires: in60Minutes })
+					Cookies.set('token', res.data?.token, { expires: in60Minutes })
 
 					setTimeout(() => {
 						setResend((prev) => (prev = null))
@@ -191,7 +196,7 @@ export default function VerificationPage(props) {
 										if (value !== '') {
 											// setValue('')
 											setUploading((prev) => (prev = true))
-											resendVerification(value, token)
+											resendVerification(value)
 										}
 									}}
 								>
@@ -199,6 +204,11 @@ export default function VerificationPage(props) {
 								</Button>
 							</Group>
 						</Paper>
+						<div className="mt-2">
+							<Text className="mt- text-muted" size="sm" align="center" style={{ fontSize: '10px' }}>
+								<span className="text-danger">*</span> Please use the latest verification link sent through your email.
+							</Text>
+						</div>
 					</Container>
 				</div>
 			)}
@@ -207,17 +217,15 @@ export default function VerificationPage(props) {
 }
 
 export async function getServerSideProps(context) {
-	let token = context.req.cookies?.token
-
+	let token = context?.req?.cookies?.token
 	let result = await axios.get(`${API_URL}/api/users/keep`, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
 	})
 
-	if (result.data.users?.status === 'verified') {
-		const in60Minutes = 1 / 24
-		Cookies.set('token', result.data?.token, { expires: in60Minutes })
+	if (result?.data?.users?.status === 'verified') {
+		Cookies.set('token', result?.data?.token, { expires: COOKIES_EXP })
 		return {
 			redirect: {
 				destination: '/home',

@@ -1,34 +1,99 @@
-import React from "react";
-import ProfileComponent from "../../components/profile/ProfileComponent";
-import AlbumComponent from "../../components/post/AlbumComponent";
-import MenubarComponent from "../../components/menubar/MenubarComponent";
-import axios from 'axios';
-import { API_URL } from "../../helper/helper";
+import React, { useId, useEffect, useState } from 'react'
+import ProfileComponent from '../../components/profile/ProfileComponent'
+import AlbumComponent from '../../components/post/AlbumComponent'
+import MenubarComponent from '../../components/menubar/MenubarComponent'
+import { API_URL } from '../../helper/helper'
+import axios from 'axios'
+import { Skeleton } from '@mantine/core'
 
 export default function ProfilePage(props) {
-	let contentClasses = "col-4 p-1";
+	// HOOKS
+	const [userPosts, setUserPosts] = useState([])
+	const [loading, setLoading] = useState(true)
+	let id = useId()
+
+	// VAR
+	let contentClasses = 'col-4 p-1'
+
+	const rederedUserPost = () => {
+		return userPosts?.map((userPost, idx) => {
+			return (
+				<div key={id + idx} className={contentClasses}>
+					<Skeleton visible={loading}>
+						<AlbumComponent image={userPost?.post_image} />
+					</Skeleton>
+				</div>
+			)
+		})
+	}
+
+	useEffect(() => {
+		setUserPosts((prev) => (prev = props?.posts))
+		setTimeout(() => {
+			setLoading((prev) => (prev = false))
+		}, 1000)
+	}, [])
 
 	return (
-        <>
-            <MenubarComponent title={'lukydwisaputra'} /> 
-            <div className='container' style={{marginTop: '1vh', marginBottom: '1vh'}}>
-                <div className='row'>
-                    <ProfileComponent />
-                </div>
-            </div>
-            <div className='container' style={{marginTop: '1vh', marginBottom: '1vh'}}>
-                <div className='row'>
-                    <div className={contentClasses}>
-                        <AlbumComponent image='"https://images.unsplash.com/photo-1657664043009-c4975cb4eed3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxlZGl0b3JpYWwtZmVlZHw2NHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"' />
-                    </div>
-                    <div className={contentClasses}>
-                        <AlbumComponent image="https://images.unsplash.com/photo-1658158509859-34f343915bb4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60"/>
-                    </div>
-                    <div className={contentClasses}>
-                        <AlbumComponent image="https://images.unsplash.com/photo-1658171757201-41b9aa2b3651?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxN3x8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60"/>
-                    </div>
-                </div>
-            </div>
-        </>
-	);
+		<>
+			<MenubarComponent title={'Profilé'} />
+			{props?.posts && (
+				<>
+					<div className="container d-lg-none" style={{ marginBottom: '1vh' }}>
+						<div className="row">
+							<ProfileComponent />
+						</div>
+					</div>
+					<div className="container" style={{ marginBottom: '1vh' }}>
+						<div className="row">{rederedUserPost()}</div>
+					</div>
+				</>
+			)}
+		</>
+	)
+}
+
+export async function getServerSideProps(context) {
+	try {
+		let token = context.req?.cookies?.token
+		if (!token) {
+			return {
+				redirect: {
+					destination: '/authentication',
+					permanent: false,
+				},
+			}
+		}
+
+		let users = await axios.get(`${API_URL}/api/users/keep`, {
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
+		})
+		let dataUser = users?.data
+
+		let feeds = await axios.get(`${API_URL}/api/posts/feeds?id_user=${dataUser?.users.id}`)
+		let dataFeed = feeds?.data
+
+		if (dataUser.users.status !== 'verified') {
+			return {
+				redirect: {
+					destination: '/home',
+					permanent: false,
+				},
+			}
+		}
+
+		return {
+			props: {
+				posts: dataFeed?.posts?.length > 0 ? dataFeed?.posts : [],
+				users: dataUser?.users,
+			},
+		}
+		
+	} catch (error) {
+		return {
+			props: {},
+		}
+	}
 }

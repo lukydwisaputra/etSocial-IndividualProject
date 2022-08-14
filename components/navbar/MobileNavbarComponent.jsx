@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { createStyles, Avatar, Indicator, ActionIcon, Menu, Group } from '@mantine/core'
 import { MdHomeFilled, MdSearch } from 'react-icons/md'
 import { AiFillHeart } from 'react-icons/ai'
@@ -6,9 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import CreatePostComponent from '../post/CreatePostComponent'
 import { useSelector } from 'react-redux'
-import Cookies from 'js-cookie'
-import axios from 'axios'
-import { API_URL, COOKIES_EXP } from '../../helper/helper'
+import { API_URL } from '../../helper/helper'
 
 const useStyles = createStyles((theme) => ({
 	a: {
@@ -77,9 +75,9 @@ export default function MobileNavbarComponent() {
 								size={'xs'}
 								control={
 									<ActionIcon component="button" style={classes.theme}>
-										<Indicator inline size={8} offset={2} position="bottom-end" color={status === 'verified' ? 'teal' : 'red'}>
+										<Indicator inline size={7} offset={2} position="bottom-end" color={status === 'verified' ? 'teal' : 'red'}>
 											<Avatar
-												src={profile_picture}
+												src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
 												radius="xl"
 												size={20}
 												style={{

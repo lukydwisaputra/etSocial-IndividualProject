@@ -13,21 +13,13 @@ export const postSlice = createSlice({
 			state.unshift(action.payload)
 		},
 		resetPost: (state) => {
-			state = initialState
+			return initialState
 		},
-		likePost: (state, action) => {
-			let {postIndex, data} = action.payload
-			state[postIndex].likes.push(data)
-		},
-		unlikePost: (state, action) => {
-			let {postIndex, likesIndex} = action.payload
-			state[postIndex].likes.splice(likesIndex, 1)
-		}
-	}
+	},
 })
 
 export const getAllPost = (state) => state.post
 
-export const { setPost, addPost, resetPost, likePost, unlikePost } = postSlice.actions
+export const { setPost, addPost, resetPost} = postSlice.actions
 
 export default postSlice.reducer

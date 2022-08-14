@@ -1,5 +1,5 @@
 import React from 'react'
-import { createStyles, Paper, Text, Title, Button } from '@mantine/core'
+import { createStyles, Text, Title, Button, Card } from '@mantine/core'
 
 const useStyles = createStyles((theme) => ({
 	card: {
@@ -8,7 +8,7 @@ const useStyles = createStyles((theme) => ({
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		alignItems: 'flex-start',
-		backgroundColor: 'rgb(26,27,30, 0.6)',
+		backgroundColor: 'rgb(26,27,30, 0.5)',
 		backgroundBlendMode: 'multiply',
 		backgroundSize: 'cover',
 		backgroundPosition: 'center',
@@ -20,7 +20,7 @@ const useStyles = createStyles((theme) => ({
 		color: theme.white,
 		lineHeight: 1.2,
 		fontSize: '0.8rem',
-		marginTop: theme.spacing.xs,
+		// marginTop: theme.spacing.xs,
 	},
 
 	category: {
@@ -40,18 +40,19 @@ export function ArticleComponent({ props }) {
 	let { category, image, title, url } = props
 
 	return (
-		<Paper shadow="sm" p="md" radius="md" sx={{ backgroundImage: `url(${image})`, maxHeight: '150px' }} className={classes.card}>
-			<Text className={classes.category} size="xs">
-				{category}
-			</Text>
+		<Card shadow="sm" p="md" radius="md" sx={{ backgroundImage: image ? `url(${image})` : '', maxHeight: '150px' }} className={classes.card}>
+			<div>
+				<Text className={classes.category} size="xs">
+					{category}
+				</Text>
+				<Title order={3} className={`${classes.title} mt-2`}>
+					{title}
+				</Title>
+			</div>
 
-			<Title order={3} className={classes.title}>
-				{title}
-			</Title>
-			
-			<Button component="a" target="_blank" variant="light" color="dark" size="xs" href={url}>
+			<Button href={url} target="_blank" component="button" variant="light" color="dark" size="xs">
 				Read article
 			</Button>
-		</Paper>
+		</Card>
 	)
 }

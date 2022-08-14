@@ -7,9 +7,9 @@ import { ToggleThemeComponent } from '../navbar/ToggleThemeComponent'
 import { useRouter } from 'next/router'
 import CreatePostComponent from '../post/CreatePostComponent'
 import Cookies from 'js-cookie'
-import axios from 'axios'
 import { API_URL } from '../../helper/helper'
 import { useSelector } from 'react-redux'
+import { getUser } from '../../slices/userSlice'
 
 const useStyles = createStyles((theme) => ({
 	a: {
@@ -22,24 +22,27 @@ const useStyles = createStyles((theme) => ({
 
 export default function LeftSidebarComponent() {
 	// HOOKS
+	const router = useRouter()
 	const { classes, theme } = useStyles()
 	const { pathname } = useRouter()
-	const {id, username, email, status, name, bio, profile_picture} = useSelector((state) => state.user)
+	const { status, profile_picture } = useSelector(getUser)
+	const user = useSelector(getUser)
+	const token = Cookies.get('token')
 
 	// VAR
 	const buttonStyle = 'col-2'
 	const rowStyle = 'row mt-4'
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
 	const border = `1px solid ${theme.colorScheme === 'dark' ? 'white' : theme.colors.gray[2]}`
-	const allowedPage = ['/home', '/explore', '/liked', '/profile']
+	const allowedPage = ['/home', '/explore', '/liked', '/profile', '/about']
 	const iconSize = 17
 	const isAllowed = allowedPage.includes(pathname)
-	
+
 	// -------- START ICONS --------
 	// LOGO
 	const logoIcon = (
 		<div className={rowStyle}>
-			<Text className="fs-3" style={{ fontWeight: '500' }}>
+			<Text className="fs-3" style={{ fontWeight: '500' }} onClick={() => router.push('/about')}>
 				ét
 			</Text>
 		</div>
@@ -111,12 +114,13 @@ export default function LeftSidebarComponent() {
 						<ActionIcon className={buttonStyle} style={classes.theme}>
 							<Indicator inline size={5} offset={-7.5} position="bottom-center" color={status === 'verified' ? 'teal' : 'red'}>
 								<Avatar
-									src={profile_picture}
-									radius="xl"
-									size={22}
+									src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
+									radius={100}
+									size={25}
 									style={{
 										border: '1px solid rgb(166,167,171, 0.3)',
 										backgroundColor: avatarBgColor,
+										objectFit: 'cover',
 									}}
 								/>
 							</Indicator>
@@ -124,21 +128,18 @@ export default function LeftSidebarComponent() {
 					</Tooltip>
 				}
 			>
-				<Menu.Item>
-					<Link href="/profile" passHref>
-						<p className="m-auto text-muted">Profilé</p>
-					</Link>
+				<Menu.Item onClick={() => router.push('/profile')}>
+					<p className="m-auto text-muted">Profilé</p>
 				</Menu.Item>
 
 				<Menu.Item
 					onClick={() => {
+						router.push('/')
 						Cookies.remove('token')
 						Cookies.remove('etSocial_ui_theme')
 					}}
 				>
-					<Link href="/" passHref>
-						<p className="m-auto text-muted">Sign Out</p>
-					</Link>
+					<p className="m-auto text-muted">Sign Out</p>
 				</Menu.Item>
 			</Menu>
 		</div>
@@ -150,7 +151,7 @@ export default function LeftSidebarComponent() {
 
 	return (
 		<nav style={{ zIndex: '5', marginTop: '6vh' }}>
-			{isAllowed ? (
+			{isAllowed && user.status === 'verified' && token ? (
 				// ------- START MAIN PAGE --------
 				<>
 					<div style={{ position: 'fixed' }}>
@@ -164,7 +165,6 @@ export default function LeftSidebarComponent() {
 						{devider}
 						{newPostIcon}
 					</div>
-
 					<div style={{ position: 'fixed', bottom: '2.5%' }}>{profileIcon}</div>
 				</>
 			) : (
@@ -176,6 +176,7 @@ export default function LeftSidebarComponent() {
 					{logoIcon}
 					{devider}
 					{themeIcon}
+					{/* {user ? Cookies.get('token') && <div style={{ position: 'fixed', bottom: '2.5%' }}>{profileIcon}</div> : ''} */}
 				</div>
 				// ------- END LANDING PAGE --------
 			)}
