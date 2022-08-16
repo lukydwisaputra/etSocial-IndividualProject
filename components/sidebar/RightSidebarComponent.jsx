@@ -6,9 +6,12 @@ import { NewsComponent } from './news/NewsComponent'
 import { BannerComponent } from './banner/BannerComponent'
 import axios from 'axios'
 import { API_URL } from '../../helper/helper'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { getUser } from '../../slices/userSlice'
+import { getDetail } from '../../slices/detailSlice'
 import ProfileComponent from '../profile/ProfileComponent'
+import ScrollableCommentsDetail from '../post/ScrollableCommentsDetail'
+import { resetDetail } from '../../slices/detailSlice'
 
 const useStyles = createStyles((theme) => ({
 	a: {
@@ -22,15 +25,17 @@ const useStyles = createStyles((theme) => ({
 export default function RightSidebarComponent() {
 	// HOOKS
 	let user = useSelector(getUser)
+	let postDetail = useSelector(getDetail)
 	const [loading, setLoading] = useState(true)
 	const [articles1, setArticles1] = useState({})
 	const [news1, setNews1] = useState({})
 	const [news2, setNews2] = useState({})
 	const { theme } = useStyles()
 	const { pathname } = useRouter()
+	const dispatch = useDispatch()
 
 	// VAR
-	const allowedPage = ['/home', '/explore', 'profile', '/liked']
+	const allowedPage = ['/home', '/explore', '/profile', '/liked']
 	const isAllowed = allowedPage.includes(pathname)
 	const border = '1px solid rgb(166,167,171, 0.2)'
 	const isVerified = user?.status === 'verified'
@@ -58,13 +63,9 @@ export default function RightSidebarComponent() {
 				while (_news1.id === _news2.id) {
 					_news2 = _news[Math.floor(Math.random() * _news.length)]
 				}
-
-				setTimeout(() => {
-					setLoading((prev) => (prev = false))
-				}, 1000)
-
-				setNews1(_news1)
-				setNews2(_news2)
+				setNews1(prev => prev = _news1)
+				setNews2(prev => prev = _news2)
+				setLoading((prev) => (prev = false))
 			}
 		} catch (error) {
 			console.log(error)
@@ -74,113 +75,130 @@ export default function RightSidebarComponent() {
 	useEffect(() => {
 		getArticles()
 		getNews()
+		
+		setTimeout(() => {
+			setLoading((prev) => (prev = false))
+		}, 1500)
 	}, [])
 
-	return (
-		<>
-			{pathname === '/profile' && (
-				<div
-					className="sticky-top"
-					style={{
-						backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : 'white',
-						zIndex: '5',
-					}}
-				>
-					<div className="row" style={{ height: '6vh', borderBottom: border }}>
-						<div className="col-12 m-auto">
-							<div className="container">
-								<Text className="fs-6 fw-bold ms-1"> @{user.username}</Text>
-							</div>
-						</div>
-					</div>
-					<div className="container" style={{ marginTop: '1vh', marginBottom: '1vh' }}>
-						<div className="row mt-4">
-							<ProfileComponent />
-						</div>
-					</div>
-				</div>
-			)}
-			{isAllowed && (
-				<div
-					className="sticky-top"
-					style={{
-						backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : 'white',
-						zIndex: '5',
-					}}
-				>
-					{/* -------- START BANNER -------*/}
-					<>
+	let content
+	if (JSON.stringify(postDetail) === '{}') {
+		content = (
+			<>
+				{pathname === '/profile' && (
+					<div
+						className="sticky-top d-none d-sm-none d-md-none d-lg-block"
+						style={{
+							backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : 'white',
+							zIndex: '5',
+						}}
+					>
 						<div className="row" style={{ height: '6vh', borderBottom: border }}>
 							<div className="col-12 m-auto">
 								<div className="container">
-									<Text className="fs-6 fw-bold ms-1">What&apos;s new today?</Text>
+									<Text className="fs-6 fw-bold ms-1"> @{user.username}</Text>
 								</div>
 							</div>
 						</div>
-						<div className="row mt-4">
-							<div className="col-12">
-								<div className="container">
-									<BannerComponent />
-								</div>
+						<div className="container" style={{ marginTop: '1vh', marginBottom: '1vh' }}>
+							<div className="row mt-4">
+								<ProfileComponent />
 							</div>
 						</div>
-					</>
-					{/* -------- END BANNER ------- */}
-
-					{!isVerified ? (
-						''
-					) : (
+					</div>
+				)}
+				{isAllowed && (
+					<div
+						className="sticky-top d-none d-sm-none d-md-none d-lg-block"
+						style={{
+							backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : 'white',
+							zIndex: '5',
+						}}
+					>
+						{/* -------- START BANNER -------*/}
 						<>
-							{/* -------- START ARTICLE ------- */}
-							<div className="row">
+							<div className="row" style={{ height: '6vh', borderBottom: border }}>
 								<div className="col-12 m-auto">
 									<div className="container">
-										<Text className="fs-6 my-3 ms-1 fw-bold">Curated Articles</Text>
+										<Text className="fs-6 fw-bold ms-1">What&apos;s new today?</Text>
 									</div>
 								</div>
 							</div>
-							<div className="row">
+							<div className="row mt-4">
 								<div className="col-12">
 									<div className="container">
-										<Skeleton visible={loading}>
-											<ArticleComponent props={articles1} />
-										</Skeleton>
+									<Skeleton visible={loading}>
+										<BannerComponent />
+									</Skeleton>
 									</div>
 								</div>
 							</div>
-							{/* -------- END ARTICLE ------- */}
-							{/* -------- START NEWS ------- */}
-							<div className="row">
-								<div className="col-12 m-auto">
-									<div className="container">
-										<Text className="fs-6 my-3 ms-1 fw-bold">Latest News</Text>
-									</div>
-								</div>
-							</div>
-
-							<div className="row">
-								<div className="col-12">
-									<div className="container">
-										<Skeleton visible={loading}>
-											<NewsComponent props={news1} />
-										</Skeleton>
-									</div>
-								</div>
-							</div>
-							<div className="row my-3">
-								<div className="col-12">
-									<div className="container">
-										<Skeleton visible={loading}>
-											<NewsComponent props={news2} />
-										</Skeleton>
-									</div>
-								</div>
-							</div>
-							{/* -------- END NEWS ------- */}
 						</>
-					)}
-				</div>
-			)}
-		</>
-	)
+						{/* -------- END BANNER ------- */}
+
+						{!isVerified ? (
+							''
+						) : (
+							<>
+								{/* -------- START ARTICLE ------- */}
+								<div className="row d-none d-sm-none d-md-none d-lg-block">
+									<div className="col-12 m-auto">
+										<div className="container">
+											<Text className="fs-6 my-3 ms-1 fw-bold">Curated Articles</Text>
+										</div>
+									</div>
+								</div>
+								<div className="row">
+									<div className="col-12">
+										<div className="container">
+											<Skeleton visible={loading}>
+												<ArticleComponent props={articles1} />
+											</Skeleton>
+										</div>
+									</div>
+								</div>
+								{/* -------- END ARTICLE ------- */}
+								{/* -------- START NEWS ------- */}
+								<div className="row d-none d-sm-none d-md-none d-lg-block">
+									<div className="col-12 m-auto">
+										<div className="container">
+											<Text className="fs-6 my-3 ms-1 fw-bold">Latest News</Text>
+										</div>
+									</div>
+								</div>
+
+								<div className="row d-none d-sm-none d-md-none d-lg-block">
+									<div className="col-12">
+										<div className="container">
+											<Skeleton visible={loading}>
+												<NewsComponent props={news1} />
+											</Skeleton>
+										</div>
+									</div>
+								</div>
+								<div className="row my-3 d-none d-sm-none d-md-none d-lg-block">
+									<div className="col-12">
+										<div className="container">
+											<Skeleton visible={loading}>
+												<NewsComponent props={news2} />
+											</Skeleton>
+										</div>
+									</div>
+								</div>
+								{/* -------- END NEWS ------- */}
+							</>
+						)}
+					</div>
+				)}
+			</>
+		)
+	} else {
+		if (pathname.includes('/post')) {
+			content = <ScrollableCommentsDetail />
+		} else {
+			content = <div></div>
+		}
+	}
+
+	return <>{content}</>
 }

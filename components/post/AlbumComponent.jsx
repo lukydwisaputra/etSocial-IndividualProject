@@ -43,10 +43,10 @@ export default function AlbumComponent({ image }) {
 	return (
 		<>
 			{/* DESKTOP LIKED ALBUM DISPLAY */}
-			<Paper shadow="md" p="md" radius="xs" sx={{ backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '17.5vh', maxWidth: '35vw' }} className={`${classes.card} ${desktop}`}></Paper>
-			
+			<Paper shadow="md" p="md" sx={{ backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '17.5vh', maxWidth: '35vw' }} className={`${classes.card} ${desktop}`}></Paper>
+
 			{/* MOBILE LIKED ALBUM DISPLAY */}
-			<Paper shadow="md" p="md" radius="xs" sx={{ backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '12.5vh', maxWidth: '35vw' }} className={`${classes.card} ${mobile}`}></Paper>
+			<Paper shadow="md" p="md" sx={{ backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '12.5vh', maxWidth: '35vw' }} className={`${classes.card} ${mobile}`}></Paper>
 		</>
 	)
 }

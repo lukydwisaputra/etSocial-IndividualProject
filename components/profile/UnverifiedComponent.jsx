@@ -91,7 +91,7 @@ export default function UnverifiedComponent() {
                         You&apos;re not verified yet 😟
                     </Title>
                     <Text className="mt-2" color="dimmed" size="sm" align="center" style={{ marginBottom: '5vh' }}>
-                        Didn&apos;t receive a verification mail? or got a problem with previous verification link? fill this form below!
+                        Didn&apos;t receive a verification mail? or got a problem with previous verification link? fill the form below!
                     </Text>
 
                     <Paper shadow="xs" p={30} radius="md" mt="xl" style={{ border: border, minWidth: '350px' }}>

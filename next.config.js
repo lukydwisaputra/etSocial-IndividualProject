@@ -7,7 +7,7 @@ const nextConfig = {
 		unoptimized: false,
 		formats: ['image/webp'],
 	},
-	reactStrictMode: true,
+	reactStrictMode: false,
 }
 
 module.exports = nextConfig

@@ -30,7 +30,7 @@ export function BannerComponent() {
 
 	return (
 		<Paper withBorder radius="md" className={`ms-1 ${classes.card}`} shadow={'sm'}>
-			<Text size="sm" weight={600}>
+			<Text size="xs" weight={600}>
 				Howdy, {username}!
 			</Text>
 			<Text size="xs" mt="xs" color="dimmed">

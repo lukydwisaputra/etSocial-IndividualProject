@@ -37,17 +37,15 @@ export default function ProfilePage(props) {
 	return (
 		<>
 			<MenubarComponent title={'Profilé'} />
+			<div className="container d-lg-none" style={{ marginBottom: '1vh' }}>
+				<div className="row">
+					<ProfileComponent />
+				</div>
+			</div>
 			{props?.posts && (
-				<>
-					<div className="container d-lg-none" style={{ marginBottom: '1vh' }}>
-						<div className="row">
-							<ProfileComponent />
-						</div>
-					</div>
-					<div className="container" style={{ marginBottom: '1vh' }}>
-						<div className="row">{rederedUserPost()}</div>
-					</div>
-				</>
+				<div className="container" style={{ marginBottom: '1vh' }}>
+					<div className="row">{rederedUserPost()}</div>
+				</div>
 			)}
 		</>
 	)
@@ -72,7 +70,7 @@ export async function getServerSideProps(context) {
 		})
 		let dataUser = users?.data
 
-		let feeds = await axios.get(`${API_URL}/api/posts/feeds?id_user=${dataUser?.users.id}`)
+		let feeds = await axios.get(`${API_URL}/api/posts/details?id_user=${dataUser?.users.id}`)
 		let dataFeed = feeds?.data
 
 		if (dataUser.users.status !== 'verified') {

@@ -17,22 +17,12 @@ export default function EditProfileComponent({ form }) {
 	const [fileName, setFileName] = useState('')
 	const [opened, setOpened] = useState(false)
 	const [edited, setEdited] = useState({ isLoading: false, isEdited: null })
-	const [state, setState] = useState({
-		isTakenEmail: null,
-		isValidEmail: null,
-		isTakenUsername: null,
-		isMatchPassword: false,
-		isStrengthPassword: false,
-		isUploading: false,
-		isSuccess: null,
-		isCredentialsOk: null,
-	})
-
-	let { isTakenEmail, isValidEmail, isTakenUsername, isMatchPassword, isStrengthPassword, isUploading, isSuccess, isCredentialsOk } = state
-
+	const [state, setState] = useState({ isTakenUsername: null })
+	
 	// VAR
 	const { id, username, name, bio, profile_picture } = useSelector(getUser)
 	const iconSize = 17
+	let { isTakenUsername } = state
 
 	const handleEditProfile = () => {
 		setEdited((prev) => ({ ...prev, isLoading: true }))
@@ -58,7 +48,7 @@ export default function EditProfileComponent({ form }) {
 					formData.append(
 						'data',
 						JSON.stringify({
-							name: form.values?.name ? form.values?.name : '•' ,
+							name: form.values?.name ? form.values?.name : '•',
 							username: form.values?.username,
 							bio: form.values?.bio,
 						})
@@ -229,7 +219,9 @@ export default function EditProfileComponent({ form }) {
 						variant="default"
 						size="sm"
 						onClick={() => {
-							handleEditProfile()
+							if (!isTakenUsername || form.values?.username === username) {
+								handleEditProfile()
+							}
 						}}
 					>
 						{edited.isLoading ? <Loader size={'xs'} color={'gray'} /> : 'Save'}

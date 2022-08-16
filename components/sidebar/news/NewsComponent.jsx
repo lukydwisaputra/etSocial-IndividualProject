@@ -11,7 +11,7 @@ const useStyles = createStyles((theme) => ({
 		fontWeight: 600,
 		fontFamily: `Greycliff CF, ${theme.fontFamily}`,
 		lineHeight: 1.2,
-		fontSize: '0.8rem',
+		fontSize: '0.7rem',
 	},
 
 	body: {
@@ -30,7 +30,7 @@ export function NewsComponent({ props }) {
 		<Card withBorder radius="sm" p={0} className={classes.card} shadow={'sm'}>
 			<Group noWrap spacing={0}>
 				<div className={classes.body}>
-					<Text transform="uppercase" color="dimmed" weight={600} style={{ fontSize: '0.65rem' }}>
+					<Text transform="uppercase" color="dimmed" weight={600} style={{ fontSize: '0.6rem' }}>
 						{category}
 					</Text>
 
@@ -41,7 +41,7 @@ export function NewsComponent({ props }) {
 					</Link>
 
 					<Group noWrap spacing="xs">
-						<Text className="text-secondary" style={{ fontSize: '0.7rem' }}>
+						<Text className="text-secondary" style={{ fontSize: '0.6rem' }}>
 							{author} - published in {media}
 						</Text>
 					</Group>

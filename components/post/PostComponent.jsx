@@ -3,13 +3,14 @@ import { Card, Image, Text, Menu, Group, useMantineTheme, Avatar, ActionIcon, Sp
 import { AiFillHeart, AiOutlineHeart, AiOutlineEdit, AiOutlineDelete, AiOutlineShareAlt } from 'react-icons/ai'
 import { BiComment } from 'react-icons/bi'
 import { IoMdSend } from 'react-icons/io'
-import Link from 'next/link'
 import { API_URL } from '../../helper/helper'
 import moment from 'moment'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { setPost, resetPost } from '../../slices/postSlice'
+import { setDetail } from '../../slices/detailSlice'
 import { useForm } from '@mantine/hooks'
+import { useRouter } from 'next/router'
 
 export default function PostComponent({ postIndex }) {
 	// HOOKS
@@ -21,12 +22,15 @@ export default function PostComponent({ postIndex }) {
 	const [commentValue, setCommentValue] = useState('')
 	const [sendComment, setSendComment] = useState(false)
 	let { id_user, username, id_post, caption, post_image, created_at, likes, comments, profile_picture } = useSelector((state) => state.post[postIndex])
+	let postDetail = useSelector((state) => state.post[postIndex])
 	const theme = useMantineTheme()
 	const { id } = useSelector((state) => state.user)
 	const dispatch = useDispatch()
+	const router = useRouter()
 
 	// VAR
 	const spoilerLimit = 50
+	const commentLimit = 2
 	const iconSize = 22
 	const border = `0.25px solid ${theme.colorScheme === 'dark' ? 'rgb(255,255,255, 0.3)' : theme.colors.gray[2]}`
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
@@ -78,13 +82,13 @@ export default function PostComponent({ postIndex }) {
 					}, 1500)
 				}
 			} catch (error) {
+				console.log(error)
 				setSendComment((prev) => (prev = false))
 				setCommentValue((prev) => (prev = ''))
-				console.log(error)
 			}
 		}
 	}
-
+ 
 	const handleDeletePost = async () => {
 		try {
 			setDeleted((prev) => ({ ...prev, isLoading: true }))
@@ -114,20 +118,36 @@ export default function PostComponent({ postIndex }) {
 				}
 			}, 3000)
 		} catch (error) {
-			setDeleted((prev) => ({ ...prev, isDeleted: false }))
 			console.log(error)
+			setDeleted((prev) => ({ ...prev, isDeleted: false }))
 		}
 	}
 
 	const displayComments = () => {
 		let result = comments.map((val, idx) => {
-			if (idx < 2) {
+			if (idx < commentLimit) {
 				return (
-					<Group key={idx}>
-						<Text className="fw-bold" style={{ fontSize: '12px', fontWeight: 900, cursor: 'pointer' }}>
-							{val.username} <span className="fw-normal">{val.comment}</span>
-						</Text>
-					</Group>
+					<div key={idx + 'container'}>
+						<Group key={idx + 'group'}>
+							<Text className="fw-bold" style={{ fontSize: '12px', fontWeight: 900 }}>
+								<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+									{val.username}{' '}
+								</span>
+								<span className="fw-normal">{val.comment} </span>
+								{/* <span className="text-muted fw-normal" style={{ fontSize: '9px' }}>
+									- {moment(val?.created_at).fromNow()}
+								</span> */}
+							</Text>
+						</Group>
+
+						{/* ----- START TIME POSTED ----- */}
+						<div key={idx + 'time-comment'}>
+							<Text className="text-muted" style={{ fontSize: '9px' }}>
+								- {moment(val?.created_at).fromNow()}
+							</Text>
+						</div>
+						{/* ----- END TIME POSTED ----- */}
+					</div>
 				)
 			}
 		})
@@ -137,10 +157,11 @@ export default function PostComponent({ postIndex }) {
 
 	const addComment = (
 		<div>
-			<TextInput
+			<Textarea
+				maxLength={300}
 				value={commentValue}
 				size="xs"
-				placeholder="comment"
+				placeholder="Comment"
 				rightSection={
 					sendComment ? (
 						<Loader size={10} color={'gray'} />
@@ -150,16 +171,24 @@ export default function PostComponent({ postIndex }) {
 							size={15}
 							style={{ cursor: 'pointer' }}
 							onClick={() => {
-								setSendComment(true)
-								handleAddComment()
+								if (commentValue.length <= 20 || commentValue.includes(' ')) {
+									setSendComment(true)
+									handleAddComment()
+								}
 							}}
 						/>
 					)
 				}
 				onChange={(e) => {
-					setCommentValue((prev) => (prev = e.target.value))
+					if (e.target.value.length <= 300) {
+						setCommentValue((prev) => (prev = e.target.value))
+					}
 				}}
+				error={commentValue.length > 20 && !commentValue?.includes(' ') ? <small>* please add some space</small> : ''}
 			/>
+			<Text className="text-end mx-1 mt-1" style={{ fontSize: '10px' }}>
+				{commentValue.length}/300
+			</Text>
 		</div>
 	)
 
@@ -195,7 +224,7 @@ export default function PostComponent({ postIndex }) {
 		if (loading) {
 			setTimeout(() => {
 				setLoading((prev) => (prev = false))
-			}, 1500)
+			}, 1000)
 		}
 	})
 
@@ -203,23 +232,24 @@ export default function PostComponent({ postIndex }) {
 		<>
 			<div style={{ marginTop: '1vh' }}>
 				<div className="row">
-					<Skeleton visible={loading} style={{ zIndex: '0' }}>
-						<Card shadow={'lg'} withBorder radius={'md'}>
+					<Skeleton visible={loading} style={{ zIndex: '0' }} radius={'md'}>
+						<Card shadow={'lg'} withBorder={theme.colorScheme === 'light'} radius={'md'}>
 							<Card.Section>
 								{/* ----- START POST HEADER ----- */}
 								<Group className="mx-3 my-2" position="apart">
-									<Group style={{ cursor: 'pointer' }}>
+									<Group>
 										<Avatar
+											onClick={() => router.push('/profile')}
 											decoding={'true'}
 											className="ms-1"
 											radius="xl"
 											size={18}
-											style={{ backgroundColor: avatarBgColor }}
-											src={profile_picture ? profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}` : ''}
+											style={{ backgroundColor: avatarBgColor, cursor: 'pointer' }}
+											src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
 										/>
-										<Link href="/profile" passHref>
-											<Text size="sm" >{username}</Text>
-										</Link>
+										<Text style={{ cursor: 'pointer', marginLeft: '-5px' }} onClick={() => router.push('/profile')} size="xs" className="fw-bold">
+											{username}
+										</Text>
 									</Group>
 
 									{/* --- START POST MENU --- */}
@@ -345,7 +375,18 @@ export default function PostComponent({ postIndex }) {
 								{/* --- END EDIT CAPTION  --- */}
 
 								{/* POST IMAGE */}
-								<Image priority={'true'} decoding={'true'} className="text-center" src={post_image ? post_image?.includes('http') ? post_image : `${API_URL}/${post_image}` : ''} alt="etSocial-post"></Image>
+								<Image
+									style={{cursor: 'pointer'}}
+									priority={'true'}
+									decoding={'true'}
+									className="text-center"
+									src={post_image ? (post_image?.includes('http') ? post_image : `${API_URL}/${post_image}`) : ''}
+									alt="etSocial-post"
+									onClick={() => {
+										router.push(`/post/${id_post}/user/${username}`)
+										dispatch(setDetail({...postDetail, viewAll: true}))
+									}}
+								></Image>
 							</Card.Section>
 
 							{/* ----- START LIKES & COMMENTS BUTTON ----- */}
@@ -396,7 +437,7 @@ export default function PostComponent({ postIndex }) {
 
 							{/* ----- START LIKES COUNTER ----- */}
 							<Group
-								className="mb-1 mx-1 mb-3 ms-1"
+								className="mb-1 mx-1 mb-2 ms-1"
 								spacing="xs"
 								size="sm"
 								style={{
@@ -412,8 +453,8 @@ export default function PostComponent({ postIndex }) {
 												border: `1.5px solid ${avatarBgColor}`,
 											}}
 											radius="xl"
-											size={20}
-											src={likes[0]?.profile_picture ? likes[0]?.profile_picture.includes('http') ? likes[0]?.profile_picture : `${API_URL}/${likes[0]?.profile_picture}` : ''}
+											size={17}
+											src={likes[0]?.profile_picture ? (likes[0]?.profile_picture.includes('http') ? likes[0]?.profile_picture : `${API_URL}/${likes[0]?.profile_picture}`) : ''}
 										/>
 										<Avatar
 											style={{
@@ -422,41 +463,42 @@ export default function PostComponent({ postIndex }) {
 												border: `1px solid ${avatarBgColor}`,
 											}}
 											radius="xl"
-											size={20}
-											src={likes[1]?.profile_picture ? likes[1]?.profile_picture.includes('http') ? likes[1]?.profile_picture : `${API_URL}/${likes[1]?.profile_picture}` : ''}
+											size={17}
+											src={likes[1]?.profile_picture ? (likes[1]?.profile_picture.includes('http') ? likes[1]?.profile_picture : `${API_URL}/${likes[1]?.profile_picture}`) : ''}
 										/>
 										<Avatar
 											style={{
 												marginLeft: '-17px',
+												marginRight: '-5px',
 												backgroundColor: avatarBgColor,
 												border: `1px solid ${avatarBgColor}`,
 											}}
 											radius="xl"
-											size={20}
-											src={likes[2]?.profile_picture ? likes[2]?.profile_picture.includes('http') ? likes[1]?.profile_picture : `${API_URL}/${likes[2]?.profile_picture}` : ''}
+											size={17}
+											src={likes[2]?.profile_picture ? (likes[2]?.profile_picture.includes('http') ? likes[1]?.profile_picture : `${API_URL}/${likes[2]?.profile_picture}`) : ''}
 										/>
 									</>
 								)}
 
 								{likes?.length >= 3 && (
-									<Text size="sm">
+									<Text size="xs">
 										Liked by
 										{likeToggle && <span className="fw-bold"> you and </span>}
 										{likes?.length} others
 									</Text>
 								)}
 
-								{!likeButton && likes?.length > 0 && <small>Liked by {likes?.length} others</small>}
+								{!likeButton && likes?.length > 0 && <Text size="xs">Liked by {likes?.length} others</Text>}
 
 								{likeButton && likes?.length - 1 > 0 && (
-									<Text size="sm">
+									<Text size="xs">
 										Liked by
 										{likeButton && <span className="fw-bold"> you</span>} and {likes?.length - 1} others
 									</Text>
 								)}
 
 								{likeButton && likes?.length - 1 === 0 && (
-									<Text size="sm">
+									<Text size="xs">
 										Liked by<span className="fw-bold"> you</span>
 									</Text>
 								)}
@@ -468,48 +510,61 @@ export default function PostComponent({ postIndex }) {
 								className="mx-1"
 								size="sm"
 								style={{
-									color: secondaryColor,
+									// color: secondaryColor,
 									lineHeight: 1.5,
 									marginBottom: 5,
 								}}
 							>
 								<div>
-									{caption && caption.length > spoilerLimit && (
-										!caption.includes(' ') ?
-										<Text size="sm" className="fw-bold" component="a" style={{ cursor: 'pointer' }}>
-											@{username}{' '}
-										</Text>
-										:
-										// maxHeight: 20 for every line of caption
-										// hideLabel="... hide"
-										<Spoiler maxHeight={20} showLabel="...more" size={'xs'}>
-											<Text size="sm" className="fw-bold" component="a" style={{ cursor: 'pointer' }}>
-												@{username}{' '}
+									{caption &&
+										caption.length > spoilerLimit &&
+										(!caption.includes(' ') ? (
+											<Text size="xs" className="fw-bold">
+												<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+													{username}{' '}
+												</span>
 											</Text>
-											<span size="sm" style={{ textAlign: 'justify' }}>
-												{caption}
-											</span>
-										</Spoiler>
-									)}
-									{caption && caption.length <= spoilerLimit && (
-											!caption.includes(' ') && caption.length >= 20 ?
+										) : (
+											// maxHeight: 20 for every line of caption
+											// hideLabel="... hide"
+											<Spoiler maxHeight={20} showLabel="...more" size={'xs'}>
+												<Text size="xs" className="fw-bold">
+													<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+														{username}{' '}
+													</span>
+													<span className="fw-normal" style={{ textAlign: 'justify' }}>
+														{caption}
+													</span>
+												</Text>
+											</Spoiler>
+										))}
+									{caption &&
+										caption.length <= spoilerLimit &&
+										(!caption.includes(' ') && caption.length >= 20 ? (
 											<>
-												<Text size="sm" className="fw-bold" component="a" style={{ cursor: 'pointer' }}>
-													@{username}{' '}
-												</Text><br />
-												<Text style={{fontSize: '10px'}}>
-													<span className='text-danger'>* </span>
+												<Text size="xs" className="fw-bold">
+													<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+														{username}{' '}
+													</span>
+												</Text>
+												<br />
+												{/* <Text style={{ fontSize: '10px' }}>
+													<span className="text-danger">* </span>
 													Please edit your caption and add some spacing.
-												</Text>
+												</Text> */}
 											</>
-											:
+										) : (
 											<>
-												<Text size="sm" className="fw-bold" component="a" style={{ cursor: 'pointer' }}>
-													@{username}{' '}
+												<Text size="xs" className="fw-bold">
+													<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+														{username}{' '}
+													</span>
+													<span size={'xs'} className="fw-normal" style={{ textAlign: 'justify' }}>
+														{caption}
+													</span>
 												</Text>
-												<span size="sm">{caption}</span>
 											</>
-									)}
+										))}
 								</div>
 							</Text>
 							{/* ----- END CAPTION ----- */}
@@ -517,14 +572,22 @@ export default function PostComponent({ postIndex }) {
 							{comments?.length > 0 && devider}
 
 							{/* ----- START COMMENTS ----- */}
-							<div className="text-secondary mb-3 mx-1">
-								{comments?.length > 2 && <Text style={{ fontSize: '11px' }}>View all {comments.length} comments</Text>}
-							
-								{
-									comments.length > 0 && displayComments()
-									// <Paper className='py-2 mt-2' withBorder>
-									// </Paper>
-								}
+							<div className="mb-3 mx-1">
+								{comments?.length > commentLimit && (
+									<Text className="mb-2">
+										<span
+											style={{ fontSize: '11px', cursor: 'pointer' }}
+											onClick={() => {
+												router.push(`/post/${id_post}/user/${username}`)
+												// dispatch(setDetail({...postDetail, viewAll: true}))
+											}}
+										>
+											View all {comments.length} comments
+										</span>
+									</Text>
+								)}
+
+								{comments.length > 0 && displayComments()}
 							</div>
 							{/* {addComment} */}
 							{comment && addComment}

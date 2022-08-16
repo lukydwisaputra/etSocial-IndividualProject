@@ -8,7 +8,7 @@ const useStyles = createStyles((theme) => ({
 		flexDirection: 'column',
 		justifyContent: 'space-between',
 		alignItems: 'flex-start',
-		backgroundColor: 'rgb(26,27,30, 0.5)',
+		backgroundColor: 'rgb(128,128,128)',
 		backgroundBlendMode: 'multiply',
 		backgroundSize: 'cover',
 		backgroundPosition: 'center',
@@ -19,7 +19,7 @@ const useStyles = createStyles((theme) => ({
 		fontWeight: 700,
 		color: theme.white,
 		lineHeight: 1.2,
-		fontSize: '0.8rem',
+		fontSize: '0.9rem',
 		// marginTop: theme.spacing.xs,
 	},
 
@@ -40,7 +40,7 @@ export function ArticleComponent({ props }) {
 	let { category, image, title, url } = props
 
 	return (
-		<Card shadow="sm" p="md" radius="md" sx={{ backgroundImage: image ? `url(${image})` : '', maxHeight: '150px' }} className={classes.card}>
+		<Card shadow="sm" p="md" radius="md" sx={{ backgroundImage: image ? `url(${image})` : '', maxHeight: '20vh' }} className={classes.card}>
 			<div>
 				<Text className={classes.category} size="xs">
 					{category}

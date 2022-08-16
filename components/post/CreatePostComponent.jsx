@@ -92,7 +92,7 @@ export default function CreatePostComponent({ props }) {
 
 					if (post?.data?.success) {
 						setTimeout(() => {
-							pathname === '/home' ? router.replace('#top') : router.push('/home')
+							pathname === '/home' ? router.push('#top') : router.push('/home')
 							dispatch(addPost(post?.data?.posts[0]))
 							setLoading((prev) => (prev = false))
 							setSuccess((prev) => (prev = true))

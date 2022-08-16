@@ -26,7 +26,7 @@ export default function MobileNavbarComponent() {
 	// VAR
 	const mobile = 'd-lg-none'
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
-	const allowedPage = ['/home', '/explore', '/liked', '/profile']
+	const allowedPage = ['/home', '/explore', '/liked', '/profile', '/post/[id_post]/user/[username]']
 	const isAllowed = allowedPage.includes(pathname)
 
 	return (

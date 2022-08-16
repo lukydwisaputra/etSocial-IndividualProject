@@ -10,6 +10,7 @@ import { API_URL, COOKIES_EXP } from '../../helper/helper'
 import Cookies from 'js-cookie'
 import { useDispatch } from 'react-redux'
 import { userLogin } from '../../slices/userSlice'
+import { resetDetail } from '../../slices/detailSlice'
 
 export default function LayoutComponent({ children }) {
 	// HOOKS
@@ -35,6 +36,12 @@ export default function LayoutComponent({ children }) {
 	}
 
 	useEffect(() => {
+		if (!pathname.includes('/post')) {
+			dispatch(resetDetail())
+		}
+	})
+
+	useEffect(() => {
 		keepLogin()
 	}, [])
 
@@ -44,7 +51,7 @@ export default function LayoutComponent({ children }) {
 			<MobileNavbarComponent />
 
 			{/* ---------- START MOBILE COMPONENT ---------- */}
-			<main style={{ marginTop: '7.5vh', marginBottom: '7.5vh' }} className="d-lg-none">
+			<main style={{ marginTop: pathname.includes('/post/[id_post]/user/[username]') ? 0 : '7.5vh'}} className="d-lg-none">
 				{/* content for mobile and tablet */}
 				{children}
 			</main>

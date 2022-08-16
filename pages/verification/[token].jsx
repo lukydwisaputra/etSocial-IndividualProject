@@ -60,8 +60,8 @@ export default function VerificationPage(props) {
 
 					if (result?.data?.success === true && result?.data?.users[0]?.status === 'verified') {
 						setTimeout(() => {
-							router.push('/home')
-						}, 750)
+							router.replace('/home')
+						}, 500)
 						const in60Minutes = 1 / 24
 						Cookies.set('token', result?.data?.token, { expires: in60Minutes })
 					} else {
