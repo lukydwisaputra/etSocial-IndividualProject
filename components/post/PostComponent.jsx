@@ -15,7 +15,7 @@ import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, Wha
 import { useClipboard } from '@mantine/hooks'
 import { IconCopy, IconCheck } from '@tabler/icons'
 
-export default function PostComponent({ postIndex }) {
+export default function PostComponent({ postIndex, link }) {
 	// HOOKS
 	const [openShare, setOpenShare] = useState(false)
 	const [openConfirmation, setOpenConfirmation] = useState(false)
@@ -306,24 +306,20 @@ export default function PostComponent({ postIndex }) {
 								>
 									{devider}
 									<Group position="apart" className="container my-4" style={{ width: '200px' }}>
-										<FacebookShareButton quote={`Check out ${username}'s post!`} url={`${HOST}/post/${id_post}/user/${username}`}>
+										<FacebookShareButton quote={`Check out ${postDetail?.username}'s post!`} url={link}>
 											<FacebookIcon size={30} />
 										</FacebookShareButton>
 
-										<TwitterShareButton title={`Check out ${username}'s post!`} hashtags={['étSocial']} url={`${HOST}/post/${id_post}/user/${username}`}>
+										<TwitterShareButton  title={`Check out ${postDetail?.username}'s post!`}  hashtags={['étSocial']} url={link}>
 											<TwitterIcon size={30} />
 										</TwitterShareButton>
 
-										<WhatsappShareButton title={`Check out ${username}'s post!`} url={`${HOST}/post/${id_post}/user/${username}`}>
+										<WhatsappShareButton title={`Check out ${postDetail?.username}'s post!`} url={link}>
 											<WhatsappIcon size={30} />
 										</WhatsappShareButton>
 
-										<ActionIcon
-											size={30}
-											style={{ border: `1.5px solid ${clipboard.copied ? 'rgb(28,115,232)' : secondaryColor}`, borderRadius: '0' }}
-											onClick={() => clipboard.copy(`${HOST}/post/${id_post}/user/${username}`)}
-										>
-											{!clipboard.copied ? <IconCopy size="15" color={secondaryColor} /> : <IconCheck size="15" color={'rgb(28,115,232)'} />}
+										<ActionIcon size={30} style={{border: `1.5px solid ${clipboard.copied ? 'rgb(28,115,232)' : secondaryColor}`, borderRadius: '0'}} onClick={() => clipboard.copy(link)}>
+											{!clipboard.copied ? <IconCopy size='15' color={secondaryColor}/> : <IconCheck size='15' color={'rgb(28,115,232)'}/>}
 										</ActionIcon>
 									</Group>
 								</Modal>

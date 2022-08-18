@@ -1,6 +1,7 @@
 import React from 'react'
 import { createStyles, Paper } from '@mantine/core'
 import { API_URL } from '../../helper/helper'
+import Link from 'next/link'
 
 const useStyles = createStyles((theme) => ({
 	card: {
@@ -32,7 +33,7 @@ const useStyles = createStyles((theme) => ({
 }))
 
 // IMAGE AND URL
-export default function AlbumComponent({ image }) {
+export default function AlbumComponent({ image, userPost }) {
 	// HOOKS
 	const { classes } = useStyles()
 
@@ -43,10 +44,14 @@ export default function AlbumComponent({ image }) {
 	return (
 		<>
 			{/* DESKTOP LIKED ALBUM DISPLAY */}
-			<Paper shadow="md" p="md" sx={{ backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '17.5vh', maxWidth: '35vw' }} className={`${classes.card} ${desktop}`}></Paper>
+			<Link href={`/post/${userPost?.id_post}/user/${userPost?.username}`} passHref>
+				<Paper shadow="md" p="md" sx={{ cursor: 'pointer', backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '17.5vh', maxWidth: '35vw' }} className={`${classes.card} ${desktop}`}></Paper>
+			</Link>
 
 			{/* MOBILE LIKED ALBUM DISPLAY */}
-			<Paper shadow="md" p="md" sx={{ backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '12.5vh', maxWidth: '35vw' }} className={`${classes.card} ${mobile}`}></Paper>
+			<Link href={`/post/${userPost?.id_post}/user/${userPost?.username}`} passHref>
+				<Paper shadow="md" p="md" sx={{ cursor: 'pointer', backgroundImage: image ? `url(${API_URL}/${image})` : '', maxHeight: '12.5vh', maxWidth: '35vw' }} className={`${classes.card} ${mobile}`}></Paper>
+			</Link>
 		</>
 	)
 }

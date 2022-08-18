@@ -5,7 +5,6 @@ import Head from 'next/head'
 import axios from 'axios'
 import { API_URL } from '../../helper/helper'
 import { Skeleton } from '@mantine/core'
-import Link from 'next/link'
 
 export default function SavedPage(props) {
 	// HOOKS
@@ -21,9 +20,7 @@ export default function SavedPage(props) {
 			return (
 				<div key={id + idx} className={contentClasses}>
 					<Skeleton visible={loading}>
-						<Link href={`/post/${userPost?.id_post}/user/${userPost?.username}`} passHref>
-							<AlbumComponent image={userPost?.post_image} />
-						</Link>
+							<AlbumComponent image={userPost?.post_image} userPost={userPost} />
 					</Skeleton>
 				</div>
 			)

@@ -10,6 +10,7 @@ import MobilePostDetailComponent from '../../../../../components/post/MobilePost
 import { useRouter } from 'next/router'
 
 export default function PostPage(props) {
+	console.log(props)
 	// HOOKS
 	const dispatch = useDispatch()
 	let post = useSelector(getDetail)
@@ -17,7 +18,6 @@ export default function PostPage(props) {
 
 	// VAR
 	const HOST = 'http://127.0.0.1:3000'
-
 	let currentUrl = HOST + pathname
 	let quote = 'Check Out' + props?.post[0]?.username + "'s Post !"
 	let title = 'étSocial | ' + props?.post[0]?.username + "'s Post"
@@ -66,14 +66,6 @@ export default function PostPage(props) {
 			<MenubarComponent title={'Post'} id={'top'} />
 			{post ? (
 				<>
-					{/* <div
-						className={`justify-content-center align-items-center d-flex`}
-						style={{ minHeight: '85vh' }}
-					>
-						<div className="container">
-							<MobilePostDetailComponent post={props.post} />
-						</div>
-					</div> */}
 					<div className={`justify-content-center align-items-center p-3 d-none d-sm-none d-md-none d-lg-flex`} style={{ minHeight: '90vh' }}>
 						<div className="container">
 							<PostDetailComponent post={props.post} />
@@ -120,6 +112,6 @@ export async function getServerSideProps(context) {
 		props: {
 			post: dataFeed.posts,
 			user: dataUser.users
-		},
+		}
 	}
 }
