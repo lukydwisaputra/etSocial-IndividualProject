@@ -31,7 +31,7 @@ function getStrength(password) {
 	return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10)
 }
 
-export function PasswordComponent({ getValue, inputValue }) {
+export function PasswordComponent({ getValue, inputValue, id }) {
 	// HOOKS
 	const [popoverOpened, setPopoverOpened] = useState(false)
 	const [value, setValue] = useState('')
@@ -86,6 +86,7 @@ export function PasswordComponent({ getValue, inputValue }) {
 			onBlurCapture={() => setPopoverOpened(false)}
 			target={
 				<PasswordInput
+					id={`password-${id}`}
 					required
 					icon={<RiLockPasswordLine size={14} />}
 					placeholder="password"

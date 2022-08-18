@@ -11,6 +11,9 @@ import { useForm } from '@mantine/hooks'
 import { useRouter } from 'next/router'
 import { IoMdSend } from 'react-icons/io'
 import { BiComment } from 'react-icons/bi'
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon } from 'react-share'
+import { useClipboard } from '@mantine/hooks'
+import { IconCopy, IconCheck } from '@tabler/icons'
 
 export default function MobilePostDetailComponent({ post }) {
 	// HOOKS
@@ -29,8 +32,11 @@ export default function MobilePostDetailComponent({ post }) {
    const [commentLimit, setCommentLimit] = useState(5)
    const uniqueId = useId()
    const [comment, setComment] = useState(false)
+   const [openShare, setOpenShare] = useState(false)
+   const clipboard = useClipboard({ timeout: 1000 })
 
 	// VAR
+   const HOST = 'http://127.0.0.1:3000'
 	const spoilerLimit = 50
 	const iconSize = 22
 	const border = `0.25px solid ${theme.colorScheme === 'dark' ? 'rgb(255,255,255, 0.3)' : theme.colors.gray[2]}`
@@ -305,7 +311,7 @@ export default function MobilePostDetailComponent({ post }) {
 
                            {/* --- START POST MENU --- */}
                            <Menu radius={'md'} shadow={'lg'} size={'sm'} placement="end" withArrow>
-                              <Menu.Item component="button">
+                              <Menu.Item component="button" onClick={() => setOpenShare(prev => prev = true)}>
                                  <Group>
                                     <AiOutlineShareAlt className="text-muted" />
                                     <p className="m-auto text-muted">Share Post</p>
@@ -425,6 +431,42 @@ export default function MobilePostDetailComponent({ post }) {
                            </Button>
                         </Modal>
                         {/* --- END EDIT CAPTION  --- */}
+
+                        {/* --- START SHARE POST --- */}
+								<Modal
+									title={
+										<Text size="sm" className="fw-bold">
+											Share {postDetail?.username}&apos;s Post
+										</Text>
+									}
+									className="ms-1"
+									size={'sm'}
+									centered
+									opened={openShare}
+									onClose={() => {
+										setOpenShare((prev) => (prev = false))
+									}}
+								>
+									{devider}
+									<Group position="apart" className="container my-4" style={{ width: '200px' }}>
+										<FacebookShareButton quote={`Check out ${postDetail?.username}'s post!`} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+											<FacebookIcon size={30} />
+										</FacebookShareButton>
+
+										<TwitterShareButton  title={`Check out ${postDetail?.username}'s post!`}  hashtags={['étSocial']} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+											<TwitterIcon size={30} />
+										</TwitterShareButton>
+
+										<WhatsappShareButton title={`Check out ${postDetail?.username}'s post!`} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+											<WhatsappIcon size={30} />
+										</WhatsappShareButton>
+
+										<ActionIcon size={30} style={{border: `1.5px solid ${clipboard.copied ? 'rgb(28,115,232)' : secondaryColor}`, borderRadius: '0'}} onClick={() => clipboard.copy(`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`)}>
+											{!clipboard.copied ? <IconCopy size='15' color={secondaryColor}/> : <IconCheck size='15' color={'rgb(28,115,232)'}/>}
+										</ActionIcon>
+									</Group>
+								</Modal>
+                        {/* --- END SHARE POST  --- */}
 
                         {/* POST IMAGE */}
                         <Image

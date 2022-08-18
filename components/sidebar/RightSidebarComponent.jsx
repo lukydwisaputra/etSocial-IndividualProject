@@ -35,7 +35,7 @@ export default function RightSidebarComponent() {
 	const dispatch = useDispatch()
 
 	// VAR
-	const allowedPage = ['/home', '/explore', '/profile', '/liked']
+	const allowedPage = ['/home', '/explore', '/liked']
 	const isAllowed = allowedPage.includes(pathname)
 	const border = '1px solid rgb(166,167,171, 0.2)'
 	const isVerified = user?.status === 'verified'
@@ -65,7 +65,10 @@ export default function RightSidebarComponent() {
 				}
 				setNews1(prev => prev = _news1)
 				setNews2(prev => prev = _news2)
-				setLoading((prev) => (prev = false))
+
+				setTimeout(() => {
+					setLoading((prev) => (prev = false))
+				}, 1000)
 			}
 		} catch (error) {
 			console.log(error)
@@ -78,7 +81,7 @@ export default function RightSidebarComponent() {
 		
 		setTimeout(() => {
 			setLoading((prev) => (prev = false))
-		}, 1500)
+		}, 1000)
 	}, [])
 
 	let content

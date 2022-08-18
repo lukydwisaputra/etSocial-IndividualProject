@@ -5,10 +5,13 @@ import { API_URL } from '../../helper/helper'
 import moment from 'moment'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { setPost, resetPost, getAllPost } from '../../slices/postSlice'
+import { setPost, resetPost } from '../../slices/postSlice'
 import { setDetail, getDetail } from '../../slices/detailSlice'
 import { useForm } from '@mantine/hooks'
 import { useRouter } from 'next/router'
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon } from 'react-share'
+import { useClipboard } from '@mantine/hooks'
+import { IconCopy, IconCheck } from '@tabler/icons'
 
 export default function PostDetailComponent({ post }) {
 	// HOOKS
@@ -21,8 +24,11 @@ export default function PostDetailComponent({ post }) {
 	const { id } = useSelector((state) => state.user)
 	const dispatch = useDispatch()
 	const router = useRouter()
+	const [openShare, setOpenShare] = useState(false)
+	const clipboard = useClipboard({ timeout: 1000 })
 
 	// VAR
+	const HOST = 'http://127.0.0.1:3000'
 	const spoilerLimit = 50
 	const iconSize = 22
 	const border = `0.25px solid ${theme.colorScheme === 'dark' ? 'rgb(255,255,255, 0.3)' : theme.colors.gray[2]}`
@@ -131,7 +137,6 @@ export default function PostDetailComponent({ post }) {
 				if (posts?.data?.success) {
 					dispatch(setPost(posts.data.posts))
 				}
-
 			}, 1500)
 		} catch (error) {
 			console.log(error)
@@ -176,16 +181,16 @@ export default function PostDetailComponent({ post }) {
 												{postDetail?.username}
 											</Text>
 										</Group>
-	
+
 										{/* --- START POST MENU --- */}
 										<Menu radius={'md'} shadow={'lg'} size={'sm'} placement="end" withArrow>
-											<Menu.Item component="button">
+											<Menu.Item component="button" onClick={() => setOpenShare((prev) => (prev = true))}>
 												<Group>
 													<AiOutlineShareAlt className="text-muted" />
 													<p className="m-auto text-muted">Share Post</p>
 												</Group>
 											</Menu.Item>
-	
+
 											{/* USER CANNOT EDIT OR DELETE OTHERS POSTS */}
 											{postDetail?.id_user === id && (
 												<>
@@ -207,7 +212,7 @@ export default function PostDetailComponent({ post }) {
 										{/* --- END POST MENU --- */}
 									</Group>
 									{/* ----- END POST HEADER ----- */}
-	
+
 									{/* --- START DELETE CONFIRMATION --- */}
 									<Group position="center">
 										<Modal
@@ -249,7 +254,7 @@ export default function PostDetailComponent({ post }) {
 										</Modal>
 									</Group>
 									{/* --- END DELETE CONFIRMATION --- */}
-	
+
 									{/* --- START EDIT CAPTION --- */}
 									<Modal
 										title={
@@ -299,7 +304,47 @@ export default function PostDetailComponent({ post }) {
 										</Button>
 									</Modal>
 									{/* --- END EDIT CAPTION  --- */}
-	
+
+									{/* --- START SHARE POST --- */}
+									<Modal
+										title={
+											<Text size="sm" className="fw-bold">
+												Share {postDetail?.username}&apos;s Post
+											</Text>
+										}
+										className="ms-1"
+										size={'sm'}
+										centered
+										opened={openShare}
+										onClose={() => {
+											setOpenShare((prev) => (prev = false))
+										}}
+									>
+										{devider}
+										<Group position="apart" className="container my-4" style={{ width: '200px' }}>
+											<FacebookShareButton quote={`Check out ${postDetail?.username}'s post!`} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+												<FacebookIcon size={30} />
+											</FacebookShareButton>
+
+											<TwitterShareButton title={`Check out ${postDetail?.username}'s post!`} hashtags={['étSocial']} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+												<TwitterIcon size={30} />
+											</TwitterShareButton>
+
+											<WhatsappShareButton title={`Check out ${postDetail?.username}'s post!`} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+												<WhatsappIcon size={30} />
+											</WhatsappShareButton>
+
+											<ActionIcon
+												size={30}
+												style={{ border: `1.5px solid ${clipboard.copied ? 'rgb(28,115,232)' : secondaryColor}`, borderRadius: '0' }}
+												onClick={() => clipboard.copy(`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`)}
+											>
+												{!clipboard.copied ? <IconCopy size="15" color={secondaryColor} /> : <IconCheck size="15" color={'rgb(28,115,232)'} />}
+											</ActionIcon>
+										</Group>
+									</Modal>
+									{/* --- END SHARE POST  --- */}
+
 									{/* POST IMAGE */}
 									<Image
 										priority={'true'}
@@ -309,7 +354,7 @@ export default function PostDetailComponent({ post }) {
 										alt="etSocial-post"
 									></Image>
 								</Card.Section>
-	
+
 								{/* ----- START LIKES & COMMENTS BUTTON ----- */}
 								<Group
 									position="apart"
@@ -355,7 +400,7 @@ export default function PostDetailComponent({ post }) {
 									</Group>
 								</Group>
 								{/* ----- END LIKES & COMMENTS BUTTON ----- */}
-	
+
 								{/* ----- START LIKES COUNTER ----- */}
 								<Group
 									className="mb-1 mx-1 mb-2 ms-1"
@@ -400,7 +445,7 @@ export default function PostDetailComponent({ post }) {
 											/>
 										</>
 									)}
-	
+
 									{postDetail?.likes?.length >= 3 && (
 										<Text size="xs">
 											Liked by
@@ -408,16 +453,16 @@ export default function PostDetailComponent({ post }) {
 											{likes?.length} others
 										</Text>
 									)}
-	
+
 									{!likeButton && postDetail?.likes?.length > 0 && <Text size="xs">Liked by {postDetail?.likes?.length} others</Text>}
-	
+
 									{likeButton && postDetail?.likes?.length - 1 > 0 && (
 										<Text size="xs">
 											Liked by
 											{likeButton && <span className="fw-bold"> you</span>} and {postDetail?.likes?.length - 1} others
 										</Text>
 									)}
-	
+
 									{likeButton && postDetail?.likes?.length - 1 === 0 && (
 										<Text size="xs">
 											Liked by<span className="fw-bold"> you</span>
@@ -425,7 +470,7 @@ export default function PostDetailComponent({ post }) {
 									)}
 								</Group>
 								{/* ----- END LIKES COUNTER ----- */}
-	
+
 								{/* ----- START CAPTION ----- */}
 								<Text
 									className="mx-1"
@@ -489,7 +534,7 @@ export default function PostDetailComponent({ post }) {
 									</div>
 								</Text>
 								{/* ----- END CAPTION ----- */}
-	
+
 								{/* ----- START TIME POSTED ----- */}
 								<div className="mt-1">
 									<Text size="xs" className="text-muted mx-1 mt-2" style={{ fontSize: '11px' }}>
@@ -505,5 +550,5 @@ export default function PostDetailComponent({ post }) {
 		)
 	}
 
-	return (<>{content}</>)
+	return <>{content}</>
 }

@@ -5,6 +5,7 @@ import MenubarComponent from '../../components/menubar/MenubarComponent'
 import { API_URL } from '../../helper/helper'
 import axios from 'axios'
 import { Skeleton } from '@mantine/core'
+import Link from 'next/link'
 
 export default function ProfilePage(props) {
 	// HOOKS
@@ -20,7 +21,9 @@ export default function ProfilePage(props) {
 			return (
 				<div key={id + idx} className={contentClasses}>
 					<Skeleton visible={loading}>
-						<AlbumComponent image={userPost?.post_image} />
+						<Link href={`/post/${userPost?.id_post}/user/${userPost?.username}`} passHref>
+							<AlbumComponent image={userPost?.post_image} />
+						</Link>
 					</Skeleton>
 				</div>
 			)

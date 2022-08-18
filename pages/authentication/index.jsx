@@ -450,6 +450,7 @@ export default function AuthenticationForm({ data }) {
 											getValue={passwordComponentValue}
 											inputValue={form.values.password}
 											resetNotification={resetNotification}
+											id={id}
 										/>
 
 										{!isStrengthPassword && form.values.password !== '' && (
@@ -521,8 +522,9 @@ export default function AuthenticationForm({ data }) {
 												resetNotification()
 											}}
 										/>
-										<Link href="/recovery" passHref>
+										{/* <Link href="/recovery" passHref> */}
 											<Anchor
+												href="/recovery"
 												className="text-muted"
 												component="a"
 												size="xs"
@@ -530,7 +532,7 @@ export default function AuthenticationForm({ data }) {
 											>
 												Forgot password?
 											</Anchor>
-										</Link>
+										{/* </Link> */}
 									</>
 								)}
 							</Group>

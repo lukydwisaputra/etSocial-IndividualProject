@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Image, Text, Menu, Group, useMantineTheme, Avatar, ActionIcon, Spoiler, Skeleton, TextInput, Textarea, Loader, Modal, Button } from '@mantine/core'
+import { Card, Image, Text, Menu, Group, useMantineTheme, Avatar, ActionIcon, Spoiler, Skeleton, CopyButton, Textarea, Loader, Modal, Button } from '@mantine/core'
 import { AiFillHeart, AiOutlineHeart, AiOutlineEdit, AiOutlineDelete, AiOutlineShareAlt } from 'react-icons/ai'
 import { BiComment } from 'react-icons/bi'
 import { IoMdSend } from 'react-icons/io'
@@ -11,9 +11,13 @@ import { setPost, resetPost } from '../../slices/postSlice'
 import { setDetail } from '../../slices/detailSlice'
 import { useForm } from '@mantine/hooks'
 import { useRouter } from 'next/router'
+import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon } from 'react-share'
+import { useClipboard } from '@mantine/hooks'
+import { IconCopy, IconCheck } from '@tabler/icons'
 
 export default function PostComponent({ postIndex }) {
 	// HOOKS
+	const [openShare, setOpenShare] = useState(false)
 	const [openConfirmation, setOpenConfirmation] = useState(false)
 	const [deleted, setDeleted] = useState({ isDeleted: null, isLoading: false })
 	const [edited, setEdited] = useState({ isOpen: false, isEdited: null, isLoading: false, captionCount: 0 })
@@ -27,8 +31,10 @@ export default function PostComponent({ postIndex }) {
 	const { id } = useSelector((state) => state.user)
 	const dispatch = useDispatch()
 	const router = useRouter()
+	const clipboard = useClipboard({ timeout: 1000 })
 
 	// VAR
+	const HOST = 'http://127.0.0.1:3000'
 	const spoilerLimit = 50
 	const commentLimit = 2
 	const iconSize = 22
@@ -88,7 +94,7 @@ export default function PostComponent({ postIndex }) {
 			}
 		}
 	}
- 
+
 	const handleDeletePost = async () => {
 		try {
 			setDeleted((prev) => ({ ...prev, isLoading: true }))
@@ -254,7 +260,7 @@ export default function PostComponent({ postIndex }) {
 
 									{/* --- START POST MENU --- */}
 									<Menu radius={'md'} shadow={'lg'} size={'sm'} placement="end" withArrow>
-										<Menu.Item component="button">
+										<Menu.Item component="button" onClick={() => setOpenShare((prev) => (prev = true))}>
 											<Group>
 												<AiOutlineShareAlt className="text-muted" />
 												<p className="m-auto text-muted">Share Post</p>
@@ -283,47 +289,45 @@ export default function PostComponent({ postIndex }) {
 								</Group>
 								{/* ----- END POST HEADER ----- */}
 
-								{/* --- START DELETE CONFIRMATION --- */}
-								<Group position="center">
-									<Modal
-										size={'sm'}
-										opened={openConfirmation}
-										onClose={() => setOpenConfirmation((prev) => (prev = false))}
-										centered
-										title={
-											<Text size="sm" className="fw-bold">
-												CONFIRM DELETION
-											</Text>
-										}
-									>
-										{devider}
-										<Text size="sm">
-											Are you sure you want to
-											<span className="fw-bold"> DELETE </span>
-											this post?
+								{/* --- START SHARE POST --- */}
+								<Modal
+									title={
+										<Text size="sm" className="fw-bold">
+											Share {username}&apos;s Post
 										</Text>
-										<Text style={{ fontSize: '11px' }} className="mt-2">
-											🚨 You <span className="fw-bold"> CAN NOT </span> restore your data after deletion.
-										</Text>
-										<br />
-										<Group position="left" className="mt-2">
-											<Button
-												variant={'light'}
-												size="xs"
-												color={`red`}
-												onClick={() => {
-													handleDeletePost()
-												}}
-											>
-												{deleted.isLoading ? <Loader size={'xs'} color={'gray'} /> : deleted.isDeleted === false ? '❌ Error: try again ?' : 'Just delete it, please!'}
-											</Button>
-											<Button variant={'light'} size="xs" color={`gray`} onClick={() => setOpenConfirmation((prev) => (prev = false))}>
-												Cancel
-											</Button>
-										</Group>
-									</Modal>
-								</Group>
-								{/* --- END DELETE CONFIRMATION --- */}
+									}
+									className="ms-1"
+									size={'sm'}
+									centered
+									opened={openShare}
+									onClose={() => {
+										setOpenShare((prev) => (prev = false))
+									}}
+								>
+									{devider}
+									<Group position="apart" className="container my-4" style={{ width: '200px' }}>
+										<FacebookShareButton quote={`Check out ${username}'s post!`} url={`${HOST}/post/${id_post}/user/${username}`}>
+											<FacebookIcon size={30} />
+										</FacebookShareButton>
+
+										<TwitterShareButton title={`Check out ${username}'s post!`} hashtags={['étSocial']} url={`${HOST}/post/${id_post}/user/${username}`}>
+											<TwitterIcon size={30} />
+										</TwitterShareButton>
+
+										<WhatsappShareButton title={`Check out ${username}'s post!`} url={`${HOST}/post/${id_post}/user/${username}`}>
+											<WhatsappIcon size={30} />
+										</WhatsappShareButton>
+
+										<ActionIcon
+											size={30}
+											style={{ border: `1.5px solid ${clipboard.copied ? 'rgb(28,115,232)' : secondaryColor}`, borderRadius: '0' }}
+											onClick={() => clipboard.copy(`${HOST}/post/${id_post}/user/${username}`)}
+										>
+											{!clipboard.copied ? <IconCopy size="15" color={secondaryColor} /> : <IconCheck size="15" color={'rgb(28,115,232)'} />}
+										</ActionIcon>
+									</Group>
+								</Modal>
+								{/* --- END SHARE POST  --- */}
 
 								{/* --- START EDIT CAPTION --- */}
 								<Modal
@@ -374,9 +378,51 @@ export default function PostComponent({ postIndex }) {
 								</Modal>
 								{/* --- END EDIT CAPTION  --- */}
 
+								{/* --- START DELETE CONFIRMATION --- */}
+								<Group position="center">
+									<Modal
+										size={'sm'}
+										opened={openConfirmation}
+										onClose={() => setOpenConfirmation((prev) => (prev = false))}
+										centered
+										title={
+											<Text size="sm" className="fw-bold">
+												CONFIRM DELETION
+											</Text>
+										}
+									>
+										{devider}
+										<Text size="sm">
+											Are you sure you want to
+											<span className="fw-bold"> DELETE </span>
+											this post?
+										</Text>
+										<Text style={{ fontSize: '11px' }} className="mt-2">
+											🚨 You <span className="fw-bold"> CAN NOT </span> restore your data after deletion.
+										</Text>
+										<br />
+										<Group position="left" className="mt-2">
+											<Button
+												variant={'light'}
+												size="xs"
+												color={`red`}
+												onClick={() => {
+													handleDeletePost()
+												}}
+											>
+												{deleted.isLoading ? <Loader size={'xs'} color={'gray'} /> : deleted.isDeleted === false ? '❌ Error: try again ?' : 'Just delete it, please!'}
+											</Button>
+											<Button variant={'light'} size="xs" color={`gray`} onClick={() => setOpenConfirmation((prev) => (prev = false))}>
+												Cancel
+											</Button>
+										</Group>
+									</Modal>
+								</Group>
+								{/* --- END DELETE CONFIRMATION --- */}
+
 								{/* POST IMAGE */}
 								<Image
-									style={{cursor: 'pointer'}}
+									style={{ cursor: 'pointer' }}
 									priority={'true'}
 									decoding={'true'}
 									className="text-center"
@@ -384,7 +430,7 @@ export default function PostComponent({ postIndex }) {
 									alt="etSocial-post"
 									onClick={() => {
 										router.push(`/post/${id_post}/user/${username}`)
-										dispatch(setDetail({...postDetail, viewAll: true}))
+										dispatch(setDetail({ ...postDetail, viewAll: true }))
 									}}
 								></Image>
 							</Card.Section>
