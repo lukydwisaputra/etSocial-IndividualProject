@@ -41,6 +41,7 @@ export default function MobileNavbarComponent() {
 						zIndex: '2',
 					}}
 				>
+					
 					<div className="container">
 						<Group position="apart">
 							{/* HOME ICON */}

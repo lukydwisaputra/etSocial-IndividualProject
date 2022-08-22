@@ -62,6 +62,8 @@ export default function HeaderComponent() {
 						borderBottom: '1 px solid gray',
 					}}
 				>
+					<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous"></link>
+					
 					<div className="container m-auto">
 						<div className="row justify-content-between align-items-center">
 							<div className="col-3 col-sm-3 col-md-3 col-lg-1">
@@ -88,6 +90,7 @@ export default function HeaderComponent() {
 						zIndex: '1',
 					}}
 				>
+					<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous"></link>
 					<div className="container m-auto">
 						<div className="row justify-content-between align-items-center">
 							<div className="col-3 col-sm-3 col-md-3 col-lg-1">
