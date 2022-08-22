@@ -150,9 +150,9 @@ export default function AuthenticationForm(props) {
 						}, 1500)
 
 						setTimeout(() => {
-							Cookies.remove('token')
+							Cookies.set('token', res.data?.token)
 							router.push('/authentication')
-						}, 5000)
+						}, 3000)
 					} else {
 						setTimeout(() => {
 							setState((prev) => ({

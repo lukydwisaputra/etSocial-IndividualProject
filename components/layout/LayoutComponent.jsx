@@ -43,7 +43,7 @@ export default function LayoutComponent({ children }) {
 
 	useEffect(() => {
 		keepLogin()
-	}, [])
+	})
 
 	return (
 		<div className={styles.container}>

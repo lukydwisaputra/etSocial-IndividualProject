@@ -21,12 +21,16 @@ export default function HomePage(props) {
 	const [hasMore, setHasMore] = useState(true)
 	const [loading, setLoading] = useState(false)
 
-	useEffect(() => {
+	const dispatchPost = () => {
 		if (JSON.stringify(post) === '[]') {
 			post = props?.posts
 		}
 		dispatch(setPost(post))
-	}, [])
+	}
+
+	useEffect(() => {
+		dispatchPost()
+	})
 
 	const totalPosts = async () => {
 		try {

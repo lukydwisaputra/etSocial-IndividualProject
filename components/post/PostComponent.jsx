@@ -3,7 +3,7 @@ import { Card, Image, Text, Menu, Group, useMantineTheme, Avatar, ActionIcon, Sp
 import { AiFillHeart, AiOutlineHeart, AiOutlineEdit, AiOutlineDelete, AiOutlineShareAlt } from 'react-icons/ai'
 import { BiComment } from 'react-icons/bi'
 import { IoMdSend } from 'react-icons/io'
-import { API_URL } from '../../helper/helper'
+import { API_URL, HOST } from '../../helper/helper'
 import moment from 'moment'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
@@ -33,8 +33,8 @@ export default function PostComponent({ postIndex, link }) {
 	const router = useRouter()
 	const clipboard = useClipboard({ timeout: 1000 })
 
+	
 	// VAR
-	const HOST = 'http://127.0.0.1:3000'
 	const spoilerLimit = 50
 	const commentLimit = 2
 	const iconSize = 22
@@ -43,6 +43,7 @@ export default function PostComponent({ postIndex, link }) {
 	const secondaryColor = theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7]
 	const likeButton = likes.findIndex((val) => val.id_user === id) < 0 ? false : true
 	const devider = <hr className="my-2" style={{ borderBottom: 'none', borderTop: border }} />
+	const sharedUrl = `${HOST}/post/${id_post}`
 
 	const form = useForm({
 		initialValues: {
@@ -293,7 +294,7 @@ export default function PostComponent({ postIndex, link }) {
 								<Modal
 									title={
 										<Text size="sm" className="fw-bold">
-											Share {username}&apos;s Post
+											Share {username}&apos;s post
 										</Text>
 									}
 									className="ms-1"
@@ -306,20 +307,24 @@ export default function PostComponent({ postIndex, link }) {
 								>
 									{devider}
 									<Group position="apart" className="container my-4" style={{ width: '200px' }}>
-										<FacebookShareButton quote={`Check out ${postDetail?.username}'s post!`} url={link}>
+										<FacebookShareButton quote={`Check out ${username}'s post!`} url={sharedUrl}>
 											<FacebookIcon size={30} />
 										</FacebookShareButton>
 
-										<TwitterShareButton  title={`Check out ${postDetail?.username}'s post!`}  hashtags={['étSocial']} url={link}>
+										<TwitterShareButton title={`Check out ${username}'s post!`} hashtags={['étSocial']} url={sharedUrl}>
 											<TwitterIcon size={30} />
 										</TwitterShareButton>
 
-										<WhatsappShareButton title={`Check out ${postDetail?.username}'s post!`} url={link}>
+										<WhatsappShareButton title={`Check out ${username}'s post!`} url={sharedUrl}>
 											<WhatsappIcon size={30} />
 										</WhatsappShareButton>
 
-										<ActionIcon size={30} style={{border: `1.5px solid ${clipboard.copied ? 'rgb(28,115,232)' : secondaryColor}`, borderRadius: '0'}} onClick={() => clipboard.copy(link)}>
-											{!clipboard.copied ? <IconCopy size='15' color={secondaryColor}/> : <IconCheck size='15' color={'rgb(28,115,232)'}/>}
+										<ActionIcon
+											size={30}
+											style={{ border: `1.5px solid ${clipboard.copied ? 'rgb(162,197,227)' : secondaryColor}`, borderRadius: '0' }}
+											onClick={() => clipboard.copy(`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`)}
+										>
+											{!clipboard.copied ? <IconCopy size="15" color={secondaryColor} /> : <IconCheck size="15" color={'rgb(162,197,227)'} />}
 										</ActionIcon>
 									</Group>
 								</Modal>

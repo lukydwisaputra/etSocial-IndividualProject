@@ -41,11 +41,15 @@ export function PasswordComponent({ getValue, inputValue, id }) {
 
 	let strength = getStrength(value)
 
-	useEffect(() => {
+	const hendleStrength = () => {
 		if (inputValue === '') {
 			strength = 10
 			setValue((prev) => (prev = ''))
 		}
+	}
+
+	useEffect(() => {
+		hendleStrength()
 	})
 
 	const indicator = (strength) => {

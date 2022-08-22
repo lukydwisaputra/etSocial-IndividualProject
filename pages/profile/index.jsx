@@ -32,7 +32,7 @@ export default function ProfilePage(props) {
 		setTimeout(() => {
 			setLoading((prev) => (prev = false))
 		}, 1000)
-	}, [])
+	}, [props?.posts])
 
 	return (
 		<>

@@ -28,11 +28,11 @@ export default function SavedPage(props) {
 	}
 
 	useEffect(() => {
-		setLikedPosts((prev) => (prev = props.posts))
+		setLikedPosts((prev) => (prev = props?.posts))
 		setTimeout(() => {
 			setLoading((prev) => (prev = false))
 		}, 1000)
-	}, [])
+	}, [props?.posts])
 
 	return (
 		<>

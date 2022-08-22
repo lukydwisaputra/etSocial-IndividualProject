@@ -196,7 +196,7 @@ export default function RightSidebarComponent() {
 			</>
 		)
 	} else {
-		if (pathname.includes('/post')) {
+		if (pathname.includes('/post') && pathname.includes('/user')) {
 			content = <ScrollableCommentsDetail />
 		} else {
 			content = <div></div>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import MenubarComponent from '../../../../../components/menubar/MenubarComponent'
 import Head from 'next/head'
-import { API_URL } from '../../../../../helper/helper'
+import { API_URL, HOST } from '../../../../../helper/helper'
 import { useSelector, useDispatch } from 'react-redux'
 import { setDetail, getDetail } from '../../../../../slices/detailSlice'
 import axios from 'axios'
@@ -10,34 +10,37 @@ import MobilePostDetailComponent from '../../../../../components/post/MobilePost
 import { useRouter } from 'next/router'
 
 export default function PostPage(props) {
-	console.log(props)
 	// HOOKS
 	const dispatch = useDispatch()
 	let post = useSelector(getDetail)
 	const { pathname } = useRouter()
 
 	// VAR
-	const HOST = 'http://127.0.0.1:3000'
-	let currentUrl = HOST + pathname
+	let currentUrl = `${HOST}/post/${props?.post[0]?.id_post}`
 	let quote = 'Check Out' + props?.post[0]?.username + "'s Post !"
 	let title = 'étSocial | ' + props?.post[0]?.username + "'s Post"
 	let image = API_URL + '/' + props?.post[0]?.post_image
 	let description = props?.post[0]?.caption
 	let hashtag = 'étSocial'
 
-	useEffect(() => {
+	const dispatchPost = () => {
+		console.log(currentUrl)
 		if (JSON.stringify(post) === '{}') {
 			post = props?.posts
 		}
 		dispatch(setDetail(post))
-	}, [])
+	}
+
+	useEffect(() => {
+		dispatchPost()
+	})
 
 	return (
 		<>
 			<Head>
 				<title>{title}</title>
 				<meta charset="utf-8" />
-				<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+				<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
 				<meta name="csrf_token" content="" />
 				<meta property="type" content="website" />
 				<meta property="url" content={currentUrl} />
@@ -111,7 +114,7 @@ export async function getServerSideProps(context) {
 	return {
 		props: {
 			post: dataFeed.posts,
-			user: dataUser.users
-		}
+			user: dataUser.users,
+		},
 	}
 }

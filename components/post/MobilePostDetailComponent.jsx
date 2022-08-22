@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useId } from 'react'
 import { Card, Image, Text, Menu, Group, useMantineTheme, Avatar, ActionIcon, Spoiler, Skeleton, Paper, Textarea, Loader, Modal, Button } from '@mantine/core'
 import { AiFillHeart, AiOutlineHeart, AiOutlineEdit, AiOutlineDelete, AiOutlineShareAlt } from 'react-icons/ai'
-import { API_URL } from '../../helper/helper'
+import { API_URL, HOST } from '../../helper/helper'
 import moment from 'moment'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
@@ -36,7 +36,6 @@ export default function MobilePostDetailComponent({ post }) {
    const clipboard = useClipboard({ timeout: 1000 })
 
 	// VAR
-   const HOST = 'http://127.0.0.1:3000'
 	const spoilerLimit = 50
 	const iconSize = 22
 	const border = `0.25px solid ${theme.colorScheme === 'dark' ? 'rgb(255,255,255, 0.3)' : theme.colors.gray[2]}`
@@ -47,9 +46,11 @@ export default function MobilePostDetailComponent({ post }) {
    const postIndex = posts.findIndex((val) => val.id_post === postDetail.id_post)
 	let comments = posts[postIndex]?.comments
 
+   const sharedUrl = `${HOST}/post/${postDetail?.id_post}`
+
 	useEffect(() => {
 		dispatch(setDetail({ ...post[0], viewAll: true }))
-	}, [])
+	})
 
 	const form = useForm({
 		initialValues: {
@@ -436,7 +437,7 @@ export default function MobilePostDetailComponent({ post }) {
 								<Modal
 									title={
 										<Text size="sm" className="fw-bold">
-											Share {postDetail?.username}&apos;s Post
+											Share {postDetail?.username}&apos;s post
 										</Text>
 									}
 									className="ms-1"
@@ -449,20 +450,20 @@ export default function MobilePostDetailComponent({ post }) {
 								>
 									{devider}
 									<Group position="apart" className="container my-4" style={{ width: '200px' }}>
-										<FacebookShareButton quote={`Check out ${postDetail?.username}'s post!`} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+										<FacebookShareButton quote={`Check out ${postDetail?.username}'s post!`} url={sharedUrl}>
 											<FacebookIcon size={30} />
 										</FacebookShareButton>
 
-										<TwitterShareButton  title={`Check out ${postDetail?.username}'s post!`}  hashtags={['étSocial']} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+										<TwitterShareButton  title={`Check out ${postDetail?.username}'s post!`}  hashtags={['étSocial']} url={sharedUrl}>
 											<TwitterIcon size={30} />
 										</TwitterShareButton>
 
-										<WhatsappShareButton title={`Check out ${postDetail?.username}'s post!`} url={`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`}>
+										<WhatsappShareButton title={`Check out ${postDetail?.username}'s post!`} url={sharedUrl}>
 											<WhatsappIcon size={30} />
 										</WhatsappShareButton>
 
-										<ActionIcon size={30} style={{border: `1.5px solid ${clipboard.copied ? 'rgb(28,115,232)' : secondaryColor}`, borderRadius: '0'}} onClick={() => clipboard.copy(`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`)}>
-											{!clipboard.copied ? <IconCopy size='15' color={secondaryColor}/> : <IconCheck size='15' color={'rgb(28,115,232)'}/>}
+										<ActionIcon size={30} style={{border: `1.5px solid ${clipboard.copied ? 'rgb(162,197,227)' : secondaryColor}`, borderRadius: '0'}} onClick={() => clipboard.copy(sharedUrl)}>
+											{!clipboard.copied ? <IconCopy size='15' color={secondaryColor}/> : <IconCheck size='15' color={'rgb(162,197,227)'}/>}
 										</ActionIcon>
 									</Group>
 								</Modal>
