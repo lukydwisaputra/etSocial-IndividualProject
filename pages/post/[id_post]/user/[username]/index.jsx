@@ -24,7 +24,6 @@ export default function PostPage(props) {
 	let hashtag = 'étSocial'
 
 	const dispatchPost = () => {
-		console.log(currentUrl)
 		if (JSON.stringify(post) === '{}') {
 			post = props?.posts
 		}

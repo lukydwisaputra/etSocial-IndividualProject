@@ -98,7 +98,7 @@ export default function HomePage(props) {
 				<>
 					<Head>
 						<title>étSocial | Homé</title>
-						<link rel="icon" />
+						{/* <link rel="icon" /> */}
 						<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
 					</Head>
 

@@ -73,12 +73,10 @@ export default function MobilePostDetailComponent({ post }) {
 			}
 
 			let res = await axios.get(`${API_URL}/api/posts/details?id_post=${postDetail?.id_post}`)
+			let result = await axios.get(`${API_URL}/api/posts/details`)
 			if (res?.data?.success) {
 				dispatch(setDetail(res.data.posts[0]))
-			}
-			let posts = await axios.get(`${API_URL}/api/posts/details`)
-			if (posts?.data?.success) {
-				dispatch(setPost(posts.data.posts))
+				dispatch(setPost(result.data.posts))
 			}
 		} catch (error) {
 			console.log(error)
@@ -230,7 +228,7 @@ export default function MobilePostDetailComponent({ post }) {
                <div key={uniqueId + idx + 'container'} className={'mx-1'}>
                   <Group key={uniqueId + idx + 'group'}>
                      <Text className="fw-bold" style={{ fontSize: '12px', fontWeight: 900 }}>
-                        <span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+                        <span >
                            {val.username}{' '}
                         </span>
                         <span className="fw-normal">{val.comment} </span>
@@ -259,7 +257,7 @@ export default function MobilePostDetailComponent({ post }) {
 
       if (counter < postDetail?.comments?.length) {
          result.push(
-            <Text key={uniqueId + 'load-more'} className="mb-2 mx-1 text-muted">
+            <Text key={Math.random() + 'load-more'} className="mb-2 mx-1 text-muted">
                <span
                   style={{ fontSize: '11px', cursor: 'pointer' }}
                   onClick={() => {
@@ -289,7 +287,7 @@ export default function MobilePostDetailComponent({ post }) {
 	} else {
 		content = (
 			<>
-            <div className="row">
+            <div className="row my-5">
                <Skeleton visible={loading} style={{ zIndex: '0' }} radius={'md'}>
                   <Card shadow={'lg'} withBorder={theme.colorScheme === 'light'} radius={'md'}>
                      <Card.Section>
@@ -297,15 +295,15 @@ export default function MobilePostDetailComponent({ post }) {
                         <Group className="mx-3 my-2" position="apart">
                            <Group>
                               <Avatar
-                                 onClick={() => router.push('/profile')}
+                                 
                                  decoding={'true'}
                                  className="ms-1"
                                  radius="xl"
                                  size={18}
-                                 style={{ backgroundColor: avatarBgColor, cursor: 'pointer' }}
+                                 style={{ backgroundColor: avatarBgColor}}
                                  src={postDetail?.profile_picture ? (postDetail?.profile_picture?.includes('http') ? postDetail?.profile_picture : `${API_URL}/${postDetail?.profile_picture}`) : ''}
                               />
-                              <Text style={{ cursor: 'pointer', marginLeft: '-5px' }} onClick={() => router.push('/profile')} size="xs" className="fw-bold">
+                              <Text style={{ marginLeft: '-5px' }} size="xs" className="fw-bold">
                                  {postDetail?.username}
                               </Text>
                            </Group>
@@ -610,7 +608,7 @@ export default function MobilePostDetailComponent({ post }) {
                               postDetail?.caption?.length > spoilerLimit &&
                               (!postDetail?.caption?.includes(' ') ? (
                                  <Text size="xs" className="fw-bold">
-                                    <span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+                                    <span >
                                        {postDetail?.username}{' '}
                                     </span>
                                  </Text>
@@ -619,7 +617,7 @@ export default function MobilePostDetailComponent({ post }) {
                                  // hideLabel="... hide"
                                  <Spoiler maxHeight={20} showLabel="...more" size={'xs'}>
                                     <Text size="xs" className="fw-bold">
-                                       <span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+                                       <span >
                                           {postDetail?.username}{' '}
                                        </span>
                                        <span className="fw-normal" style={{ textAlign: 'justify' }}>
@@ -633,7 +631,7 @@ export default function MobilePostDetailComponent({ post }) {
                               (!postDetail?.caption.includes(' ') && postDetail?.caption.length >= 20 ? (
                                  <>
                                     <Text size="xs" className="fw-bold">
-                                       <span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+                                       <span >
                                           {postDetail?.username}{' '}
                                        </span>
                                     </Text>
@@ -646,7 +644,7 @@ export default function MobilePostDetailComponent({ post }) {
                               ) : (
                                  <>
                                     <Text size="xs" className="fw-bold">
-                                       <span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+                                       <span >
                                           {postDetail?.username}{' '}
                                        </span>
                                        <span size={'xs'} className="fw-normal" style={{ textAlign: 'justify' }}>
@@ -663,12 +661,12 @@ export default function MobilePostDetailComponent({ post }) {
                      </ScrollArea> */}
                      <div>
                         <Card className='p-2 mt-2'>
-                           <Text key={uniqueId + 'load-more'} className="mb-2 text-muted fw-bold">
+                           <Text key={Math.random() + 'load-more'} className="mb-2 text-muted fw-bold">
                               <span style={{ fontSize: '11px' }}>Comments</span>
                            </Text>
                            {displayComments()}
                            {comments?.length === 0 && (
-                              <Text key={uniqueId + 'load-more'} className="mb-2 text-muted">
+                              <Text key={Math.random() + 'load-more'} className="mb-2 text-muted">
                                  <span style={{ fontSize: '11px' }}>no comments for this post</span>
                               </Text>
                            )}

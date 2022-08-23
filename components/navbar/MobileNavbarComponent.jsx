@@ -41,7 +41,6 @@ export default function MobileNavbarComponent() {
 						zIndex: '2',
 					}}
 				>
-					
 					<div className="container">
 						<Group position="apart">
 							{/* HOME ICON */}
@@ -98,10 +97,14 @@ export default function MobileNavbarComponent() {
 								</Menu.Item>
 
 								{/* SIGN OUT */}
-								<Menu.Item>
-									<Link href="/" passHref>
-										<p className="m-auto text-muted">Sign Out</p>
-									</Link>
+								<Menu.Item
+									onClick={() => {
+										router.push('/')
+										Cookies.remove('token')
+										Cookies.remove('etSocial_ui_theme')
+									}}
+								>
+									<p className="m-auto text-muted">Sign Out</p>
 								</Menu.Item>
 							</Menu>
 							{/* ------- END MENU -------- */}

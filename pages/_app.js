@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/globals.css'
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core'
-// import '~bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 import LayoutComponent from '../components/layout/LayoutComponent'
 import Cookies from 'js-cookie'
 import { store } from '../store'

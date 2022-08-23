@@ -5,11 +5,13 @@ import EditProfileComponent from './EditProfileComponent'
 import { useSelector } from 'react-redux'
 import { getUser } from '../../slices/userSlice'
 import { API_URL } from '../../helper/helper'
+import { useRouter } from 'next/router'
 
-export default function UserInfoAction() {
+export default function UserInfoAction({ user }) {
 	// HOOKS
 	const theme = useMantineTheme()
 	const { username, email, name, bio, profile_picture } = useSelector(getUser)
+	const { asPath } = useRouter()
 
 	// VAR
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
@@ -34,20 +36,22 @@ export default function UserInfoAction() {
 		>
 			{/* CRITERIA: Fullname, Bio, Username, Email, Profile Picture */}
 
-			<div className="container">
-				<div align="right">
-					<ActionIcon variant="transparent">
-						<EditProfileComponent form={form} />
-					</ActionIcon>
+			{asPath.includes(username) && (
+				<div className="container">
+					<div align="right">
+						<ActionIcon variant="transparent">
+							<EditProfileComponent form={form} />
+						</ActionIcon>
+					</div>
 				</div>
-			</div>
+			)}
 
 			{/* PROFILE PICTURE */}
 			<Avatar
 				priority={'true'}
 				decoding={'true'}
 				style={{
-					marginTop: '-2vh',
+					marginTop: `${asPath.includes(username) ? '-2vh' : ''}`,
 					border: '1px solid rgb(166,167,171, 0.3)',
 					backgroundColor: avatarBgColor,
 				}}

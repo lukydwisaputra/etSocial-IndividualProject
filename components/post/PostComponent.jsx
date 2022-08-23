@@ -33,7 +33,6 @@ export default function PostComponent({ postIndex, link }) {
 	const router = useRouter()
 	const clipboard = useClipboard({ timeout: 1000 })
 
-	
 	// VAR
 	const spoilerLimit = 50
 	const commentLimit = 2
@@ -137,7 +136,7 @@ export default function PostComponent({ postIndex, link }) {
 					<div key={idx + 'container'}>
 						<Group key={idx + 'group'}>
 							<Text className="fw-bold" style={{ fontSize: '12px', fontWeight: 900 }}>
-								<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+								<span>
 									{val.username}{' '}
 								</span>
 								<span className="fw-normal">{val.comment} </span>
@@ -246,15 +245,14 @@ export default function PostComponent({ postIndex, link }) {
 								<Group className="mx-3 my-2" position="apart">
 									<Group>
 										<Avatar
-											onClick={() => router.push('/profile')}
 											decoding={'true'}
 											className="ms-1"
 											radius="xl"
 											size={18}
-											style={{ backgroundColor: avatarBgColor, cursor: 'pointer' }}
+											style={{ backgroundColor: avatarBgColor}}
 											src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
 										/>
-										<Text style={{ cursor: 'pointer', marginLeft: '-5px' }} onClick={() => router.push('/profile')} size="xs" className="fw-bold">
+										<Text style={{ marginLeft: '-5px' }} size="xs" className="fw-bold">
 											{username}
 										</Text>
 									</Group>
@@ -319,11 +317,7 @@ export default function PostComponent({ postIndex, link }) {
 											<WhatsappIcon size={30} />
 										</WhatsappShareButton>
 
-										<ActionIcon
-											size={30}
-											style={{ border: `1.5px solid ${clipboard.copied ? 'rgb(162,197,227)' : secondaryColor}`, borderRadius: '0' }}
-											onClick={() => clipboard.copy(`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`)}
-										>
+										<ActionIcon size={30} style={{ border: `1.5px solid ${clipboard.copied ? 'rgb(162,197,227)' : secondaryColor}`, borderRadius: '0' }} onClick={() => clipboard.copy(sharedUrl)}>
 											{!clipboard.copied ? <IconCopy size="15" color={secondaryColor} /> : <IconCheck size="15" color={'rgb(162,197,227)'} />}
 										</ActionIcon>
 									</Group>
@@ -456,7 +450,7 @@ export default function PostComponent({ postIndex, link }) {
 												size={iconSize}
 												color={'rgb(235,72,72)'}
 												onClick={async () => {
-													handleLikeButton()
+													await handleLikeButton()
 												}}
 											/>
 										) : (
@@ -464,7 +458,7 @@ export default function PostComponent({ postIndex, link }) {
 												size={iconSize}
 												color={secondaryColor}
 												onClick={async () => {
-													handleLikeButton()
+													await handleLikeButton()
 												}}
 											/>
 										)}
@@ -567,7 +561,7 @@ export default function PostComponent({ postIndex, link }) {
 										caption.length > spoilerLimit &&
 										(!caption.includes(' ') ? (
 											<Text size="xs" className="fw-bold">
-												<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+												<span>
 													{username}{' '}
 												</span>
 											</Text>
@@ -576,7 +570,7 @@ export default function PostComponent({ postIndex, link }) {
 											// hideLabel="... hide"
 											<Spoiler maxHeight={20} showLabel="...more" size={'xs'}>
 												<Text size="xs" className="fw-bold">
-													<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+													<span>
 														{username}{' '}
 													</span>
 													<span className="fw-normal" style={{ textAlign: 'justify' }}>
@@ -590,7 +584,7 @@ export default function PostComponent({ postIndex, link }) {
 										(!caption.includes(' ') && caption.length >= 20 ? (
 											<>
 												<Text size="xs" className="fw-bold">
-													<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+													<span>
 														{username}{' '}
 													</span>
 												</Text>
@@ -603,7 +597,7 @@ export default function PostComponent({ postIndex, link }) {
 										) : (
 											<>
 												<Text size="xs" className="fw-bold">
-													<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
+													<span>
 														{username}{' '}
 													</span>
 													<span size={'xs'} className="fw-normal" style={{ textAlign: 'justify' }}>

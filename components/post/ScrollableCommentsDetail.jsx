@@ -124,13 +124,8 @@ export default function ScrollableCommentsComponent() {
 					<div key={uniqueId + idx + 'container'}>
 						<Group key={uniqueId + idx + 'group'}>
 							<Text className="fw-bold" style={{ fontSize: '11px', fontWeight: 900 }}>
-								<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
-									{val.username}{' '}
-								</span>
+								<span>{val.username} </span>
 								<span className="fw-normal">{val.comment} </span>
-								{/* <span className="text-muted fw-normal" style={{ fontSize: '9px' }}>
-								- {moment(val?.created_at).fromNow()}
-							</span> */}
 							</Text>
 						</Group>
 
@@ -185,27 +180,18 @@ export default function ScrollableCommentsComponent() {
 						</div>
 					</div>
 				</div>
-				{/* <div className="row">
-					<div className="col-12 m-auto">
-						<div className="container">
-							<Text size="xs" className="fs-6 fw-bold ms-1 my-3">
-								{postDetail.username}'s post
-							</Text>
-						</div>
-					</div>
-				</div> */}
 
 				<div className="row">
 					<div className="col-12 m-auto">
 						<div className={`d-flex justify-content-center align-items-center px-2`} style={{ minHeight: '90vh' }}>
-							<div className="container">
+							<div className="container px-5">
 								<Card shadow="xs" p="md" radius={'md'}>
 									<ScrollArea type="always" style={{ height: '60vh' }} offsetScrollbars scrollbarSize={2} scrollHideDelay={0}>
 										{displayComments()}
 									</ScrollArea>
 									<div className="mt-3">
 										{comments?.length === 0 && (
-											<Text key={uniqueId + 'load-more'} className="mb-2 text-muted">
+											<Text key={Date.now() + 'load-more'} className="mb-2 text-muted">
 												<span style={{ fontSize: '11px' }}>no comments for this post</span>
 											</Text>
 										)}

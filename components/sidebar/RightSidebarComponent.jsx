@@ -31,7 +31,8 @@ export default function RightSidebarComponent() {
 	const [news1, setNews1] = useState({})
 	const [news2, setNews2] = useState({})
 	const { theme } = useStyles()
-	const { pathname } = useRouter()
+	const { pathname, asPath } = useRouter()
+	const router = useRouter()
 	const dispatch = useDispatch()
 
 	// VAR
@@ -63,8 +64,8 @@ export default function RightSidebarComponent() {
 				while (_news1.id === _news2.id) {
 					_news2 = _news[Math.floor(Math.random() * _news.length)]
 				}
-				setNews1(prev => prev = _news1)
-				setNews2(prev => prev = _news2)
+				setNews1((prev) => (prev = _news1))
+				setNews2((prev) => (prev = _news2))
 
 				setTimeout(() => {
 					setLoading((prev) => (prev = false))
@@ -78,7 +79,7 @@ export default function RightSidebarComponent() {
 	useEffect(() => {
 		getArticles()
 		getNews()
-		
+
 		setTimeout(() => {
 			setLoading((prev) => (prev = false))
 		}, 1000)
@@ -88,7 +89,7 @@ export default function RightSidebarComponent() {
 	if (JSON.stringify(postDetail) === '{}') {
 		content = (
 			<>
-				{pathname === '/profile' && (
+				{pathname === `/profile/user/[username]` && (
 					<div
 						className="sticky-top d-none d-sm-none d-md-none d-lg-block"
 						style={{
@@ -130,9 +131,9 @@ export default function RightSidebarComponent() {
 							<div className="row mt-4">
 								<div className="col-12">
 									<div className="container">
-									<Skeleton visible={loading}>
-										<BannerComponent />
-									</Skeleton>
+										<Skeleton visible={loading}>
+											<BannerComponent />
+										</Skeleton>
 									</div>
 								</div>
 							</div>

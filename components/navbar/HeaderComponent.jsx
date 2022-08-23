@@ -54,7 +54,7 @@ export default function HeaderComponent() {
 	return (
 		<>
 			{isHome ? (
-				<header
+				<div
 					className="justify-content-between align-items-center fixed-top d-lg-none"
 					style={{
 						backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : 'white',
@@ -62,12 +62,12 @@ export default function HeaderComponent() {
 						borderBottom: '1 px solid gray',
 					}}
 				>
-					<link
+					{/* <link
 						href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
 						rel="stylesheet"
 						integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
 						crossOrigin="anonymous"
-					></link>
+					></link> */}
 
 					<div className="container m-auto">
 						<div className="row justify-content-between align-items-center">
@@ -84,9 +84,9 @@ export default function HeaderComponent() {
 							</div>
 						</div>
 					</div>
-				</header>
+				</div>
 			) : (
-				<header
+				<div
 					className="justify-content-between align-items-center fixed-top d-lg-none"
 					style={{
 						backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : 'white',
@@ -95,12 +95,12 @@ export default function HeaderComponent() {
 						zIndex: '1',
 					}}
 				>
-					<link
+					{/* <link
 						href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
 						rel="stylesheet"
 						integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
 						crossOrigin="anonymous"
-					></link>
+					></link> */}
 					<div className="container m-auto">
 						<div className="row justify-content-between align-items-center">
 							<div className="col-3 col-sm-3 col-md-3 col-lg-1">
@@ -121,7 +121,7 @@ export default function HeaderComponent() {
 							</div>
 						</div>
 					</div>
-				</header>
+				</div>
 			)}
 		</>
 	)

@@ -34,7 +34,7 @@ export default function LeftSidebarComponent() {
 	const rowStyle = 'row mt-4'
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
 	const border = `1px solid ${theme.colorScheme === 'dark' ? 'white' : theme.colors.gray[2]}`
-	const allowedPage = ['/home', '/explore', '/liked', '/profile', '/about', '/post/[id_post]/user/[username]']
+	const allowedPage = ['/home', '/explore', '/liked', '/profile/user/[username]', '/about', '/post/[id_post]/user/[username]']
 	const iconSize = 17
 	const isAllowed = allowedPage.includes(pathname)
 
@@ -130,7 +130,7 @@ export default function LeftSidebarComponent() {
 					</Tooltip>
 				}
 			>
-				<Menu.Item onClick={() => router.push('/profile')}>
+				<Menu.Item onClick={() => router.push(`/profile/user/${user?.username}`)}>
 					<p className="m-auto text-muted">Profilé</p>
 				</Menu.Item>
 

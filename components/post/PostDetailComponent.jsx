@@ -5,7 +5,7 @@ import { API_URL, HOST } from '../../helper/helper'
 import moment from 'moment'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
-import { setPost, resetPost } from '../../slices/postSlice'
+import { setPost, resetPost, getAllPost } from '../../slices/postSlice'
 import { setDetail, getDetail } from '../../slices/detailSlice'
 import { useForm } from '@mantine/hooks'
 import { useRouter } from 'next/router'
@@ -37,9 +37,15 @@ export default function PostDetailComponent({ post }) {
 	const devider = <hr className="my-2" style={{ borderBottom: 'none', borderTop: border }} />
 	const sharedUrl = `${HOST}/post/${postDetail?.id_post}`
 
-	useEffect(() => {
-		dispatch(setDetail({ ...post[0], viewAll: true }))
-	})
+	const getNewPost = async () => {
+		let posts = await axios.get(`${API_URL}/api/posts/feeds`)
+		if (posts?.data?.success) {
+			dispatch(setPost(posts.data.posts))
+		}
+	}
+	// useEffect(() => {
+	// 	dispatch(setDetail({ ...post[0], viewAll: true }))
+	// })
 
 	const form = useForm({
 		initialValues: {
@@ -62,12 +68,10 @@ export default function PostDetailComponent({ post }) {
 			}
 
 			let res = await axios.get(`${API_URL}/api/posts/details?id_post=${postDetail?.id_post}`)
+			let result = await axios.get(`${API_URL}/api/posts/details`)
 			if (res?.data?.success) {
 				dispatch(setDetail(res.data.posts[0]))
-			}
-			let posts = await axios.get(`${API_URL}/api/posts/details`)
-			if (posts?.data?.success) {
-				dispatch(setPost(posts.data.posts))
+				dispatch(setPost(result.data.posts))
 			}
 		} catch (error) {
 			console.log(error)
@@ -169,17 +173,14 @@ export default function PostDetailComponent({ post }) {
 									<Group className="mx-3 my-2" position="apart">
 										<Group>
 											<Avatar
-												onClick={() => router.push('/profile')}
 												decoding={'true'}
 												className="ms-1"
 												radius="xl"
 												size={18}
-												style={{ backgroundColor: avatarBgColor, cursor: 'pointer' }}
+												style={{ backgroundColor: avatarBgColor}}
 												src={postDetail?.profile_picture ? (postDetail?.profile_picture?.includes('http') ? postDetail?.profile_picture : `${API_URL}/${postDetail?.profile_picture}`) : ''}
 											/>
-											<Text style={{ cursor: 'pointer', marginLeft: '-5px' }} onClick={() => router.push('/profile')} size="xs" className="fw-bold">
-												{postDetail?.username}
-											</Text>
+											<Text size={'xs'} style={{ marginLeft: '-5px' }} className='fw-bold'>{postDetail?.username}</Text>
 										</Group>
 
 										{/* --- START POST MENU --- */}
@@ -486,18 +487,14 @@ export default function PostDetailComponent({ post }) {
 											postDetail?.caption?.length > spoilerLimit &&
 											(!postDetail?.caption?.includes(' ') ? (
 												<Text size="xs" className="fw-bold">
-													<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
-														{postDetail?.username}{' '}
-													</span>
+													<span>{postDetail?.username} </span>
 												</Text>
 											) : (
 												// maxHeight: 20 for every line of caption
 												// hideLabel="... hide"
 												<Spoiler maxHeight={20} showLabel="...more" size={'xs'}>
 													<Text size="xs" className="fw-bold">
-														<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
-															{postDetail?.username}{' '}
-														</span>
+														<span>{postDetail?.username} </span>
 														<span className="fw-normal" style={{ textAlign: 'justify' }}>
 															{postDetail?.caption}
 														</span>
@@ -509,9 +506,7 @@ export default function PostDetailComponent({ post }) {
 											(!postDetail?.caption.includes(' ') && postDetail?.caption.length >= 20 ? (
 												<>
 													<Text size="xs" className="fw-bold">
-														<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
-															{postDetail?.username}{' '}
-														</span>
+														<span>{postDetail?.username} </span>
 													</Text>
 													<br />
 													{/* <Text style={{ fontSize: '10px' }}>
@@ -522,9 +517,7 @@ export default function PostDetailComponent({ post }) {
 											) : (
 												<>
 													<Text size="xs" className="fw-bold">
-														<span style={{ cursor: 'pointer' }} onClick={() => router.push('/profile')}>
-															{postDetail?.username}{' '}
-														</span>
+														<span>{postDetail?.username} </span>
 														<span size={'xs'} className="fw-normal" style={{ textAlign: 'justify' }}>
 															{postDetail?.caption}
 														</span>
