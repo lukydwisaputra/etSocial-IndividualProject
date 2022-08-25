@@ -65,12 +65,17 @@ export async function getServerSideProps(context) {
 
 		let users = await axios.get(`${API_URL}/api/users/keep`, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				'Authorization': `Bearer ${token}`,
+				'Bypass-Tunnel-Reminder': 'ok'
 			},
 		})
 		let dataUser = users?.data
 
-		let feeds = await axios.get(`${API_URL}/api/posts/details?username=${context.params.username}`)
+		let feeds = await axios.get(`${API_URL}/api/posts/details?username=${context.params.username}`, {
+			headers: {
+				'Bypass-Tunnel-Reminder': 'ok'
+			}
+		})
 		let dataFeed = feeds?.data
 
 		if (dataUser.users.status !== 'verified') {

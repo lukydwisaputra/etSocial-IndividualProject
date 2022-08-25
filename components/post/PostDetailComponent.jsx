@@ -338,7 +338,7 @@ export default function PostDetailComponent({ post }) {
 											<ActionIcon
 												size={30}
 												style={{ border: `1.5px solid ${clipboard.copied ? 'rgb(162,197,227)' : secondaryColor}`, borderRadius: '0' }}
-												onClick={() => clipboard.copy(`${HOST}/post/${postDetail?.id_post}/user/${postDetail?.username}`)}
+												onClick={() => clipboard.copy(sharedUrl)}
 											>
 												{!clipboard.copied ? <IconCopy size="15" color={secondaryColor} /> : <IconCheck size="15" color={'rgb(162,197,227)'} />}
 											</ActionIcon>

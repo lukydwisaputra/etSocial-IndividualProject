@@ -43,7 +43,11 @@ export default function RightSidebarComponent() {
 
 	const getArticles = async () => {
 		try {
-			let result = await axios.get(`${API_URL}/api/articles`)
+			let result = await axios.get(`${API_URL}/api/articles`, {
+				headers: {
+					'Bypass-Tunnel-Reminder': 'ok'
+				}
+			})
 			if (result.data.success) {
 				let _articles = result.data.articles
 				let _articles1 = _articles[Math.floor(Math.random() * _articles.length)]
@@ -56,7 +60,11 @@ export default function RightSidebarComponent() {
 
 	const getNews = async () => {
 		try {
-			let result = await axios.get(`${API_URL}/api/news`)
+			let result = await axios.get(`${API_URL}/api/news`, {
+				headers: {
+					'Bypass-Tunnel-Reminder': 'ok'
+				}
+			})
 			if (result.data.success) {
 				let _news = result.data.news
 				let _news1 = _news[Math.floor(Math.random() * _news.length)]

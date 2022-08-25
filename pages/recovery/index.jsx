@@ -61,15 +61,14 @@ export default function ForgotPassword(props) {
 			}, 1500)
 		}
 	}
-	
+
 	useEffect(() => {
 		if (success !== null) {
 			setTimeout(() => {
 				setSuccess((prev) => (prev = null))
-			}, 5000);
+			}, 5000)
 		}
 	})
-	
 
 	let notification
 	if (success === true) {
@@ -90,14 +89,13 @@ export default function ForgotPassword(props) {
 		<>
 			<Head>
 				<title>étSocial | Récovery</title>
-				<link rel="icon" href="/favicon.ico" />
 				{/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
 				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
 			</Head>
 			<MenubarComponent title={'Récovery'} />
 
 			{notification}
-			<div className="d-flex justify-content-center align-items-center p-0" style={{ minHeight: '70vh'}}>
+			<div className="d-flex justify-content-center align-items-center p-0" style={{ minHeight: '70vh' }}>
 				<Container size={'sm'} my={30} style={{ maxWidth: '500px' }}>
 					<Title className="fs-4" align="center">
 						Oops..

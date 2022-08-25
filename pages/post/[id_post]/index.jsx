@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Card, Image, Text, Group, useMantineTheme, Avatar, Spoiler, Skeleton } from '@mantine/core'
-import { API_URL, HOST } from '../../../helper/helper'
+import { API_URL, HOST, SHARE_API_URL } from '../../../helper/helper'
 import moment from 'moment'
 import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
@@ -17,22 +17,24 @@ export default function PostDetailComponent({ post }) {
 	const dispatch = useDispatch()
 	const router = useRouter()
 
-	// VAR
-	const spoilerLimit = 50
-	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
-	const secondaryColor = theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7]
-	let currentUrl = `${HOST}/post/${post[0]?.id_post}`
-	let quote = 'Check out ' + post[0]?.username + "'s post!"
-	let title = 'étSocial | ' + post[0]?.username + "'s post"
-	let image = API_URL + '/' + post[0]?.post_image
-	let description = post[0]?.caption
-	let hashtag = 'étSocial'
-
 	useEffect(() => {
 		dispatch(setDetail({ ...post[0], viewAll: true }))
 	}, [])
 
-	// console.log({ currentUrl, quote, title, image, description, hashtag })
+	// VAR
+	const spoilerLimit = 50
+	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
+	const secondaryColor = theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7]
+	let username = post[0].username
+	let currentUrl = `${HOST}/post/${post[0]?.id_post}`
+	let quote = 'Check out ' + username + "'s post!"
+	let title = 'étSocial'
+	let image = SHARE_API_URL + '/' + post[0]?.post_image
+	let description = post[0]?.caption
+	let hashtag = 'étSocial'
+
+	console.log({ currentUrl, quote, title, image, description, hashtag })
+	console.log(postDetail)
 
 	useEffect(() => {
 		if (loading) {
@@ -44,37 +46,28 @@ export default function PostDetailComponent({ post }) {
 
 	return (
 		<>
+			<Head>
+				{/* PRIMARY */}
+				<title>étSocial</title>
+				<meta name="description" content={description} />
+
+				{/* FACEBOOK */}
+				<meta property="og:url" content={currentUrl} />
+				<meta property="og:type" content="website" />
+				<meta property="og:title" content={title} />
+				<meta property="og:description" content={description} />
+				<meta property="og:image" content={image} />
+
+				{/* TWITTER */}
+				<meta property="twitter:card" content="summary_large_image" />
+				<meta property="twitter:url" content={currentUrl} />
+				<meta property="twitter:title" content={title} />
+				<meta property="twitter:description" content={description} />
+				<meta property="twitter:image" content={image} />
+			</Head>
+
 			{JSON.stringify(postDetail) !== '' && (
 				<>
-					<Head>
-						<title>{title}</title>
-						<meta charset="utf-8" />
-						<meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-						<meta name="csrf_token" content="" />
-						<meta property="type" content="website" />
-						<meta property="url" content={currentUrl} />
-						<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
-						<meta name="msapplication-TileColor" content="#ffffff" />
-						<meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
-						<meta name="theme-color" content="rgb(26,27,30)" />
-						<meta name="_token" content="" />
-						<meta name="robots" content="noodp" />
-						<meta property="title" content={title} />
-						<meta property="quote" content={quote} />
-						<meta name="description" content={description} />
-						<meta property="image" content={image} />
-						<meta property="og:locale" content="en_US" />
-						<meta property="og:type" content="website" />
-						<meta property="og:title" content={title} />
-						<meta property="og:quote" content={quote} />
-						<meta property="og:hashtag" content={hashtag} />
-						<meta property="og:image" content={image} />
-						<meta content="image/*" property="og:image:type" />
-						<meta property="og:url" content={currentUrl} />
-						<meta property="og:site_name" content="étSocial" />
-						<meta property="og:description" content={description} />
-					</Head>
-
 					<MenubarComponent title={`${postDetail?.username}'s post`} />
 					<div className={`justify-content-center align-items-center p-3 d-none d-sm-none d-md-none d-lg-flex`} style={{ minHeight: '85vh' }}>
 						<div className="container">
@@ -212,6 +205,8 @@ export async function getServerSideProps(context) {
 
 	let feeds = await axios.get(`${API_URL}/api/posts/details?id_post=${params.id_post}`)
 	let dataFeed = feeds?.data
+
+	console.log(dataFeed.posts)
 
 	return {
 		props: {

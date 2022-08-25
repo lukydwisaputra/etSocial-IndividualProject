@@ -38,8 +38,6 @@ export default function LeftSidebarComponent() {
 	const iconSize = 17
 	const isAllowed = allowedPage.includes(pathname)
 
-	useEffect
-
 	// -------- START ICONS --------
 	// LOGO
 	const logoIcon = (
@@ -116,7 +114,8 @@ export default function LeftSidebarComponent() {
 						<ActionIcon className={buttonStyle} style={classes.theme}>
 							<Indicator inline size={5} offset={-7.5} position="bottom-center" color={status === 'verified' ? 'teal' : 'red'}>
 								<Avatar
-									src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
+									src={`${API_URL}/${profile_picture}`}
+									// src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
 									radius={100}
 									size={25}
 									style={{

@@ -25,7 +25,8 @@ export default function LayoutComponent({ children }) {
 		let token = Cookies.get('token')
 		let result = await axios.get(`${API_URL}/api/users/keep`, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				'Authorization': `Bearer ${token}`,
+				'Bypass-Tunnel-Reminder': 'ok'
 			},
 		})
 

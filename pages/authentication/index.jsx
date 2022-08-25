@@ -6,18 +6,7 @@ import { PasswordComponent } from '../../components/form/PasswordComponent'
 import { At } from 'tabler-icons-react'
 import Link from 'next/link'
 import MenubarComponent from '../../components/menubar/MenubarComponent'
-import {
-	TextInput,
-	PasswordInput,
-	Text,
-	Paper,
-	Group,
-	Button,
-	Anchor,
-	useMantineTheme,
-	Loader,
-	Notification,
-} from '@mantine/core'
+import { TextInput, PasswordInput, Text, Paper, Group, Button, Anchor, useMantineTheme, Loader, Notification } from '@mantine/core'
 import Head from 'next/head'
 import axios from 'axios'
 import { API_URL, COOKIES_EXP } from '../../helper/helper'
@@ -44,18 +33,9 @@ export default function AuthenticationForm({ data }) {
 		isSuccess: null,
 		isCredentialsOk: null,
 	})
-	
+
 	// VAR
-	let {
-		isTakenEmail,
-		isValidEmail,
-		isTakenUsername,
-		isMatchPassword,
-		isStrengthPassword,
-		isUploading,
-		isSuccess,
-		isCredentialsOk,
-	} = state
+	let { isTakenEmail, isValidEmail, isTakenUsername, isMatchPassword, isStrengthPassword, isUploading, isSuccess, isCredentialsOk } = state
 
 	let isNotError = !isTakenEmail && isValidEmail && !isTakenUsername && isMatchPassword && isStrengthPassword
 	const btnColor = theme.colorScheme === 'dark' ? 'light' : 'dark'
@@ -91,12 +71,16 @@ export default function AuthenticationForm({ data }) {
 			let password = formValues.passwordLogin
 			if (credentials && password) {
 				setState((prev) => ({ ...prev, isUploading: true }))
-				setTimeout(async() => {
+				setTimeout(async () => {
 					let result = await axios.post(`${API_URL}/api/users/login`, {
 						credentials,
 						password,
+					}, {
+						headers: {
+							'Bypass-Tunnel-Reminder': 'ok'
+						}
 					})
-	
+
 					if (result?.data?.success) {
 						dispatch(userLogin(result.data.users))
 						Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
@@ -107,7 +91,7 @@ export default function AuthenticationForm({ data }) {
 							router.push('/home')
 						}, 750)
 						return
-					} 
+					}
 
 					setTimeout(() => {
 						setState((prev) => ({ ...prev, isUploading: false }))
@@ -117,8 +101,7 @@ export default function AuthenticationForm({ data }) {
 						setState((prev) => ({ ...prev, isUploading: false }))
 						setState((prev) => ({ ...prev, isCredentialsOk: null }))
 					}, 5000)
-
-				}, 1000);
+				}, 1000)
 			}
 		} catch (error) {
 			console.log(error)
@@ -140,7 +123,6 @@ export default function AuthenticationForm({ data }) {
 			}, 5000)
 		}
 	})
-	
 
 	const onRegister = async (formValues) => {
 		let username = formValues.username
@@ -230,69 +212,36 @@ export default function AuthenticationForm({ data }) {
 		<>
 			<Head>
 				<title>étSocial | Authéntication</title>
-				<link rel="icon" href="/favicon.ico" />
-				<meta
-					name="viewport"
-					content="width=device-width, initial-scale=1, maximum-scale=1"
-				></meta>
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
 			</Head>
 
 			<MenubarComponent title={'Authéntication'} />
 
 			{isSuccess === true && isUploading === false && type === 'register' && (
-				<Notification
-					size={15}
-					icon={<IconCheck size={15} />}
-					color="teal"
-					title="REGISTRATION SUCCESS"
-					onClose={() => setState((prev) => ({ ...prev, isSuccess: null }))}
-					className="mt-3"
-				>
+				<Notification size={15} icon={<IconCheck size={15} />} color="teal" title="REGISTRATION SUCCESS" onClose={() => setState((prev) => ({ ...prev, isSuccess: null }))} className="mt-3">
 					<small>Please check email to verify your account.</small>
 				</Notification>
 			)}
 			{isSuccess === false && !isNotError && type === 'register' && (
-				<Notification
-					icon={<IconX size={15} />}
-					color="red"
-					title="REGISTRATION FAILED"
-					className="mt-3"
-					onClose={() => setState((prev) => ({ ...prev, isSuccess: null }))}
-				>
+				<Notification icon={<IconX size={15} />} color="red" title="REGISTRATION FAILED" className="mt-3" onClose={() => setState((prev) => ({ ...prev, isSuccess: null }))}>
 					<small>Oops, something wrong happened!</small>
 				</Notification>
 			)}
-			{isCredentialsOk === false && isUploading === false &&
-				form.values.userOrEmailLogin !== '' &&
-				form.values.passwordLogin !== '' &&
-				type === 'login' && (
-				<Notification
-					icon={<IconX size={15} />}
-					color="red"
-					title="LOGIN FAILED"
-					className="mt-3"
-					onClose={() => setState((prev) => ({ ...prev, isCredentialsOk: null }))}
-				>
+			{isCredentialsOk === false && isUploading === false && form.values.userOrEmailLogin !== '' && form.values.passwordLogin !== '' && type === 'login' && (
+				<Notification icon={<IconX size={15} />} color="red" title="LOGIN FAILED" className="mt-3" onClose={() => setState((prev) => ({ ...prev, isCredentialsOk: null }))}>
 					<small>Your credentials did not match or not registered</small>
 				</Notification>
 			)}
-			<div
-				className={`d-flex justify-content-center align-items-center p-0`}
-				style={{ minHeight: '75vh' }}
-			>
+			<div className={`d-flex justify-content-center align-items-center p-0`} style={{ minHeight: '75vh' }}>
 				<div className="container" style={{ maxWidth: '600px' }}>
 					<div>
 						<Text weight={700} className="fs-4 mb-25 text-center">
-							{type === 'login'
-								? 'Welcome back to étSocial!'
-								: 'Welcome to étSocial!'}
+							{type === 'login' ? 'Welcome back to étSocial!' : 'Welcome to étSocial!'}
 						</Text>
 					</div>
 					<div style={{ marginBottom: '2.5vh' }}>
 						<Text className="mt-2 mb-4" color="dimmed" size="sm" align="center">
-							{type === 'login'
-								? 'Keep create, discover and connect with the global community'
-								: 'Start create, discover and connect with the global community'}
+							{type === 'login' ? 'Keep create, discover and connect with the global community' : 'Start create, discover and connect with the global community'}
 						</Text>
 					</div>
 
@@ -310,14 +259,7 @@ export default function AuthenticationForm({ data }) {
 											required
 											icon={<At size={14} />}
 											rightSection={
-												form.values.username === '' ? (
-													''
-												) : !isTakenUsername &&
-												  form.values.username !== '' ? (
-													<AiOutlineCheck size={14} color={'teal'} />
-												) : (
-													<AiOutlineClose size={14} color={'red'} />
-												)
+												form.values.username === '' ? '' : !isTakenUsername && form.values.username !== '' ? <AiOutlineCheck size={14} color={'teal'} /> : <AiOutlineClose size={14} color={'red'} />
 											}
 											placeholder="username"
 											value={form.values.username.toLowerCase()}
@@ -328,9 +270,7 @@ export default function AuthenticationForm({ data }) {
 
 												setTimeout(async () => {
 													try {
-														let res = await axios.get(
-															`${API_URL}/api/users?username=${username.toLowerCase()}`
-														)
+														let res = await axios.get(`${API_URL}/api/users?username=${username.toLowerCase()}`)
 														if (res.data.success && username !== '') {
 															setState((prev) => ({
 																...prev,
@@ -355,9 +295,7 @@ export default function AuthenticationForm({ data }) {
 													? ''
 													: isTakenUsername && (
 															<div className="row">
-																<small className="text-danger">
-																	username has been taken
-																</small>
+																<small className="text-danger">username has been taken</small>
 															</div>
 													  )
 											}
@@ -370,10 +308,7 @@ export default function AuthenticationForm({ data }) {
 											rightSection={
 												form.values.email === '' ? (
 													''
-												) : !isTakenEmail &&
-												  form.values.email !== '' &&
-												  form.values.email.includes('@') &&
-												  form.values.email.includes('.') ? (
+												) : !isTakenEmail && form.values.email !== '' && form.values.email.includes('@') && form.values.email.includes('.') ? (
 													<AiOutlineCheck size={14} color={'teal'} />
 												) : (
 													<AiOutlineClose size={14} color={'red'} />
@@ -387,9 +322,7 @@ export default function AuthenticationForm({ data }) {
 												form.setFieldValue('email', email)
 												setTimeout(async () => {
 													try {
-														let res = await axios.get(
-															`${API_URL}/api/users?email=${email.toLowerCase()}`
-														)
+														let res = await axios.get(`${API_URL}/api/users?email=${email.toLowerCase()}`)
 
 														if (res.data.success && email !== '') {
 															setState((prev) => ({
@@ -410,11 +343,7 @@ export default function AuthenticationForm({ data }) {
 													}
 												}, 500)
 
-												if (
-													email !== '' &&
-													email.includes('@') &&
-													email.includes('.')
-												) {
+												if (email !== '' && email.includes('@') && email.includes('.')) {
 													setState((prev) => ({
 														...prev,
 														isValidEmail: true,
@@ -430,34 +359,25 @@ export default function AuthenticationForm({ data }) {
 												form.values.email !== '' &&
 												isTakenEmail && (
 													<div className="row">
-														<small className="text-danger">
-															email has been taken
-														</small>
+														<small className="text-danger">email has been taken</small>
 													</div>
 												)
 											}
 										/>
 										{!isValidEmail && form.values.email !== '' && (
 											<div className="row">
-												<Text style={{fontSize: '10px', marginTop: '-1.5vh'}}>
-													<span className="text-danger">*</span> email
-													must contains @ (at) and . (dot) as a domain
+												<Text style={{ fontSize: '10px', marginTop: '-1.5vh' }}>
+													<span className="text-danger">*</span> email must contains @ (at) and . (dot) as a domain
 												</Text>
 											</div>
 										)}
 
-										<PasswordComponent
-											getValue={passwordComponentValue}
-											inputValue={form.values.password}
-											resetNotification={resetNotification}
-											id={id}
-										/>
+										<PasswordComponent getValue={passwordComponentValue} inputValue={form.values.password} resetNotification={resetNotification} id={id} />
 
 										{!isStrengthPassword && form.values.password !== '' && (
 											<div className="row">
 												<small>
-													<span className="text-danger">*</span> please
-													make your password stronger
+													<span className="text-danger">*</span> please make your password stronger
 												</small>
 											</div>
 										)}
@@ -484,12 +404,7 @@ export default function AuthenticationForm({ data }) {
 													}))
 												}
 											}}
-											error={
-												!isMatchPassword &&
-												form.values.secondPassword !== '' && (
-													<small>password did not match</small>
-												)
-											}
+											error={!isMatchPassword && form.values.secondPassword !== '' && <small>password did not match</small>}
 										/>
 									</>
 								) : (
@@ -502,10 +417,7 @@ export default function AuthenticationForm({ data }) {
 											placeholder="username or email"
 											onChange={(event) => {
 												resetNotification()
-												form.setFieldValue(
-													'userOrEmailLogin',
-													event.currentTarget.value
-												)
+												form.setFieldValue('userOrEmailLogin', event.currentTarget.value)
 											}}
 										/>
 
@@ -515,23 +427,14 @@ export default function AuthenticationForm({ data }) {
 											required
 											placeholder="password"
 											onChange={(event) => {
-												form.setFieldValue(
-													'passwordLogin',
-													event.currentTarget.value
-												)
+												form.setFieldValue('passwordLogin', event.currentTarget.value)
 												resetNotification()
 											}}
 										/>
 										{/* <Link href="/recovery" passHref> */}
-											<Anchor
-												href="/recovery"
-												className="text-muted"
-												component="a"
-												size="xs"
-												style={{ textAlign: 'left', width: '40%' }}
-											>
-												Forgot password?
-											</Anchor>
+										<Anchor href="/recovery" className="text-muted" component="a" size="xs" style={{ textAlign: 'left', width: '40%' }}>
+											Forgot password?
+										</Anchor>
 										{/* </Link> */}
 									</>
 								)}
@@ -550,9 +453,7 @@ export default function AuthenticationForm({ data }) {
 									}}
 									size="xs"
 								>
-									{type === 'register'
-										? 'Have an account? Login'
-										: "Don't have an account? Register"}
+									{type === 'register' ? 'Have an account? Login' : "Don't have an account? Register"}
 								</Anchor>
 
 								<Button
@@ -573,11 +474,7 @@ export default function AuthenticationForm({ data }) {
 										}
 									}}
 								>
-									{isUploading ? (
-										<Loader size={14} color="gray" />
-									) : (
-										upperFirst(type)
-									)}
+									{isUploading ? <Loader size={14} color="gray" /> : upperFirst(type)}
 								</Button>
 							</Group>
 						</form>

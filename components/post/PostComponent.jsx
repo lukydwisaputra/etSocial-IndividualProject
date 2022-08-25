@@ -14,6 +14,7 @@ import { useRouter } from 'next/router'
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon } from 'react-share'
 import { useClipboard } from '@mantine/hooks'
 import { IconCopy, IconCheck } from '@tabler/icons'
+import { RWebShare } from 'react-web-share'
 
 export default function PostComponent({ postIndex, link }) {
 	// HOOKS
@@ -136,9 +137,7 @@ export default function PostComponent({ postIndex, link }) {
 					<div key={idx + 'container'}>
 						<Group key={idx + 'group'}>
 							<Text className="fw-bold" style={{ fontSize: '12px', fontWeight: 900 }}>
-								<span>
-									{val.username}{' '}
-								</span>
+								<span>{val.username} </span>
 								<span className="fw-normal">{val.comment} </span>
 								{/* <span className="text-muted fw-normal" style={{ fontSize: '9px' }}>
 									- {moment(val?.created_at).fromNow()}
@@ -249,7 +248,7 @@ export default function PostComponent({ postIndex, link }) {
 											className="ms-1"
 											radius="xl"
 											size={18}
-											style={{ backgroundColor: avatarBgColor}}
+											style={{ backgroundColor: avatarBgColor }}
 											src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
 										/>
 										<Text style={{ marginLeft: '-5px' }} size="xs" className="fw-bold">
@@ -561,18 +560,14 @@ export default function PostComponent({ postIndex, link }) {
 										caption.length > spoilerLimit &&
 										(!caption.includes(' ') ? (
 											<Text size="xs" className="fw-bold">
-												<span>
-													{username}{' '}
-												</span>
+												<span>{username} </span>
 											</Text>
 										) : (
 											// maxHeight: 20 for every line of caption
 											// hideLabel="... hide"
 											<Spoiler maxHeight={20} showLabel="...more" size={'xs'}>
 												<Text size="xs" className="fw-bold">
-													<span>
-														{username}{' '}
-													</span>
+													<span>{username} </span>
 													<span className="fw-normal" style={{ textAlign: 'justify' }}>
 														{caption}
 													</span>
@@ -584,9 +579,7 @@ export default function PostComponent({ postIndex, link }) {
 										(!caption.includes(' ') && caption.length >= 20 ? (
 											<>
 												<Text size="xs" className="fw-bold">
-													<span>
-														{username}{' '}
-													</span>
+													<span>{username} </span>
 												</Text>
 												<br />
 												{/* <Text style={{ fontSize: '10px' }}>
@@ -597,9 +590,7 @@ export default function PostComponent({ postIndex, link }) {
 										) : (
 											<>
 												<Text size="xs" className="fw-bold">
-													<span>
-														{username}{' '}
-													</span>
+													<span>{username} </span>
 													<span size={'xs'} className="fw-normal" style={{ textAlign: 'justify' }}>
 														{caption}
 													</span>

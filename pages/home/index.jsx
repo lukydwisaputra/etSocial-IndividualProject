@@ -34,7 +34,11 @@ export default function HomePage(props) {
 
 	const totalPosts = async () => {
 		try {
-			let res = await axios.get(`${API_URL}/api/posts/count`)
+			let res = await axios.get(`${API_URL}/api/posts/count`, {
+				headers: {
+					'Bypass-Tunnel-Reminder': 'ok'
+				}
+			})
 			if (!res.data.success) {
 				return
 			}
@@ -57,7 +61,11 @@ export default function HomePage(props) {
 				setLoading((prev) => (prev = true))
 				setTimeout(async () => {
 					setOffset((prev) => (prev = post.length))
-					let res = await axios.get(`${API_URL}/api/posts?limit=${initialPostAmount}&offset=${post.length}`)
+					let res = await axios.get(`${API_URL}/api/posts?limit=${initialPostAmount}&offset=${post.length}`, {
+						headers: {
+							'Bypass-Tunnel-Reminder': 'ok'
+						}
+					})
 					let newPosts = res.data?.posts
 					dispatch(setPost([...post, ...newPosts]))
 				}, 1500)
@@ -98,7 +106,6 @@ export default function HomePage(props) {
 				<>
 					<Head>
 						<title>étSocial | Homé</title>
-						{/* <link rel="icon" /> */}
 						<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"></meta>
 					</Head>
 
@@ -128,16 +135,19 @@ export async function getServerSideProps(context) {
 	let [users, feeds] = await Promise.all([
 		axios.get(`${API_URL}/api/users/keep`, {
 			headers: {
-				Authorization: `Bearer ${token}`,
+				'Authorization': `Bearer ${token}`,
+				'Bypass-Tunnel-Reminder': 'ok'
 			},
 		}),
-		axios.get(`${API_URL}/api/posts?limit=${initialPostAmount}&offset=0`),
+		axios.get(`${API_URL}/api/posts?limit=${initialPostAmount}&offset=0`, {
+			headers: {
+				'Bypass-Tunnel-Reminder': 'ok'
+			}
+		}),
 	])
 
 	let dataUser = users?.data
 	let dataFeed = feeds?.data
-
-	console.log(dataUser?.users)
 
 	return {
 		props: {
