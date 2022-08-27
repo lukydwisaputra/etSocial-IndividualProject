@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styles from '../../styles/Home.module.css'
-import HeaderComponent from '../../components/navbar/HeaderComponent'
+import TitleComponent from '../../components/navbar/TitleComponent'
 import MobileNavbarComponent from '../../components/navbar/MobileNavbarComponent'
 import LeftSidebarComponent from '../../components/sidebar/LeftSidebarComponent'
 import RightSidebarComponent from '../../components/sidebar/RightSidebarComponent'
@@ -25,8 +25,8 @@ export default function LayoutComponent({ children }) {
 		let token = Cookies.get('token')
 		let result = await axios.get(`${API_URL}/api/users/keep`, {
 			headers: {
-				'Authorization': `Bearer ${token}`,
-				'Bypass-Tunnel-Reminder': 'ok'
+				Authorization: `Bearer ${token}`,
+				'Bypass-Tunnel-Reminder': 'ok',
 			},
 		})
 
@@ -48,11 +48,11 @@ export default function LayoutComponent({ children }) {
 
 	return (
 		<div className={styles.container}>
-			<HeaderComponent />
+			<TitleComponent />
 			<MobileNavbarComponent />
 
 			{/* ---------- START MOBILE COMPONENT ---------- */}
-			<main style={{ marginTop: pathname.includes('/post/[id_post]/user/[username]') ? 0 : '7.5vh'}} className="d-lg-none">
+			<main style={{ marginTop: pathname.includes('/post/[id_post]/user/[username]') ? 0 : '7.5vh' }} className="d-lg-none">
 				{/* content for mobile and tablet */}
 				{children}
 			</main>

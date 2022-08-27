@@ -4,7 +4,6 @@ import { AiOutlineMail, AiOutlineClose, AiOutlineCheck } from 'react-icons/ai'
 import { RiLockPasswordLine } from 'react-icons/ri'
 import { PasswordComponent } from '../../components/form/PasswordComponent'
 import { At } from 'tabler-icons-react'
-import Link from 'next/link'
 import MenubarComponent from '../../components/menubar/MenubarComponent'
 import { TextInput, PasswordInput, Text, Paper, Group, Button, Anchor, useMantineTheme, Loader, Notification } from '@mantine/core'
 import Head from 'next/head'
@@ -72,14 +71,18 @@ export default function AuthenticationForm({ data }) {
 			if (credentials && password) {
 				setState((prev) => ({ ...prev, isUploading: true }))
 				setTimeout(async () => {
-					let result = await axios.post(`${API_URL}/api/users/login`, {
-						credentials,
-						password,
-					}, {
-						headers: {
-							'Bypass-Tunnel-Reminder': 'ok'
+					let result = await axios.post(
+						`${API_URL}/api/users/login`,
+						{
+							credentials,
+							password,
+						},
+						{
+							headers: {
+								'Bypass-Tunnel-Reminder': 'ok',
+							},
 						}
-					})
+					)
 
 					if (result?.data?.success) {
 						dispatch(userLogin(result.data.users))
@@ -366,7 +369,7 @@ export default function AuthenticationForm({ data }) {
 										/>
 										{!isValidEmail && form.values.email !== '' && (
 											<div className="row">
-												<Text style={{ fontSize: '10px'}}>
+												<Text style={{ fontSize: '10px' }}>
 													<span className="text-danger">*</span> email must contains @ (at) and . (dot) as a domain
 												</Text>
 											</div>
