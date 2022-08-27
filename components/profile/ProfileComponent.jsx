@@ -35,16 +35,13 @@ export default function UserInfoAction({ user }) {
 			})}
 		>
 			{/* CRITERIA: Fullname, Bio, Username, Email, Profile Picture */}
-
-			{asPath.includes(username) && (
-				<div className="container">
-					<div align="right">
-						<ActionIcon variant="transparent">
-							<EditProfileComponent form={form} />
-						</ActionIcon>
-					</div>
+			<div className="container">
+				<div align="right">
+					<ActionIcon variant="transparent">
+						<EditProfileComponent form={form} />
+					</ActionIcon>
 				</div>
-			)}
+			</div>
 
 			{/* PROFILE PICTURE */}
 			<Avatar

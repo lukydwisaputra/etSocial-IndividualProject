@@ -14,7 +14,6 @@ import { useRouter } from 'next/router'
 import { FacebookShareButton, FacebookIcon, TwitterShareButton, TwitterIcon, WhatsappShareButton, WhatsappIcon } from 'react-share'
 import { useClipboard } from '@mantine/hooks'
 import { IconCopy, IconCheck } from '@tabler/icons'
-import { RWebShare } from 'react-web-share'
 
 export default function PostComponent({ postIndex, link }) {
 	// HOOKS
@@ -304,7 +303,7 @@ export default function PostComponent({ postIndex, link }) {
 								>
 									{devider}
 									<Group position="apart" className="container my-4" style={{ width: '200px' }}>
-										<FacebookShareButton quote={`Check out ${username}'s post!`} url={sharedUrl}>
+										<FacebookShareButton quote={`Check out ${username}'s post!`} url={sharedUrl} hashtags={['étSocial']}>
 											<FacebookIcon size={30} />
 										</FacebookShareButton>
 
@@ -520,13 +519,13 @@ export default function PostComponent({ postIndex, link }) {
 									</>
 								)}
 
-								{likes?.length >= 3 && (
+								{/* {likes?.length >= 3 && (
 									<Text size="xs">
 										Liked by
-										{likeToggle && <span className="fw-bold"> you and </span>}
+										{likeButton && <span className="fw-bold"> you and </span>}
 										{likes?.length} others
 									</Text>
-								)}
+								)} */}
 
 								{!likeButton && likes?.length > 0 && <Text size="xs">Liked by {likes?.length} others</Text>}
 

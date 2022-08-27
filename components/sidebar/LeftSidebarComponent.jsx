@@ -34,7 +34,7 @@ export default function LeftSidebarComponent() {
 	const rowStyle = 'row mt-4'
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
 	const border = `1px solid ${theme.colorScheme === 'dark' ? 'white' : theme.colors.gray[2]}`
-	const allowedPage = ['/home', '/explore', '/liked', '/profile/user/[username]', '/about', '/post/[id_post]/user/[username]']
+	const allowedPage = ['/home', '/explore', '/liked', '/profile', '/about', '/post/[id_post]/user/[username]']
 	const iconSize = 17
 	const isAllowed = allowedPage.includes(pathname)
 
@@ -114,8 +114,8 @@ export default function LeftSidebarComponent() {
 						<ActionIcon className={buttonStyle} style={classes.theme}>
 							<Indicator inline size={5} offset={-7.5} position="bottom-center" color={status === 'verified' ? 'teal' : 'red'}>
 								<Avatar
-									src={`${API_URL}/${profile_picture}`}
-									// src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
+									// src={`${API_URL}/${profile_picture}`}
+									src={profile_picture ? (profile_picture?.includes('http') ? profile_picture : `${API_URL}/${profile_picture}`) : ''}
 									radius={100}
 									size={25}
 									style={{
@@ -129,7 +129,7 @@ export default function LeftSidebarComponent() {
 					</Tooltip>
 				}
 			>
-				<Menu.Item onClick={() => router.push(`/profile/user/${user?.username}`)}>
+				<Menu.Item onClick={() => router.push(`/profile`)}>
 					<p className="m-auto text-muted">Profilé</p>
 				</Menu.Item>
 

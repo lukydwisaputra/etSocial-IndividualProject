@@ -421,7 +421,7 @@ export default function PostDetailComponent({ post }) {
 												}}
 												radius="xl"
 												size={17}
-												src={likes[0]?.profile_picture ? (likes[0]?.profile_picture.includes('http') ? likes[0]?.profile_picture : `${API_URL}/${likes[0]?.profile_picture}`) : ''}
+												src={postDetail?.likes[0]?.profile_picture ? (postDetail?.likes[0]?.profile_picture.includes('http') ? postDetail?.likes[0]?.profile_picture : `${API_URL}/${postDetail?.likes[0]?.profile_picture}`) : ''}
 											/>
 											<Avatar
 												style={{
@@ -431,7 +431,7 @@ export default function PostDetailComponent({ post }) {
 												}}
 												radius="xl"
 												size={17}
-												src={likes[1]?.profile_picture ? (likes[1]?.profile_picture.includes('http') ? likes[1]?.profile_picture : `${API_URL}/${likes[1]?.profile_picture}`) : ''}
+												src={postDetail?.likes[1]?.profile_picture ? (postDetail?.likes[1]?.profile_picture.includes('http') ? postDetail?.likes[1]?.profile_picture : `${API_URL}/${postDetail?.likes[1]?.profile_picture}`) : ''}
 											/>
 											<Avatar
 												style={{
@@ -442,18 +442,18 @@ export default function PostDetailComponent({ post }) {
 												}}
 												radius="xl"
 												size={17}
-												src={likes[2]?.profile_picture ? (likes[2]?.profile_picture.includes('http') ? likes[1]?.profile_picture : `${API_URL}/${likes[2]?.profile_picture}`) : ''}
+												src={postDetail?.likes[2]?.profile_picture ? (postDetail?.likes[2]?.profile_picture.includes('http') ? postDetail?.likes[1]?.profile_picture : `${API_URL}/${postDetail?.likes[2]?.profile_picture}`) : ''}
 											/>
 										</>
 									)}
 
-									{postDetail?.likes?.length >= 3 && (
+									{/* {postDetail?.likes?.length >= 3 && (
 										<Text size="xs">
 											Liked by
-											{likeToggle && <span className="fw-bold"> you and </span>}
-											{likes?.length} others
+											{likeButton && <span className="fw-bold"> you and </span>}
+											{postDetail?.likes?.length} others
 										</Text>
-									)}
+									)} */}
 
 									{!likeButton && postDetail?.likes?.length > 0 && <Text size="xs">Liked by {postDetail?.likes?.length} others</Text>}
 

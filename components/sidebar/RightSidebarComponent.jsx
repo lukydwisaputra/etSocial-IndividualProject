@@ -97,7 +97,7 @@ export default function RightSidebarComponent() {
 	if (JSON.stringify(postDetail) === '{}') {
 		content = (
 			<>
-				{pathname === `/profile/user/[username]` && (
+				{pathname === `/profile` && (
 					<div
 						className="sticky-top d-none d-sm-none d-md-none d-lg-block"
 						style={{

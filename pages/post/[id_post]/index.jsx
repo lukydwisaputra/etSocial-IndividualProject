@@ -9,7 +9,8 @@ import { useRouter } from 'next/router'
 import MenubarComponent from '../../../components/menubar/MenubarComponent'
 import Head from 'next/head'
 
-export default function PostDetailComponent({ post }) {
+export default function PostDetailComponent({ post, image, currentUrl, title, description }) {
+	console.log({ post, image, currentUrl, title, description })
 	// HOOKS
 	let postDetail = useSelector(getDetail)
 	const [loading, setLoading] = useState(true)
@@ -25,16 +26,6 @@ export default function PostDetailComponent({ post }) {
 	const spoilerLimit = 50
 	const avatarBgColor = theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[2]
 	const secondaryColor = theme.colorScheme === 'dark' ? theme.colors.dark[1] : theme.colors.gray[7]
-	let username = post[0].username
-	let currentUrl = `${HOST}/post/${post[0]?.id_post}`
-	let quote = 'Check out ' + username + "'s post!"
-	let title = 'étSocial'
-	let image = SHARE_API_URL + '/' + post[0]?.post_image
-	let description = post[0]?.caption
-	let hashtag = 'étSocial'
-
-	console.log({ currentUrl, quote, title, image, description, hashtag })
-	console.log(postDetail)
 
 	useEffect(() => {
 		if (loading) {
@@ -57,6 +48,7 @@ export default function PostDetailComponent({ post }) {
 				<meta property="og:title" content={title} />
 				<meta property="og:description" content={description} />
 				<meta property="og:image" content={image} />
+				<meta property="og:image:secure_url" content={image} />
 
 				{/* TWITTER */}
 				<meta property="twitter:card" content="summary_large_image" />
@@ -161,10 +153,6 @@ export default function PostDetailComponent({ post }) {
 																</span>
 															</Text>
 															<br />
-															{/* <Text style={{ fontSize: '10px' }}>
-																<span className="text-danger">* </span>
-																Please edit your caption and add some spacing.
-															</Text> */}
 														</>
 													) : (
 														<>
@@ -206,11 +194,19 @@ export async function getServerSideProps(context) {
 	let feeds = await axios.get(`${API_URL}/api/posts/details?id_post=${params.id_post}`)
 	let dataFeed = feeds?.data
 
-	console.log(dataFeed.posts)
+	let image = `${SHARE_API_URL}/${dataFeed?.posts[0]?.post_image}`
+	let username = dataFeed.posts[0]?.username
+	let currentUrl = `${HOST}/post/${dataFeed.posts[0]?.id_post}`
+	let title = username ? 'étSocial | ' + username + "'s post" : 'étSocial post'
+	let description = dataFeed.posts[0]?.caption
 
 	return {
 		props: {
 			post: dataFeed.posts,
+			image,
+			currentUrl,
+			title,
+			description,
 		},
 	}
 }

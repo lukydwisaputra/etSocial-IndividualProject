@@ -7,9 +7,9 @@ import axios from 'axios'
 import { API_URL } from '../../helper/helper'
 import Cookies from 'js-cookie'
 import { useDispatch, useSelector } from 'react-redux'
-import { userLogin } from '../../slices/userSlice'
+import { userLogin, getUser } from '../../slices/userSlice'
 import { setPost } from '../../slices/postSlice'
-import { getUser } from '../../slices/userSlice'
+import { useRouter } from 'next/router'
 
 export default function EditProfileComponent({ form }) {
 	// HOOKS
@@ -18,7 +18,8 @@ export default function EditProfileComponent({ form }) {
 	const [opened, setOpened] = useState(false)
 	const [edited, setEdited] = useState({ isLoading: false, isEdited: null })
 	const [state, setState] = useState({ isTakenUsername: null })
-	
+	const router = useRouter()
+
 	// VAR
 	const { id, username, name, bio, profile_picture } = useSelector(getUser)
 	const iconSize = 17

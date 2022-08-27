@@ -149,14 +149,14 @@ export async function getServerSideProps(context) {
 		})
 		let dataUser = users?.data
 
-		if (dataUser.users.status !== 'verified') {
-			return {
-				redirect: {
-					destination: '/home',
-					permanent: false,
-				},
-			}
-		}
+		// if (dataUser.users.status !== 'verified') {
+		// 	return {
+		// 		redirect: {
+		// 			destination: '/home',
+		// 			permanent: false,
+		// 		},
+		// 	}
+		// }
 		return {
 			props: {},
 		}

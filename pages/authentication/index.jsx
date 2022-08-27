@@ -366,7 +366,7 @@ export default function AuthenticationForm({ data }) {
 										/>
 										{!isValidEmail && form.values.email !== '' && (
 											<div className="row">
-												<Text style={{ fontSize: '10px', marginTop: '-1.5vh' }}>
+												<Text style={{ fontSize: '10px'}}>
 													<span className="text-danger">*</span> email must contains @ (at) and . (dot) as a domain
 												</Text>
 											</div>
@@ -494,7 +494,7 @@ export async function getServerSideProps(context) {
 		},
 	})
 
-	if (result.data?.success) {
+	if (result.data?.success && result.data?.users.status === 'verified') {
 		Cookies.set('token', result.data.token, { expires: COOKIES_EXP })
 		return {
 			redirect: {

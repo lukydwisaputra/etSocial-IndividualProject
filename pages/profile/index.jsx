@@ -1,16 +1,18 @@
 import React, { useId, useEffect, useState } from 'react'
-import ProfileComponent from '../../../components/profile/ProfileComponent'
-import AlbumComponent from '../../../components/post/AlbumComponent'
-import MenubarComponent from '../../../components/menubar/MenubarComponent'
-import { API_URL } from '../../../helper/helper'
+import ProfileComponent from '../../components/profile/ProfileComponent'
+import AlbumComponent from '../../components/post/AlbumComponent'
+import MenubarComponent from '../../components/menubar/MenubarComponent'
+import { API_URL } from '../../helper/helper'
 import axios from 'axios'
 import { Skeleton } from '@mantine/core'
+import { useRouter } from 'next/router'
 
 export default function ProfilePage(props) {
 	// HOOKS
 	const [userPosts, setUserPosts] = useState([])
 	const [loading, setLoading] = useState(true)
 	let id = useId()
+	const { asPath } = useRouter()
 
 	// VAR
 	let contentClasses = 'col-4 p-1'
@@ -36,7 +38,7 @@ export default function ProfilePage(props) {
 
 	return (
 		<>
-			<MenubarComponent title={`${props?.posts[0]?.username}'s profilé`} />
+			<MenubarComponent title={`Profilé`} />
 			<div className="container d-lg-none" style={{ marginBottom: '1vh' }}>
 				<div className="row">
 					<ProfileComponent />
@@ -71,7 +73,7 @@ export async function getServerSideProps(context) {
 		})
 		let dataUser = users?.data
 
-		let feeds = await axios.get(`${API_URL}/api/posts/details?username=${context.params.username}`, {
+		let feeds = await axios.get(`${API_URL}/api/posts/details?username=${dataUser.users.username}`, {
 			headers: {
 				'Bypass-Tunnel-Reminder': 'ok'
 			}
